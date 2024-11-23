@@ -1,61 +1,61 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-ingress
-  namespace: argocd
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  # Argo CD requires HTTPS
-spec:
-  rules:
-    - host: argocd.example.com   # Replace with your static URL or DNS
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 443
-  tls:                             # Enable TLS for HTTPS
-    - hosts:
-        - argocd.example.com
-      secretName: argocd-tls-secret       # Replace with your TLS secret
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: argocd-tls-secret
-  namespace: argocd
-type: kubernetes.io/tls
-data:
-  tls.crt: <base64-encoded-cert>
-  tls.key: <base64-encoded-key>
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-ingress
-  namespace: argocd
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-spec:
-  tls:
-    - hosts:
-        - argocd.example.com  # Replace with your domain
-      secretName: argocd-tls-secret
-  rules:
-    - host: argocd.example.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 443
----
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: argocd-ingress
+#  namespace: argocd
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  # Argo CD requires HTTPS
+#spec:
+#  rules:
+#    - host: argocd.example.com   # Replace with your static URL or DNS
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: argocd-server
+#                port:
+#                  number: 443
+#  tls:                             # Enable TLS for HTTPS
+#    - hosts:
+#        - argocd.example.com
+#      secretName: argocd-tls-secret       # Replace with your TLS secret
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: argocd-tls-secret
+#  namespace: argocd
+#type: kubernetes.io/tls
+#data:
+#  tls.crt: <base64-encoded-cert>
+#  tls.key: <base64-encoded-key>
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: argocd-ingress
+#  namespace: argocd
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#spec:
+#  tls:
+#    - hosts:
+#        - argocd.example.com  # Replace with your domain
+#      secretName: argocd-tls-secret
+#  rules:
+#    - host: argocd.example.com
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: argocd-server
+#                port:
+#                  number: 443
+#---

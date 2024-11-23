@@ -42,6 +42,7 @@ metadata:
     app: mysql
     tier: database
 spec:
+#  nodeName: Your_Node_name
   selector: # mySQL Pod Should contain same labels
     matchLabels:
       app: mysql

@@ -4,7 +4,6 @@ package com.foodapp.springfoodapp.serviceImpl;
 import com.foodapp.springfoodapp.entiry.Address;
 import com.foodapp.springfoodapp.repository.AddressRepo;
 import com.foodapp.springfoodapp.service.AddressServices;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,32 +33,12 @@ public class AddressServicesImpl implements AddressServices {
 
     @Override
     public List<Address> getAll() {
-        return addressRepo.findAll();
+        return addressRepo.findAllByQuery();
     }
-
-    @Override
-    public Address findByAddressId(int id) {
-//
-//        addresses.stream()
-//                .filter(find -> find.addressId == id)
-//                .findFirst();
-//
-        Optional<Address> address = addressRepo.findById(id);
-        if (address.isEmpty()) {
-            throw new IllegalArgumentException("Address Not Found");
-        } else {
-            return address.get();
-        }
-    }
-
-//    @Override
-//    public void deleteAddress(int addressId) {
-//        addressRepo.deleteById(addressId);
-//    }
 
     @Override
     public String deleteAddress(int addressId) {
-        Optional<Address> addressOpt = addressRepo.findById(addressId);
+        Optional<Address> addressOpt = addressRepo.findByIdAddress(addressId);
         if (addressOpt.isPresent()) {
             addressRepo.deleteById(addressId);
         }
@@ -72,28 +51,38 @@ public class AddressServicesImpl implements AddressServices {
     }
 
     @Override
+    public Address findByIdAddress(int id) {
+        Address address = addressRepo.findByIdAddress(id).
+                orElseThrow(() -> new RuntimeException("Address Not Found"));
+        return address;
+    }
+
+    @Override
+    public Address getCityByQuery(String keyWord) {
+        Address findByCityAddress = addressRepo.getCityByQuery(keyWord);
+        return findByCityAddress;
+    }
+
+    @Override
     public Address updateAddress(Address updateAddress, int id) {
-        Address address = addressRepo.findById(id)
+        Address address = addressRepo.findByIdAddress(id)
                 .orElseThrow(() -> new IllegalArgumentException("No Address Id"));
-
-//        if (address.getArea() != null) {
-//            address.setArea(updateAddress.getArea());
-//        }
-//        if (address.getCity() != null) {
-//            address.setCity(updateAddress.getCity());
-//        }
-//        if (address.getState() != null) {
-//            address.setState(updateAddress.getState());
-//        }
-//        if (address.getCountry() != null) {
-//            address.setCountry(updateAddress.getCountry());
-//        }
-//        if (address.getPinCode() != null) {
-//            address.setCountry(updateAddress.getCountry());
-//        }
-
-//        addressRepo.save(address);
-        return null;
+        if (address.getArea() != null) {
+            address.setArea(updateAddress.getArea());
+        }
+        if (address.getCity() != null) {
+            address.setCity(updateAddress.getCity());
+        }
+        if (address.getState() != null) {
+            address.setState(updateAddress.getState());
+        }
+        if (address.getCountry() != null) {
+            address.setCountry(updateAddress.getCountry());
+        }
+        if (address.getPinCode() != null) {
+            address.setCountry(updateAddress.getCountry());
+        }
+        return addressRepo.save(address);
     }
 
 

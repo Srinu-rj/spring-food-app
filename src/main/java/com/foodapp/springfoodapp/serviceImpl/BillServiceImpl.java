@@ -28,7 +28,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill getById(int billId) {
-        Optional<Bill> billOpt = billRepo.findById(billId);
+        Optional<Bill> billOpt = billRepo.findByIdQuery(billId);
         if (billOpt.isEmpty()){
             throw new RuntimeException("Bill Not Found");
         }
@@ -38,7 +38,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill updateBill(Integer id, Bill updateBill) {
-        Bill existBill = billRepo.findById(updateBill.getBillId())
+        Bill existBill = billRepo.findByIdQuery(updateBill.getBillId())
                 .orElseThrow(() -> new RuntimeException("Can't Find billId"));
 
         existBill.setBillId(existBill.getBillId());
@@ -51,7 +51,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public String deleteBill(int billId) {
-        billRepo.deleteById(billId);
+        billRepo.deleteByIdQuery(billId);
         return "product repo !! " + billId;
     }
 

@@ -1,8 +1,8 @@
 apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+kind: HorizontalPodAutoscaler #horizontalpodautoscalers
 metadata:
   name: HorizontalDeployment
-#  namespace: app-namespace
+  namespace: app-namespace
 spec:
   minReplicas: 1
   maxReplicas: 5
@@ -18,25 +18,25 @@ spec:
     kind: Deployment
     name: app-deployment
 ---
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: horizontal-deployment # Updated to meet naming conventions
-  namespace: app-namespace
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: app-deployment # Replace with the name of your target deployment
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 80
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: horizontal-deployment # Updated to meet naming conventions
+#  namespace: app-namespace
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: app-deployment # Replace with the name of your target deployment
+#  minReplicas: 1
+#  maxReplicas: 10
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        target:
+#          type: Utilization
+#          averageUtilization: 80
 ---
 
 #apiVersion: autoscaling/v2

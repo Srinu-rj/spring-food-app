@@ -4,10 +4,11 @@ metadata:
   name: app-deployment
   namespace: app-namespace
 spec:
+  serviceName: "app-service"
+  replicas: 10
   selector:
     matchLabels:
       app: app-deployment
-  replicas: 10
   template:
     metadata:
       labels:

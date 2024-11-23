@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,9 +43,17 @@ public class AddressController {
         return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 
+    //TODO THE API SEARCH CITY
+    @GetMapping("/get/city/query/{keyWord}")
+    public ResponseEntity<Address> getCityByQuery(@PathVariable String keyWord) {
+        Address address = addressServices.getCityByQuery(keyWord);
+        return new ResponseEntity<>(address, HttpStatus.CREATED);
+    }
+
+    //TODO THE API FINDS ADDRESS ID
     @GetMapping("/{id}")
     public ResponseEntity<Address> findByAddressId(@PathVariable int id) {
-        Address address = addressServices.findByAddressId(id);
+        Address address = addressServices.findByIdAddress(id);
         return ResponseEntity.ok(address);
     }
 
@@ -60,4 +69,15 @@ public class AddressController {
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
+//    @PostMapping("/add")
+//    public ResponseEntity<Address> addAddress(@RequestBody String area,
+//                                              @RequestBody int address_Id,
+//                                              @RequestBody String city,
+//                                              @RequestBody String country,
+//                                              @RequestBody String pinCode,
+//                                              @RequestBody String state) {
+//        Address address = addressServices.saveAddAddresByQuerys(area, city,address_Id, country, pinCode, state);
+//        return new ResponseEntity<>(address, HttpStatus.CREATED);
+//    }
 }
+

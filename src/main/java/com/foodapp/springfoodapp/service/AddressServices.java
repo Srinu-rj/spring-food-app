@@ -16,10 +16,18 @@ public interface AddressServices {
 
     List<Address> getAll();
 
-    Address findByAddressId(int id);
 
     String deleteAddress(int addressId);
 
     List<Address> findAdd();
+
+    Address findByIdAddress(int id);
+
+
+    Address getCityByQuery(String keyWord);
+
+
+
+
 
 }

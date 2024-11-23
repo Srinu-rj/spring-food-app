@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-//@RestController
+
+@RestController
 @RequestMapping("/api/bill")
 @Slf4j
 @RequiredArgsConstructor
