@@ -1,13 +1,16 @@
 package com.foodapp.springfoodapp.serviceImpl;
 
 
+import com.foodapp.springfoodapp.entiry.Address;
 import com.foodapp.springfoodapp.entiry.Restaurant;
 import com.foodapp.springfoodapp.repository.RestaurantRepo;
 import com.foodapp.springfoodapp.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +25,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<Restaurant> getAllRestants() {
-        return restaurantRepo.findAll();
+        return restaurantRepo.findAllRestaurantByQuery();
     }
 
 
     @Override
     public String deleterestaurant(int restaurantId) {
-        restaurantRepo.deleteById(restaurantId);
+
+        restaurantRepo.deleteByQuery(restaurantId);
         return "delete SuccessFull!";
     }
 
@@ -39,7 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant updateRestaurant(Restaurant restaurant, int id) {
-        var exits = restaurantRepo.findById(restaurant.getRestaurantId())
+        var exits = restaurantRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("There iss no Id Please Create"));
 
         if (exits.getManagerName() != null) {
@@ -60,7 +64,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        Restaurant restaurantSave=restaurantRepo.save(restaurant);
+        Restaurant restaurantSave = restaurantRepo.save(restaurant);
         return restaurantSave;
 
     }
