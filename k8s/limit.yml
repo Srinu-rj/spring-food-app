@@ -34,48 +34,48 @@ spec:
       max:
         storage: 10Gi
 ---
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: user-quota
-  namespace: app-namespace
-spec:
-  hard:
-    pods: "10"
-    requests.cpu: "4"
-    requests.memory: 4Gi
-    limits.cpu: "8"
-    limits.memory: 8Gi
----
-apiVersion: v1
-kind: RoleBinding
-metadata:
-  name: user-a-binding
-  namespace: app-namespace
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: edit
-subjects:
-  - kind: User
-    name: user-a
-  - kind: ServiceAccount
-    name: service-account-a
-    namespace: my-namespace
----
-apiVersion: v1
-kind: RoleBinding
-metadata:
-  name: user-b-binding
-  namespace: app-namespace
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: edit
-subjects:
-  - kind: User
-    name: user-b
-  - kind: ServiceAccount
-    name: service-account-b
-    namespace: my-namespace
----
+#apiVersion: v1
+#kind: ResourceQuota
+#metadata:
+#  name: user-quota
+#  namespace: app-namespace
+#spec:
+#  hard:
+#    pods: "10"
+#    requests.cpu: "4"
+#    requests.memory: 4Gi
+#    limits.cpu: "8"
+#    limits.memory: 8Gi
+#---
+#apiVersion: v1
+#kind: RoleBinding
+#metadata:
+#  name: user-a-binding
+#  namespace: app-namespace
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: ClusterRole
+#  name: edit
+#subjects:
+#  - kind: User
+#    name: user-a
+#  - kind: ServiceAccount
+#    name: service-account-a
+#    namespace: my-namespace
+#---
+#apiVersion: v1
+#kind: RoleBinding
+#metadata:
+#  name: user-b-binding
+#  namespace: app-namespace
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: ClusterRole
+#  name: edit
+#subjects:
+#  - kind: User
+#    name: user-b
+#  - kind: ServiceAccount
+#    name: service-account-b
+#    namespace: my-namespace
+#---

@@ -4,8 +4,7 @@ metadata:
   name: app-deployment
   namespace: app-namespace
 spec:
-  serviceName: "app-service"
-  replicas: 10
+  replicas: 7
   selector:
     matchLabels:
       app: app-deployment
@@ -14,7 +13,7 @@ spec:
       labels:
         app: app-deployment
     spec:
-#      nodeName: Your_nodeName # you can specify with in Particular node.
+#      nodeName: local-cluster-m04 # you can specify with in Particular node.
       containers:
         - name: app-deployment
           image: srinu641/spring-image:latest

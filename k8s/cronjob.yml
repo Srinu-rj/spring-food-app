@@ -16,21 +16,21 @@ spec:
           containers:
             -name: mysql-db
             image: mysql
-            command: ["/bin/bash", "-c"]
-            args:
-              [
-                'mysql --url' "jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring" # todo ->need to Impl
-              ]
-            volumeMounts:
-              - mountPath: "" #todo ->
-                name:
-            env:
-              - name: MYSQL_PASSWORD
-                value: #####
-          volumes:
-            - name: #####
-              persistentVolumeClaim:
-                claimName: ###
-          restartPolicy: Never
+#            command: ["/bin/bash", "-c"]
+#            args:
+#              [
+#                'mysql --url' "jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring" ' # todo ->need to Impl
+#              ]
+#            volumeMounts:
+#              - mountPath: "" #todo ->
+#                name:
+#            env:
+#              - name: MYSQL_PASSWORD
+#                value: srinu1234
+#          volumes:
+#            - name:
+#              persistentVolumeClaim:
+#                claimName: ###
+#          restartPolicy: Never
 ---
 
