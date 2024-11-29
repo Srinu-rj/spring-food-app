@@ -20,13 +20,13 @@ spec:
           imagePullPolicy: Always  #todo imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 8998
-          resources:
-            requests:
-              memory: 20Mi
-              cpu: "0.25"
-            limits:
-              memory: 400Mi
-              cpu: "1"
+#          resources:
+#            requests:
+#              memory: 20Mi
+#              cpu: "0.25"
+#            limits:
+#              memory: 400Mi
+#              cpu: "1"
           env:   # Setting Environmental Variables
             - name: DB_HOST   # Setting Database host address
               value: mysql
