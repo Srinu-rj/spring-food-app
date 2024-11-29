@@ -155,19 +155,16 @@
     </build>
     <distributionManagement>
         <!-- Publish the versioned releases here -->
-
         <snapshotRepository>
             <id>snapshotnexus</id>
             <name>snapshot nexus</name>
             <url>http://localhost:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-
+        </snapshotRepository> 
         <repository>
             <id>releasenexus</id>
             <name>release nexus</name>
             <url>http://localhost:8081/repository/maven-releases/</url>
         </repository>
-
     </distributionManagement>
 
 </project>
