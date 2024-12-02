@@ -1,22 +1,42 @@
+#apiVersion: autoscaling/v1
+#kind: HorizontalPodAutoscaler #horizontalpodautoscalers
+#metadata:
+#  name: HorizontalDeployment
+#  namespace: app-namespace
+#spec:
+#  minReplicas: 1
+#  maxReplicas: 15
+#  metrics:
+#    - resource:
+#        name: cpu
+#        target:
+#          averageUtilization: 70
+#          type: Utilization
+#      type: Resource
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: app-deployment
+---
 apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler #horizontalpodautoscalers
+kind: HorizontalPodAutoscaler
 metadata:
-  name: HorizontalDeployment
+  name: example-hpa
   namespace: app-namespace
 spec:
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-    - resource:
-        name: cpu
-        target:
-          averageUtilization: 70
-          type: Utilization
-      type: Resource
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: app-deployment
+    name: app-deployment # Replace with your deployment name
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50 # Scale if CPU usage exceeds 50%
 ---
 #apiVersion: autoscaling/v2
 #kind: HorizontalPodAutoscaler
@@ -37,38 +57,36 @@ spec:
 #        target:
 #          type: Utilization
 #          averageUtilization: 80
----
-
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: spring-boot
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: app-deployment
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 50
-status:
-  observedGeneration: 1
-  lastScaleTime: <some-time>
-  currentReplicas: 1
-  desiredReplicas: 5
-  currentMetrics:
-    - type: Resource
-      resource:
-        name: cpu
-        current:
-          averageUtilization: 0
-          averageValue: 0
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: spring-boot
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: app-deployment
+#  minReplicas: 1
+#  maxReplicas: 10
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        target:
+#          type: Utilization
+#          averageUtilization: 50
+#status:
+#  observedGeneration: 1
+#  lastScaleTime: <some-time>
+#  currentReplicas: 1
+#  desiredReplicas: 5
+#  currentMetrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        current:
+#          averageUtilization: 0
+#          averageValue: 0
 #---
 #---
 #apiVersion: autoscaling/v2
@@ -129,7 +147,6 @@ status:
 #          name: main-route
 #        current:
 #          value: 10k
----
 ##VerticalPodAutoscaler
 #apiVersion: autoscaling.k8s.io/v1
 #kind: VerticalPodAutoscaler
