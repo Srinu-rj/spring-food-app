@@ -8,11 +8,12 @@ metadata:
     app: mysql
     tier: database
 spec:
+  storageClassName: gp2
   accessModes:
     - ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.
   resources:
     requests:
-      storage: 1Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
+      storage: 5Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
 ---
 apiVersion: v1
 kind: Service
@@ -20,7 +21,6 @@ metadata:
   name: mysql
   namespace: app-namespace
   labels:
-#    nodeName: Your_node_name
     app: mysql
     tier: database
 spec:
@@ -30,7 +30,8 @@ spec:
   selector:
     app: mysql
     tier: database
-  clusterIP: None #demo
+  clusterIP: None
+---
 ---
 # Deployment specification begins here
 apiVersion: apps/v1
@@ -60,17 +61,27 @@ spec:
           imagePullPolicy: "IfNotPresent"
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: root
-            - name: MYSQL_DATABASE
-              value: srinu1234
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: password
+#            - name: MYSQL_ROOT_PASSWORD
+#              value: root
+#            - name: MYSQL_DATABASE
+#              value: srinu1234
           ports:
             - containerPort: 3306
               name: mysql
           volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: mysql-persistance-storage
+            - name: mysql-persistance-storage
+              mountPath: /var/lib/mysql
       volumes:
         - name: mysql-persistance-storage
           persistentVolumeClaim:
-            claimName: mysql-pv-claim
+            claimName: mysql-pv-claim #todo must match with pvc
 ---

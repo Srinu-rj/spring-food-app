@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/home")
 public class SpringFoodAppApplication {
 
+//    mvn spring-boot:run
+//    java -jar target/spring-image.jar
 // TODO ->https://github.com/Srinu-rj/spring-food-app.git
 //   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
 

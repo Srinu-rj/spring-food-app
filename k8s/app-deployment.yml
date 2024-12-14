@@ -19,25 +19,56 @@ spec:
       containers:
         - name: app-deployment
           image: srinu641/spring-image:latest
-          imagePullPolicy: Always  #todo imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: IfNotPresent
+#          resources:
+#            requests:
+#              memory: 20Mi
+#              cpu: "0.25"
+#            limits:
+#              memory: 400Mi
+#              cpu: "1"
+          env:   # Setting Environmental Variables
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: root-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: aws-rds-server
+                  key: secret
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: password
           ports:
             - containerPort: 8998
-          resources:
-            requests:
-              memory: 20Mi
-              cpu: "0.25"
-            limits:
-              memory: 400Mi
-              cpu: "1"
-          env:   # Setting Environmental Variables
-            - name: DB_HOST   # Setting Database host address
-              value: mysql
-            - name: DB_NAME  # Setting Database name
-              value: jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring
-            - name: DB_USERNAME  # Setting Database username
-              value: root
-            - name: DB_PASSWORD # Setting Database password
-              value: srinu1234
+              name: app-deployment
+          volumeMounts:
+            - name: mysql
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistance-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+---
+
+#            - name: DB_HOST   # Setting Database host address
+#              value: mysql
+#            - name: DB_NAME  # Setting Database name
+#              value: jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring
+#            - name: DB_USERNAME  # Setting Database username
+#              value: root
+#            - name: DB_PASSWORD # Setting Database password
+#              value: srinu1234
+
 ---
 #todo  Define a 'Service' To Expose the application
 apiVersion: v1

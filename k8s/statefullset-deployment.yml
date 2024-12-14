@@ -5,7 +5,7 @@ metadata:
   namespace: app-namespace
 spec:
   serviceName: "app-service"  # Mandatory for StatefulSets
-  replicas: 3  # Example: Number of replicas
+  replicas: 5  # Example: Number of replicas
   selector:
     matchLabels:
       app: app-statefulset
@@ -21,15 +21,40 @@ spec:
         - name: app-container
           image: srinu641/spring-image:latest
           imagePullPolicy: Always
-          ports:
-            - containerPort: 8998
-          resources:
-            requests:
-              memory: 20Mi
-              cpu: "0.25"
-            limits:
-              memory: 400Mi
-              cpu: "1"
+          startupProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+
           env:  # Environmental Variables
             - name: DB_HOST
               value: mysql
@@ -40,8 +65,8 @@ spec:
             - name: DB_PASSWORD
               value: srinu1234
           volumeMounts:
-            - name: app-data
-              mountPath: /data  # Mount path inside the container
+            - name: mysql-pv-claim
+              mountPath: /var/lib/mysql  # Mount path inside the container
   volumeClaimTemplates:
     - metadata:
         name: app-data
