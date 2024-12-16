@@ -1,8 +1,0 @@
-resources:
-  - namespace.yml
-  - db-deployment.yml
-  - app-deployment.yml
-  - limit.yml
-  - secrets.yml
-#  - cronjob.yml
----
