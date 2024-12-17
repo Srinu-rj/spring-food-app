@@ -1,0 +1,20 @@
+apiVersion:
+kind: DaemonSet
+metadata:
+  name:  daemonSet-deploy
+spec:
+  selector:
+    matchLabels:
+      name: demo-one-match-label
+  template:
+    metadata:
+      labels:
+         name: demo-one-match-label
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - name: app-deployment
+          image: srinu641/spring-image:latest
+
