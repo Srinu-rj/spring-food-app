@@ -1,9 +1,0 @@
-apiVersion : v1
-kind : ConfigMap
-metadata:
-  name : db-config
-data:
-  host : mysql
-  dbName: jdbc:mysql://database.cn2aysi4umep.us-east-1.rds.amazonaws.com:3306/spring
-#  dbName: spring
----
