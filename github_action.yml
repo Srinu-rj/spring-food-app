@@ -14,10 +14,10 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.0.40
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
+          MYSQL_DATABASE: food
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
