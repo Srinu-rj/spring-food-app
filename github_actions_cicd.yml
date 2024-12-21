@@ -63,6 +63,17 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/spring-image:${{ github.sha }}
 
+      - name: Cache Qodana results
+        uses: actions/cache@v3
+        with:
+        path: ~/.cache/qodana
+        key: qodana-2024.1-${{ runner.os }}-${{ hashFiles('**/qodana.yaml') }}
+        restore-keys: |
+          qodana-2024.1-${{ runner.os }}-
+          qodana-${{ runner.os }}-
+  
+  
+
   deploy:
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
