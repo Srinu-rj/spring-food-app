@@ -1,0 +1,92 @@
+#name: Spring Boot CI/CD Pipeline
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
+#
+#env:
+#  JAVA_VERSION: '17' # Use the Java version your project requires
+#  AWS_REGION: 'us-east-1'
+#  DB_URL: 'jdbc:mysql://database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring'
+#
+#jobs:
+#  build-and-test:
+#    name: Build and Test
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      # Checkout code from repository
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      # Set up Java
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: ${{ env.JAVA_VERSION }}
+#          distribution: 'temurin'
+#
+#      # Cache Maven dependencies
+#      - name: Cache Maven dependencies
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            ${{ runner.os }}-maven
+#
+#      # Install dependencies and build project
+#      - name: Build with Maven
+#        run: mvn clean install
+#
+#      # Run tests
+#      - name: Run Tests
+#        run: mvn test
+#
+#  security-scan:
+#    name: Security Scan
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      # Checkout code
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      # Security scan with OWASP Dependency-Check
+#      - name: Run OWASP Dependency-Check
+#        uses: dependency-check/owasp-dependency-check-action@v2
+#        with:
+#          output-directory: owasp-report
+#          fail-build-on-any-severity: true
+#
+#  deploy-to-aws:
+#    name: Deploy to AWS Elastic Beanstalk
+#    runs-on: ubuntu-latest
+#    needs: build-and-test
+#
+#    steps:
+#      # Checkout code
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      # Set up AWS CLI
+#      - name: Configure AWS CLI
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ env.AWS_REGION }}
+#
+#      # Deploy application to Elastic Beanstalk
+#      - name: Deploy to Elastic Beanstalk
+#        run: |
+#          zip -r spring-boot-app.zip .
+#          aws elasticbeanstalk create-application-version \
+#            --application-name "SpringBootApp" \
+#            --version-label v1 \
+#            --source-bund
+#---
