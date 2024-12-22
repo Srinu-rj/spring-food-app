@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1
+# todo no need to mention namespace ,ClusterIssuer used in my entire kubernates cluster in all namespaces.
+# todo  if you want to spacify with perticlure namespace use only-> [Issuer] kind Object
+kind: ClusterIssuer
+metadata:
+  name: ingress-nginx-cluster-issuer
+spec:
+  ca:
+    secretName: ca-secret #todo name must match with ca-secret name
