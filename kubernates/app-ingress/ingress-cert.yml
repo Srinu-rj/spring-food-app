@@ -2,11 +2,11 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: ingress-cert
-  namespace: app-namespace
+  namespace: cert-manager
 spec:
   secretName: ca-secret
   issuerRef:
     name: ingress-nginx-cluster-issuer
     kind: ClusterIssuer
   dnsNames:
-    - ingress_host_name # must match with in Ingress hostName
+    - spring.boot.com # must match with in Ingress hostName

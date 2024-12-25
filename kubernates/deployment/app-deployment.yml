@@ -1,13 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-deployment
+  name: app-deployment-blue
   namespace: app-namespace
 spec:
   replicas: 7
   selector:
     matchLabels:
       app: app-deployment
+      env: blue # todo blue-deployment
   template:
     metadata:
       labels:
@@ -83,6 +84,7 @@ spec:
       targetPort: 8998   #TODO  Port exposed to the outside
   selector:
     app: app-deployment
-  type: NodePort
+    env: blue
+  type: NodePort #todo ClusterIP
 ---
 

@@ -10,7 +10,7 @@ metadata:
 spec:
   storageClassName: gp2
   accessModes:
-    - ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.
+    - ReadWriteMany   #todo This specifies the mode of the claim that we are trying to create.
   resources:
     requests:
       storage: 5Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
@@ -24,13 +24,14 @@ metadata:
     app: mysql
     tier: database
 spec:
-  ports:
-    - port: 3307
-      targetPort: 3307
   selector:
     app: mysql
     tier: database
-  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 3307
+      targetPort: 3307
+  clusterIP: ClusterIP
 ---
 ---
 # Deployment specification begins here

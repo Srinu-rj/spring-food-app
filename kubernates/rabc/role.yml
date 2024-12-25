@@ -1,26 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: manage-pods-roles
-  namespace: app-namespace
+  name: pod-reader
+#  namespace: role-namespace
 rules:
-  - apiGroup: [""]
-    resources: ["pods","pods/exec"]
-    verbs: ["get","delete","watch","list","create"]
-
-  - apiGroups: [ "apps" ]
-    resources: [ "deployments" ]
-    verbs: [ "get", "watch", "list", "delete", "create" ]
-
-  - apiGroups: [""]  #todo for app-service
-    resources: ["service"]
-    verbs: ["get","delete","watch","list","create"]
-
-  - apiGroups: [ "apps" ]
-    resources: [ "deployments" ]
-    verbs: [ "get", "watch", "list", "delete", "create" ]
-
-  - apiGroups: [ "" ] #todo for mysql-service
-    resources: [ "service" ]
-    verbs: [ "get","delete","watch","list","create" ]
-
+  - apiGroups: [""] # "" indicates the core API group
+    verbs: ["get", "watch", "list"]
+    resources: ["pods", "pods/log"]
+#    resourceNames: ["nginx"]
+---
