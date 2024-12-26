@@ -47,6 +47,15 @@ spec:
 #  nodeName: new-cluster-m02
 #  nodeSelector:
 #    kubernetes.io/hostname: new-cluster-m02
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                  - worker
   selector: # mySQL Pod Should contain same labels
     matchLabels:
       app: mysql
@@ -81,24 +90,10 @@ spec:
             - containerPort: 3306
               name: mysql
           volumeMounts:
-            - mountPath: /data/db
+            - mountPath: /var/lib/mysql
               name: mysql-volume
       volumes:
         - name: mysql-volume
           persistentVolumeClaim:
             claimName: mysql-pv-claim
-#          volumeMounts:
-#            - name: mysql-persistance-storage
-#              mountPath: /var/lib/mysql
-#      volumes:
-#        - name: mysql-persistance-storage
-#          persistentVolumeClaim:
-#            claimName: mysql-pv-claim #todo must match with pvc
 ---
-#volumeMounts:
-#  - mountPath: /data/db
-#    name: mongo-volume
-#volumes:
-#  - name: mongo-volume
-#    persistentVolumeClaim:
-#      claimName: mysql-pv-claim

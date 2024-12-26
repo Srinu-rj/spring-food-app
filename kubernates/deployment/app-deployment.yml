@@ -8,7 +8,6 @@ spec:
   selector:
     matchLabels:
       app: app-deployment
-      env: blue # todo blue-deployment
   template:
     metadata:
       labels:
@@ -18,25 +17,26 @@ spec:
 #      nodeSelector:
 #        kubernetes.io/hostname: "new-cluster"
 #      affinity:
-#        nodeAffinity:
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#            nodeSelectorTerms:
-#              - matchExpressions:
-#                  - key: key
-#                    operator: In
-#                    values:
-#                      - value
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: role
+                    operator: In
+                    values:
+                      - worker #Labae name must be deployment Labels
       containers:
         - name: app-deployment
           image: srinu641/spring-image:latest
           imagePullPolicy: IfNotPresent #the image is pulled only if it is not already present locally.
           resources:
             requests:
-              memory: 20Mi
-              cpu: "0.25"
+              memory: "64Mi"
+              cpu: "250m"
             limits:
-              memory: 400Mi
-              cpu: "1"
+              memory: "128Mi"
+              cpu: "500m"
           env:   # Setting Environmental Variables
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -62,10 +62,10 @@ spec:
             - containerPort: 8998
               name: app-deployment
           volumeMounts:
-            - name: mysql
-              mountPath: /var/lib/mysql
+            - mountPath: /var/lib/mysql
+              name: mysql-volume
       volumes:
-        - name: mysql-persistance-storage
+        - name: mysql-volume
           persistentVolumeClaim:
             claimName: mysql-pv-claim
 ---
@@ -93,7 +93,6 @@ spec:
       targetPort: 8998   #TODO  Port exposed to the outside
   selector:
     app: app-deployment
-    env: blue
   type: NodePort #todo ClusterIP
 ---
 
