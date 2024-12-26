@@ -16,18 +16,27 @@ spec:
     spec:
 #      nodeName: local-cluster-m04 # you can specify with in Particular node.
 #      nodeSelector:
-#        kubernetes.io/hostname: "node1"
+#        kubernetes.io/hostname: "new-cluster"
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#              - matchExpressions:
+#                  - key: key
+#                    operator: In
+#                    values:
+#                      - value
       containers:
         - name: app-deployment
           image: srinu641/spring-image:latest
-          imagePullPolicy: IfNotPresent
-#          resources:
-#            requests:
-#              memory: 20Mi
-#              cpu: "0.25"
-#            limits:
-#              memory: 400Mi
-#              cpu: "1"
+          imagePullPolicy: IfNotPresent #the image is pulled only if it is not already present locally.
+          resources:
+            requests:
+              memory: 20Mi
+              cpu: "0.25"
+            limits:
+              memory: 400Mi
+              cpu: "1"
           env:   # Setting Environmental Variables
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

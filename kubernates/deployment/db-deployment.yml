@@ -8,12 +8,12 @@ metadata:
     app: mysql
     tier: database
 spec:
-  storageClassName: gp2
   accessModes:
-    - ReadWriteMany   #todo This specifies the mode of the claim that we are trying to create.
+    - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
+      storage: 5Gi
+  storageClassName: "demo-storage"
 ---
 apiVersion: v1
 kind: Service
@@ -31,7 +31,7 @@ spec:
     - protocol: TCP
       port: 3307
       targetPort: 3307
-  clusterIP: ClusterIP
+  type: NodePort
 ---
 ---
 # Deployment specification begins here
@@ -44,7 +44,9 @@ metadata:
     app: mysql
     tier: database
 spec:
-#  nodeName: Your_Node_name
+#  nodeName: new-cluster-m02
+#  nodeSelector:
+#    kubernetes.io/hostname: new-cluster-m02
   selector: # mySQL Pod Should contain same labels
     matchLabels:
       app: mysql
@@ -79,10 +81,24 @@ spec:
             - containerPort: 3306
               name: mysql
           volumeMounts:
-            - name: mysql-persistance-storage
-              mountPath: /var/lib/mysql
+            - mountPath: /data/db
+              name: mysql-volume
       volumes:
-        - name: mysql-persistance-storage
+        - name: mysql-volume
           persistentVolumeClaim:
-            claimName: mysql-pv-claim #todo must match with pvc
+            claimName: mysql-pv-claim
+#          volumeMounts:
+#            - name: mysql-persistance-storage
+#              mountPath: /var/lib/mysql
+#      volumes:
+#        - name: mysql-persistance-storage
+#          persistentVolumeClaim:
+#            claimName: mysql-pv-claim #todo must match with pvc
 ---
+#volumeMounts:
+#  - mountPath: /data/db
+#    name: mongo-volume
+#volumes:
+#  - name: mongo-volume
+#    persistentVolumeClaim:
+#      claimName: mysql-pv-claim
