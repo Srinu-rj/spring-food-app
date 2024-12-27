@@ -24,9 +24,9 @@ sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add the repository to Apt sources:
 echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -81,7 +81,7 @@ sudo rm /usr/local/bin/trivy
 https://127.0.0.1:32771
 --> CLUSTER NAME
 02 kubectl config view --minify -o jsonpath='{.clusters[0].name}'
-minikube
+   minikube
 03 cat ~/.kube/config
 -------------------------------
 kubectl cluster-info dump
@@ -91,8 +91,8 @@ kubectl config view --minify --output 'jsonpath={.clusters[0].cluster.server}'
 nano ~/.kube/config
 clusters:
 - cluster:
-  server: https://127.0.0.1:3277
-  =================================
+    server: https://127.0.0.1:3277
+=================================
 
 ===========================================================================================================================================================
 nexusArtifactUploader artifacts: [[artifactId: 'spring-food-app', classifier: '', file: 'target/spring-image.jar', type: 'jar']], credentialsId: 'nexus-credential', groupId: 'com.foodapp', nexusUrl: '192.168.0.100:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'spring-maven', version: '0.0.1-SNAPSHOT'
@@ -130,12 +130,12 @@ minikube start driver=docker --cpus=4 --memory=3800
 cd /mnt/d/spring-food-app/k8s
 -------------------------------------
 
--------------------------------------  
+-------------------------------------
 sudo minikube delete
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 minikube start --driver=docker
--------------------------------------  
+-------------------------------------
 
 -----
 access key->  AKIA2MNVL5557C2T2QSM
@@ -177,14 +177,14 @@ sudo systemctl restart docker
 
 -------
 pipeline {
-agent any
-stages {
-stage('Test AWS CLI') {
-steps {
-sh 'aws --version'
-}
-}
-}
+    agent any
+    stages {
+        stage('Test AWS CLI') {
+            steps {
+                sh 'aws --version'
+            }
+        }
+    }
 }
 -------
 
@@ -204,17 +204,17 @@ eksctl get clusters
 eksctl create cluster --name my-cluster --region us-east-1 --nodes 2
 
 pipeline {
-agent any
-stages {
-stage('Test eksctl') {
-steps {
-sh '''
-eksctl version
-eksctl get clusters
-'''
-}
-}
-}
+    agent any
+    stages {
+        stage('Test eksctl') {
+            steps {
+                sh '''
+                eksctl version
+                eksctl get clusters
+                '''
+            }
+        }
+    }
 }
 ---------------------------------------
 
@@ -223,8 +223,8 @@ eksctl get clusters
 Grafana with Helm
 ------------------
 Requirements
-Minikube
-Helm
+ Minikube
+ Helm
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus prometheus-community/prometheus
@@ -275,10 +275,10 @@ User=prometheus
 Group=prometheus
 Type=simple
 ExecStart=/usr/local/bin/prometheus \
---config.file=/etc/prometheus/prometheus.yml \
---storage.tsdb.path=/var/lib/prometheus \
---web.console.templates=/usr/share/prometheus/consoles \
---web.console.libraries=/usr/share/prometheus/console_libraries
+    --config.file=/etc/prometheus/prometheus.yml \
+    --storage.tsdb.path=/var/lib/prometheus \
+    --web.console.templates=/usr/share/prometheus/consoles \
+    --web.console.libraries=/usr/share/prometheus/console_libraries
 
 [Install]
 WantedBy=multi-user.target
@@ -378,7 +378,7 @@ kubect expose pod nginx_pod --type=LoadBalancer --name=nginx-svc --port=80 --ter
 •	Services
 •	Volumes
 •	Secrets
-ConfigMaps
+	ConfigMaps
 •	Ingress
 •	Horizontal Pod Autoscalers
 •	Scheduler
@@ -424,7 +424,7 @@ CERIFICATE TLS:: for only HOST BASED INGESS::
 01 it will generate self singed certificate
 02 for that we need to create -> SECRETS
 ====================================================================================
-->  
+->
 openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -sub "/CN=restaurant.food.app.application.com
 " -days 365
 
@@ -432,7 +432,7 @@ openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -
 kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
 
 SUMMERY:
-It will generate -> tls.crt and tls.key   
+It will generate -> tls.crt and tls.key
 ====================================================================================
 
 HOW TO GET API ,KIND ,MATADATA OF ANY API::
@@ -443,19 +443,19 @@ mandatory for all yml::
 apiVersion:
 kind: Ingress
 metadata:
-name: ingress-demo
+ name: ingress-demo
 spec:
-rules:
-- host: spring.application.com
-  https:
-  paths:
-    - path: /    #-->  /(.*) root for --> spring.application.com
-      pathType: Prifix or Sufix   # depends on your requirements
-      backend:
-      service:
-      name: # here the service name must be application service name  
-      port:
-      number: # here the service name must be application port number like --> 8998
+ rules:
+  - host: spring.application.com
+    https:
+     paths:
+       - path: /    #-->  /(.*) root for --> spring.application.com
+         pathType: Prifix or Sufix   # depends on your requirements
+         backend:
+          service:
+            name: # here the service name must be application service name
+            port:
+              number: # here the service name must be application port number like --> 8998
 ---
 
 
@@ -466,28 +466,28 @@ THIS IS PATH BASED INGRESS ::
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 matadata:
-name: spring-demoin-application
-annotations:
-nginx.ingress.kubernates.io/rewrite-target: /$1
+  name: spring-demoin-application
+  annotations:
+     nginx.ingress.kubernates.io/rewrite-target: /$1
 spec:
-rules:
-- host: restaurant.food.app.application.com
-https:
-paths: /(.*)  && /api/(.*)
-pathType: Prifix
-backend:
-service:
-name: spring-boot-service
-port:
-number: 8998
+  rules:
+    - host: restaurant.food.app.application.com
+      https:
+        paths: /(.*)  && /api/(.*)
+        pathType: Prifix
+        backend:
+          service:
+            name: spring-boot-service
+            port:
+              number: 8998
 ---
 
-kubectl apply -f spring-path-ingress.yml
-kubectl describe ing  nginc-ingress
-minikube ip -p ingress-cluster --> Get the minikube IP
-sudo vim /etc/hosts
-MAP MINIKUBE IP ADDRESS WITH HOST NAME:
-192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
+ kubectl apply -f spring-path-ingress.yml
+ kubectl describe ing  nginc-ingress
+ minikube ip -p ingress-cluster --> Get the minikube IP
+ sudo vim /etc/hosts
+ MAP MINIKUBE IP ADDRESS WITH HOST NAME:
+ 192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
 
 
 ====================================================================================
@@ -503,7 +503,7 @@ openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -
 kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
 
 SUMMERY:
-It will generate -> tls.crt and tls.key   
+It will generate -> tls.crt and tls.key
 ====================================================================================
 
 ====================================================================================
@@ -513,34 +513,34 @@ THIS IS HOST BASED INGRESS:: -->  no need to write annotations and the paths -->
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 matadata:
-name: spring-demoin-application
+  name: spring-demoin-application
 spec:
-tls:
-- secretName: nginx-demo-com-tls # created secret for tls certificate --> kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
-  hosts:
-    - "restaurant.food.app.application.com"
-      rules:
-      - host: restaurant.food.app.application.com
+  tls:
+   - secretName: nginx-demo-com-tls # created secret for tls certificate --> kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
+     hosts:
+       - "restaurant.food.app.application.com"
+  rules:
+    - host: restaurant.food.app.application.com
       https:
-      paths: /
-      pathType: Prifix
-      backend:
-      service:
-      name: spring-boot-service
-      port:
-      number: 8998
+        paths: /
+        pathType: Prifix
+        backend:
+          service:
+            name: spring-boot-service
+            port:
+              number: 8998
 ---
 we can access HTTPS->
 https:://restaurant.food.app.application.com
 ====================================================================================`
 --> APPLY ::
-kubectl apply -f spring-host-ingress.yml
-minikube ip -p ingress-cluster --> Get the minikube IP
-sudo vim /etc/hosts
-MAP MINIKUBE IP ADDRESS WITH HOST NAME:
-192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
+ kubectl apply -f spring-host-ingress.yml
+ minikube ip -p ingress-cluster --> Get the minikube IP
+ sudo vim /etc/hosts
+ MAP MINIKUBE IP ADDRESS WITH HOST NAME:
+ 192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
 
- 
+
 -------------------------------------------------
 kubectl api-resources | grep ingress
 kubectl api-resources | grep service
@@ -570,60 +570,60 @@ kubectl create ns ingress-nginx
 helm install ingress-nginx ingress-nginx/ingress-nginx -f values.yml -n ingress-nginx
 
 apiVersion: apps/v1
-kind: Deployment
-metadata:
-namespace: default
-name: hello-app-deployment
-labels:
-app: hello-app
-spec:
-replicas: 2
-selector:
-matchLabels:
-app: hello-app
-template:
-metadata:
-labels:
-app: hello-app
-spec:
-containers:
-- name: hello-app
-image: gcr.io/google-samples/hello-app:1.0
-ports:
-- containerPort: 8080
+  kind: Deployment
+  metadata:
+    namespace: default
+    name: hello-app-deployment
+    labels:
+      app: hello-app
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: hello-app
+    template:
+      metadata:
+        labels:
+          app: hello-app
+      spec:
+        containers:
+        - name: hello-app
+          image: gcr.io/google-samples/hello-app:1.0
+          ports:
+          - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-namespace: default
-name: hello-app-service
+  namespace: default
+  name: hello-app-service
 spec:
-type: NodePort
-selector:
-app: hello-app
-ports:
-- protocol: TCP
-port: 8080
+  type: NodePort
+  selector:
+    app: hello-app
+  ports:
+    - protocol: TCP
+      port: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-annotations:
-kubernetes.io/ingress.class: nginx
-name: hello-app
-namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: hello-app
+  namespace: default
 spec:
-rules:
-- host: www.devopsbyexample.io
-http:
-paths:
-- path: /
-pathType: Prefix
-backend:
-service:
-name: hello-app-service
-port:
-number: 8080
+  rules:
+    - host: www.devopsbyexample.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-app-service
+                port:
+                  number: 8080
 ============================================================================
 
 -->
@@ -636,41 +636,41 @@ kubectl port-forword svc/mongo-svc 32000:27017  -->here 32000 port is a NortPOrt
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: mongo
+  name: mongo
 spec:
-replicas: 1
-selector:
-matchLabels:
-app: mongo
-template:
-metadata:
-labels:
-app: mongo
-spec:
-containers:
-- image: mongo
-name: mongo
-args: ["--dbpath", "/data/db"]
-env:
-- name: MONGO_INITDB_ROOT_USERNAME
-value: "admin"
-- name: MONGO_INITDB_ROOT_PASSWORD
-value: "password"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - image: mongo
+          name: mongo
+          args: ["--dbpath", "/data/db"]
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "admin"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "password"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-name: mongo-svc
+  name: mongo-svc
 spec:
-ports:
-- port: 27017
-protocol: TCP
-targetPort: 27017
-nodePort: 32000
-selector:
-app: mongo
-type: NodePort
----          
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+      nodePort: 32000
+  selector:
+    app: mongo
+  type: NodePort
+---
 
 
 
@@ -679,12 +679,12 @@ type: NodePort
 ->> minikube addons enable ingress
 -----------------------------------------------------------------------
 --> INGRESS FOR JENKINS::
-kubectl apply -f spring-path-ingress.yml
-kubectl describe ing  nginc-ingress
-minikube ip -p ingress-cluster --> Get the minikube IP
-sudo vim /etc/hosts
-MAP MINIKUBE IP ADDRESS WITH HOST NAME:
-192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
+ kubectl apply -f spring-path-ingress.yml
+ kubectl describe ing  nginc-ingress
+ minikube ip -p ingress-cluster --> Get the minikube IP
+ sudo vim /etc/hosts
+ MAP MINIKUBE IP ADDRESS WITH HOST NAME:
+ 192.168.63.102 spring.application.com -> SAVE AND COME BACK -> :wq!
 
 -->
 minikube start --vm=true  -p ingress-cluster
@@ -767,55 +767,55 @@ k apply -f kubernates/rabc
 
 ----------------------------
 spec:
-strategy: Recreate
+  strategy: Recreate
 
 spec:
-containers:
-name:
-image:
-resources:
-request:
-memory: "3gi"
-cpu: "2"
-limits:
-memory: "3gi"
-cpu: "2"
+ containers:
+    name:
+    image:
+    resources:
+      request:
+        memory: "3gi"
+        cpu: "2"
+      limits:
+        memory: "3gi"
+        cpu: "2"
 ---
 spec:
-strategy:
-type:
-rollingUpdate:
-maxUnavailable: 25%
-maxSurge: 25%  -> pod created over desired size
-replicas: 4
+  strategy:
+    type:
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%  -> pod created over desired size
+  replicas: 4
 ---
 spec:
-strategy:
-type:
-rollingUpdate:
-# Max number of pods that can be unavailable during the update process
-maxUnavailable: 1
-# Max number of pods that can be create over the desired number of pods
-maxSurge: 25%  -> pod created over desired size
-replicas: 10
+  strategy:
+    type:
+    rollingUpdate:
+      # Max number of pods that can be unavailable during the update process
+      maxUnavailable: 1
+      # Max number of pods that can be create over the desired number of pods
+      maxSurge: 25%  -> pod created over desired size
+  replicas: 10
 ---
 spec:
-containers:
-name:
-image:
-ports:
-- Name: http
-vontainerPort: 8998
-# for
-startupProbe:
-tcpSocket:
-port: 8998
-initialDelaySeconds: 20
-periodSeconds: 5
+ containers:
+    name:
+    image:
+    ports:
+      - Name: http
+        vontainerPort: 8998
+    # for
+    startupProbe:
+       tcpSocket:
+          port: 8998
+       initialDelaySeconds: 20
+       periodSeconds: 5
  ---
 
 
-----------------------------  
+----------------------------
 kubectl get pods -l app=myapp,env=blue
 kubectl scale deployment green --replicas=3
 kubectl describe service blue | grep Endpoints
@@ -885,34 +885,34 @@ Schedule a web server Pod and its corresponding database Pod on the same node.
 Distribute replicas of a stateful application across multiple nodes.
 ---------------------------------
 spec:
-nodeName: your_deployment_lable_name
+  nodeName: your_deployment_lable_name
 
 spec:
-nodeSelector:
-team: your_deployment_lable_name
+  nodeSelector:
+     team: your_deployment_lable_name
 -------------------------------------
 spec:
-nodeName: new-cluster-m02
+  nodeName: new-cluster-m02
 
-nodeSelector:
-kubernetes.io/hostname: new-cluster-m02
+  nodeSelector:
+  kubernetes.io/hostname: new-cluster-m02
 
-affinity:
-nodeAffinity:
-requiredDuringSchedulingIgnoredDuringExecution:
-nodeSelectorTerms:
-- matchExpressions:
-- key: role
-operator: In
-values:
-- worker
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                  - worker
 -------------------------------------------------
 Create ,Watch and Delete cluster| stop cluster | nodes:
 ->
 ----------------------------------------------
 minikube profile list
 
-minikube start -p new-cluster  
+minikube start -p new-cluster
 minikube node add --worker -p new-cluster  --> TO CREATE NEW NODE
 
 minikube start -p Your_cluster_name
@@ -961,7 +961,7 @@ k get pods -o wide /yaml
 
 
 There is only one option to add one pods with help of lables to multiple nodes, Add labels to multiple nodes:
-->  
+->
 k label node fast_node team= your_deployment_lable_name
 k label node secound_node team= your_deployment_lable_name
 k label node thred_node team= your_deployment_lable_name
@@ -1001,34 +1001,34 @@ KUBERNATES VOLUMES: 192.168.67.2
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-name: mongo-pv
+  name: mongo-pv
 spec:
-capacity:
-storage: 5Gi
-accessModes:
-- ReadWriteMany
-local:
-path: /storage/data
-nodeAffinity:
-required:
-nodeSelectorTerms:
-- matchExpressions:
-- key: kubernetes.io/hostname
-operator: In
-values:
-- minikube
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  local:
+    path: /storage/data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-name: mongo-pvc-sc
+  name: mongo-pvc-sc
 spec:
-accessModes:
-- ReadWriteMany
-resources:
-requests:
-storage: 5Gi
-storageClassName: "demo-storage"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: "demo-storage"
 ---
           volumeMounts:
             - mountPath: /data/db
@@ -1041,7 +1041,7 @@ storageClassName: "demo-storage"
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-name: demo-storage
+  name: demo-storage
 provisioner: k8s.io/minikube-hostpath
 volumeBindingMode: Immediate
 reclaimPolicy: Delete
@@ -1054,10 +1054,10 @@ kill 1
 
 ---------------------------
 Note : when pod is deleted port-forward is deleted ,need to port-forward:
-: in real time Pods  created by developer pvc created by k8s admin
-: StorageClass -> this is not namespace , available entire cluster
-: StorageClass  provisioner : many type like AWS EBS ,EFS, AZURE ABS.
-: pvc -> is namespace
+     : in real time Pods  created by developer pvc created by k8s admin
+     : StorageClass -> this is not namespace , available entire cluster
+     : StorageClass  provisioner : many type like AWS EBS ,EFS, AZURE ABS.
+     : pvc -> is namespace
 ->   : reclaimPolicy: Delete -> PVC WILL BE ALSO DELETE ,ONLY PVC DELETED NOT ACTUAL DATA .we need to delete actual data manually
 
 01 k apply -f deployment.yml -> only -> Svc/deploy/pvc
@@ -1160,14 +1160,14 @@ k get all --all-namespaces
 
 -----------------------------------------------------------
 helm install \
-cert-manager jetstack/cert-manager \
---namespace cert-manager \
---create-namespace \
---version v1.16.2 \
---set crds.enabled=true \
---set prometheus.enabled=false \  # Example: disabling prometheus using a Helm parameter
---set webhook.timeoutSeconds=4   # Example: changing the webhook timeout using a Helm parameter
- 
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.16.2 \
+  --set crds.enabled=true \
+  --set prometheus.enabled=false \  # Example: disabling prometheus using a Helm parameter
+  --set webhook.timeoutSeconds=4   # Example: changing the webhook timeout using a Helm parameter
+
 ============================================================================
 INGRESS CONTROLLER
 ============================================================================
@@ -1313,10 +1313,10 @@ kubectl describe ing sevice/deployment
 --> self singed certificated
 -------------------------------------
 spec:
-tls:
-- secretName: nginx-demo-com-tls
-  hosts:
-    - "nginx-demo-com"
+  tls:
+   - secretName: nginx-demo-com-tls
+     hosts:
+       - "nginx-demo-com"
 -------------------------------------
 --> create tls self singed-certificated
 o1 openssl reg -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -subj "/CN=nginx-demo-com" -days 365
@@ -1352,39 +1352,39 @@ The modified version also increases the memory requests, indicating that the con
 
 -----------------------------------------
 spec:
-containers:
-- name: resources-demo
-  image: polinux/stress
-  command: ["stress"]
-  args: ["--cpu", "2", "--vm", "1", "--vm-bytes", "1G", "--vm-hang", "1"]
-  resources:
-  requests:
-  cpu: "200m"
-  memory: "200Mi"
-  limits:
-  cpu: "0.2"
-  memory: "1Gi"
+  containers:
+  - name: resources-demo
+    image: polinux/stress
+    command: ["stress"]
+    args: ["--cpu", "2", "--vm", "1", "--vm-bytes", "1G", "--vm-hang", "1"]
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "200Mi"
+      limits:
+        cpu: "0.2"
+        memory: "1Gi"
 ---
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-name: resource-quota
+  name: resource-quota
 spec:
-hard:
-requests.cpu: 400m
-requests.memory: 200Mi
-limits.cpu: 2000m
-limits.memory: 8Gi
-pods: "10"
-replicationcontrollers: "5"
-secrets: "10"
-configmaps: "10"
-persistentvolumeclaims: "4"
-services: "5"
-services.loadbalancers: "1"
-services.nodeports: "2"
-# Only two PVCs can claim storage with the ssd StorageClass.
-ssd.storageclass.storage.k8s.io/persistentvolumeclaims: "2"
+  hard:
+    requests.cpu: 400m
+    requests.memory: 200Mi
+    limits.cpu: 2000m
+    limits.memory: 8Gi
+    pods: "10"
+    replicationcontrollers: "5"
+    secrets: "10"
+    configmaps: "10"
+    persistentvolumeclaims: "4"
+    services: "5"
+    services.loadbalancers: "1"
+    services.nodeports: "2"
+    # Only two PVCs can claim storage with the ssd StorageClass.
+    ssd.storageclass.storage.k8s.io/persistentvolumeclaims: "2"
 ---
 
 ===========================================================================
@@ -1434,16 +1434,16 @@ cat <<EOF | kubectl apply -f -
 apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
 metadata:
-name: raju
+  name: raju
 spec:
-request: <base64_encoded_csr>
-signerName: kubernetes.io/kube-apiserver-client
-expirationSeconds: 86400  # one day
-usages:
-- digital signature
-- key encipherment
-- client auth
-  EOF
+  request: <base64_encoded_csr>
+  signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 86400  # one day
+  usages:
+  - digital signature
+  - key encipherment
+  - client auth
+EOF
 -------------------------
 kubectl get csr
 
@@ -1466,21 +1466,21 @@ Note:
 Replace KUBERNETES-API-ADDRESS with the actual API server address of your Kubernetes cluster.
 
 3. Set user credentials:
-   ->
-   Use the kubectl config set-credentials command to set up the user credentials:
-   kubectl --kubeconfig ~/.kube/config-anvesh config set-credentials anvesh --client-certificate=anvesh-user.crt --client-key=anvesh.pem --embed-certs=true
+->
+Use the kubectl config set-credentials command to set up the user credentials:
+kubectl --kubeconfig ~/.kube/config-anvesh config set-credentials anvesh --client-certificate=anvesh-user.crt --client-key=anvesh.pem --embed-certs=true
 
 Replace anvesh-user.crt and anvesh.pem with the paths to your user certificate and private key files respectively.
 
 4. Set context information:
-   ->
-   Use the kubectl config set-context command to set up the context information:
-   kubectl --kubeconfig ~/.kube/config-anvesh config set-context default --cluster=preprod --user=anvesh
+->
+Use the kubectl config set-context command to set up the context information:
+kubectl --kubeconfig ~/.kube/config-anvesh config set-context default --cluster=preprod --user=anvesh
 
 5. Use the context:
-   ->
-   Finally, use the kubectl config use-context command to use the newly created context:
-   kubectl --kubeconfig ~/.kube/config-anvesh config use-context default
+->
+Finally, use the kubectl config use-context command to use the newly created context:
+kubectl --kubeconfig ~/.kube/config-anvesh config use-context default
 
 Now, your config-anvesh file is configured with the necessary cluster, user, and context information. You can use it with kubectl commands by passing --kubeconfig ~/.kube/config-anvesh. Make sure to replace placeholder values with your actual configuration details.
 
@@ -1555,7 +1555,7 @@ statefull doset create replica we need to create manually replicas
 ============================================================================
 SERVICE AFFINITY NODENAME NODESELECTOR TAINT AND TOLERATION
 ============================================================================
-the information schedule pod level not container level  
+the information schedule pod level not container level
 ============================================================================
 minikube start --nodes 4
 k get nodes
@@ -1724,132 +1724,128 @@ spring.datasource.url=jdbc:mysql://${DB_HOST}/${DB_NAME}?useSSL=false
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: app-deployment
+  name: app-deployment
 spec:
-selector:
-matchLabels:
-app: app-deployment
-replicas: 6
-template:
-metadata:
-labels:
-app: app-deployment
-spec:
-containers:
-- name: app-deployment
-image: srinu641/spring-image:latest
-imagePullPolicy: Always    #todo imagePullPolicy: "IfNotPresent"
-ports:
-- containerPort: 8998
-env:   # Setting Environmental Variables
-- name: DB_HOST   # Setting Database host address
-value: mysql
-- name: DB_NAME  # Setting Database name
-value: jdbc:mysql://database.cn2aysi4umep.us-east-1.rds.amazonaws.com:3306/spring
-- name: DB_USERNAME  # Setting Database username
-value: root
-- name: DB_PASSWORD # Setting Database password
-value: srinu1234
-volumeMounts:
-- mountPath: /var/lib/mysql
-name: mysql-persistance-storage
-volumes:
-- name: mysql-persistance-storage
-persistentVolumeClaim:
-claimName: mysql-pv-claim
+  selector:
+    matchLabels:
+      app: app-deployment
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: app-deployment
+    spec:
+      containers:
+        - name: app-deployment
+          image: srinu641/spring-image:latest
+          imagePullPolicy: Always    #todo imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8998
+          env:   # Setting Environmental Variables
+            - name: DB_HOST   # Setting Database host address
+              value: mysql
+            - name: DB_NAME  # Setting Database name
+              value: jdbc:mysql://database.cn2aysi4umep.us-east-1.rds.amazonaws.com:3306/spring
+            - name: DB_USERNAME  # Setting Database username
+              value: root
+            - name: DB_PASSWORD # Setting Database password
+              value: srinu1234
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-persistance-storage
+      volumes:
+        - name: mysql-persistance-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
 ---
 
 #todo  Define a 'Service' To Expose the application
 apiVersion: v1
 kind: Service
 metadata:
-name: app-service
+  name: app-service
 spec:
-ports:
-- protocol: "TCP"
-port: 8998    # TODO Port inside the cluster
-targetPort: 8998   #TODO  Port exposed to the outside
-selector:
-app: app-deployment
-type: NodePort
+  ports:
+    - protocol: "TCP"
+      port: 8998    # TODO Port inside the cluster
+      targetPort: 8998   #TODO  Port exposed to the outside
+  selector:
+    app: app-deployment
+  type: NodePort
 ---
 
 # Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-name: mysql-pv-claim # todo name of PVC essential for identifying the storage data
-labels:
-app: mysql
-tier: database
+  name: mysql-pv-claim # todo name of PVC essential for identifying the storage data
+  labels:
+    app: mysql
+    tier: database
 spec:
-accessModes:
-- ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.
-resources:
-requests:
-storage: 1Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
+  accessModes:
+    - ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.
+  resources:
+    requests:
+      storage: 1Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
 ---
 apiVersion: v1
 kind: Service
 metadata:
-name: mysql
-labels:
-app: mysql
-tier: database
+  name: mysql
+  labels:
+    app: mysql
+    tier: database
 spec:
-ports:
-- port: 3307
-targetPort: 3307
-selector:
-app: mysql
-tier: database
-clusterIP: None
+  ports:
+    - port: 3307
+      targetPort: 3307
+  selector:
+    app: mysql
+    tier: database
+  clusterIP: None
 ---
 # Deployment specification begins here
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: mysql
-namespace: app-deployment
-labels:
-app: mysql
-tier: database
+  name: mysql
+  namespace: app-deployment
+  labels:
+    app: mysql
+    tier: database
 spec:
-selector: # mySQL Pod Should contain same labels
-matchLabels:
-app: mysql
-strategy:
-type: Recreate
-template:
-metadata:
-labels: # todo -> Must match 'Service' and 'Deployment' selectors
-app: mysql
-tier: database
-spec:
-containers:
-- name: mysql
-image: mysql:8.0.36
-imagePullPolicy: "IfNotPresent"
-env:
-- name: MYSQL_ROOT_PASSWORD
-value: root
-- name: MYSQL_DATABASE
-value: srinu1234
-ports:
-- containerPort: 3306
-name: mysql
-volumeMounts:
-- mountPath: /var/lib/mysql
-name: mysql-persistance-storage
-volumes:
-- name: mysql-persistance-storage
-persistentVolumeClaim:
-claimName: mysql-pv-claim
+  selector: # mySQL Pod Should contain same labels
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: # todo -> Must match 'Service' and 'Deployment' selectors
+        app: mysql
+        tier: database
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.36
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: srinu1234
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-persistance-storage
+      volumes:
+        - name: mysql-persistance-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
 ---
-
 =======================================================================================
-![img.png](img.png)
-
-
 
 
