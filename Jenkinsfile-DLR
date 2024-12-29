@@ -88,7 +88,6 @@ pipeline {
            }
         }
 
-
         stage('OWASP CHECK'){
             steps{
                 script{
@@ -98,7 +97,13 @@ pipeline {
                 }
             }
         }
-
+        stage('OWASP FS SCAN') {
+            steps {
+                echo "OWASP CHECK Started"
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         stage('Docker Images') {
             steps {
                 script {
@@ -116,22 +121,53 @@ pipeline {
                 script {
                     echo "Tag & Push to DockerHub Started..."
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                      sh "docker tag spring-image srinu641/spring-image:latest"
-                      sh "docker push srinu641/spring-image:latest"
+                      sh "docker tag spring-image srinu641/spring-image:1.0"
+                      sh "docker push srinu641/spring-image:1.0"
                     }
                     echo "End of Tag & Push to DockerHub"
                 }
             }
         }
-
+        stage ("Docker Scout Image Analysis ") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker') {
+                        sh 'docker-scout quickview srinu641/spring-image:1.0'
+                        sh 'docker-scout cves srinu641/spring-image:1.0'
+                        sh 'docker-scout recommendations srinu641/spring-image:1.0'
+                    }
+                }
+            }
+        }
         stage('Docker Image Scan') {
             steps {
-                sh "trivy image --format table -o trivy-image-report.html srinu641/spring-image:latest "
+                sh "trivy image --format table -o trivy-image-report.html srinu641/spring-image:1.0"
                 sh "trivy clean --java-db"
             }
         }
 
-
+    post {
+    always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: """
+                <html>
+                <body>
+                    <div style="background-color: #FFA07A; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Project: ${env.JOB_NAME}</p>
+                    </div>
+                    <div style="background-color: #90EE90; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Build Number: ${env.BUILD_NUMBER}</p>
+                    </div>
+                    <div style="background-color: #87CEEB; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">URL: ${env.BUILD_URL}</p>
+                    </div>
+                </body>
+                </html>
+            """,
+            to: 'dnsrinu143@gmail.com',
+            mimeType: 'text/html'
+        }
     }
 
 }

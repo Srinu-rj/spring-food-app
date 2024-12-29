@@ -5,16 +5,60 @@ TOKENS
 =================================
 GITHUB:-> INTELIJI IDEA
 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
-SONARQUBE:
 
+-------------------------------------
+SONARQUBE:
+GIVE Permission to Build docker image:
+sudo chmod 777 /var/run/docker.sock
+-> password : srinu1234@aA
+=============================================================
+1 sudo apt update && upgrade
+2 sudo apt install openjdk-17-jdk
+2 docker pull sonarqube:latest
+3 docker run -d --name sonarqube \
+    -p 9000:9000 \
+    -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+    -v sonarqube_conf:/opt/sonarqube/conf \
+    -v sonarqube_data:/opt/sonarqube/data \
+    -v sonarqube_logs:/opt/sonarqube/logs \
+    -v sonarqube_extensions:/opt/sonarqube/extensions \
+    sonarqube:latest
+--------------------------------------------------------
 NVD API Key::
 b9ef407c-86f8-4513-baa1-2ecf6c4f6348
 =================================
 
 =============================================================
-MINIKUBE | KUBECTL | DOCKER:
+MINIKUBE | KUBECTL | DOCKER |JENKINS:
 =============================================================
+- Install Jenkins using below script:
+--------
+#!/bin/bash
+sudo apt update -y
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo tee /etc/apt/keyrings/adoptium.asc
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+sudo apt update -y
+sudo apt install temurin-17-jdk -y
+/usr/bin/java --version
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y
+sudo apt-get install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+-------------------------
+sudo chmod 777 jenkins.sh
+sh jenkins.sh
+sudo systemctl status jenkins
+jenkins --version
 --------------------------------------------------------
+docker-scout:
+->
+sudo su
+docker login
+copy the url peast the code
+sudo curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b /usr/local/bin
+--------------------------------
 # Add Docker's official GPG key:
 sudo apt-get update
 sudo apt-get install ca-certificates curl
@@ -30,6 +74,8 @@ echo \
 sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+docker version
 --------------------------------------------------------
 
 minikube logs
