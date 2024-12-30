@@ -7,7 +7,7 @@ spec:
   source:
     repoURL: https://github.com/Srinu-rj/spring-food-app.git
     targetRevision: main
-    path: /kubernates/
+    path: /kubernates/.
     helm:
       values: |
         replicaCount: 2
