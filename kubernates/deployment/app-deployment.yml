@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-deployment-blue
-  namespace: app-namespace
+  namespace: database-production
 spec:
   replicas: 7
   selector:
@@ -16,19 +16,24 @@ spec:
 #      nodeName: local-cluster-m04 # you can specify with in Particular node.
 #      nodeSelector:
 #        kubernetes.io/hostname: "new-cluster"
-#      affinity:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - key: role
+                  - key: app-node
                     operator: In
                     values:
-                      - worker #Labae name must be deployment Labels
+                      - available
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: app-deployment
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: app-deployment
-          image: srinu641/spring-image:latest
+          image: srinu641/spring-image:1.0
           imagePullPolicy: IfNotPresent #the image is pulled only if it is not already present locally.
           resources:
             requests:
@@ -85,7 +90,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-service
-  namespace: app-namespace
+  namespace: database-production
 spec:
   ports:
     - protocol: "TCP"
