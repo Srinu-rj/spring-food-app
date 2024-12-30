@@ -44,7 +44,7 @@ metadata:
     app: mysql
     tier: database
 spec:
-#  nodeName: new-cluster-m02
+#  nodeName: minikube-m02
 #  nodeSelector:
 #    kubernetes.io/hostname: new-cluster-m02
 #  affinity:
