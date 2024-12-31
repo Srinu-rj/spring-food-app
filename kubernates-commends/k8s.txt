@@ -22,8 +22,9 @@ lsblk
 =================================
 
 =============================================================
-MINIKUBE | KUBECTL | DOCKER:
+MINIKUBE | KUBECTL | DOCKER |JAVA:
 =============================================================
+sudo apt install openjdk-17-jre-headless
 --------------------------------------------------------
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -38,14 +39,27 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+
+-> To check if docker installed or nor
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker run hello-world
 --------------------------------------------------------
 
 minikube logs
 minikube stop
 minikube delete
 minikube start --driver=docker
+
+INSTALL KUBERCTL:
+->
+01 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+02 sudo snap install kubectl  --classic
+03 kubectl version --client
+04 kubectl get nodes
 
 INSTALL MINIKUBE:
 ->
@@ -56,17 +70,6 @@ minikube start --driver=docker
 
 minikube delete
 minikube start --driver=docker --addons=storage-provisioner,default-storageclass
-
-INSTALL KUBERCTL:
-->
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-
-
-sudo KUBECONFIG=/var/lib/minikube/kubeconfig /var/lib/minikube/binaries/v1.31.0/kubectl apply --force -f /etc/kubernetes/addons/storage-provisioner.yaml
-sudo KUBECONFIG=/var/lib/minikube/kubeconfig /var/lib/minikube/binaries/v1.31.0/kubectl apply --force -f /etc/kubernetes/addons/storageclass.yaml
-
-kubectl cluster-info
-kubectl get nodes
 
 
 NEXUS ->
@@ -351,40 +354,51 @@ kubectl get all -n argocd
 kubectl port-forward svc/argocd-server -n argocd 8081:443
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
+CREATING APPLICATIONS VIA CLI:
+->
+#Login Using The CLI
+#argocd login <ARGOCD_SERVER>
+->
+argocd login ALB_ADDRESS --username admin --password srinu1234
+
+#Create An Application From deploy Git Repository
+#argocd app create guestbook --repo https://github.com/Srinu-rj/spring-food-app.git --path kubernates --dest-server https://kubernetes.default.svc --dest-namespace database-production
+#argocd app create blue-green-app --repo https://github.com/lily4499/rollout-coming-soon-web.git --path . --dest-server https://kubernetes.default.svc --dest-namespace default
+
+argocd app create blue-green-app \
+--repo https://github.com/lily4499/rollout-coming-soon-web.git \
+--path . \
+--dest-server https://kubernetes.default.svc \
+--dest-namespace default \
+--sync-policy automated
+
+#Sync (Deploy) The Application
+#argocd app sync blue-green-app
+
+# Get ALB for svc-active and svc-preview
+kubectl get svc
+
+>>>>Go on browser
+
 172.20.99.79:8081
 https://medium.com/@mehmetodabashi/installing-argocd-on-minikube-and-deploying-a-test-application-caa68ec55fbf
 --------------------------------------
 ROLLOUT ARGOCD
 --------------------------------------
-kubectl create namespace argo-rollouts
-kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+https://medium.com/@lilnya79/real-time-blue-green-deployment-with-argocd-and-argo-rollout-using-jenkins-6ceaad218b16 ->IMP
 
 kubectl create namespace argo-rollouts
 kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
-kubectl create clusterrolebinding YOURNAME-cluster-admin-binding --clusterrole=cluster-admin --user=dnsrinu143@gmail.com
-kubectl apply -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
-curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-darwin-amd64
-chmod +x ./kubectl-argo-rollouts-darwin-amd64
-sudo mv ./kubectl-argo-rollouts-darwin-amd64 /usr/local/bin/kubectl-argo-rollouts
+
+#Install argo-rollout kubectl plugin with below commands
+curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
+chmod +x ./kubectl-argo-rollouts-linux-amd64
+sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
 kubectl argo rollouts version
-
-kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-rollouts/master/docs/getting-started/basic/rollout.yaml
-kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-rollouts/master/docs/getting-started/basic/service.yaml
-
-
-kubectl argo rollouts get rollout rollouts-demo --watch
+#access argo rollout Dashboard
 kubectl argo rollouts dashboard
 
-Rollout a new image:
-->
-kubectl argo rollouts set image rollouts-demo \
-  rollouts-demo=argoproj/rollouts-demo:yellow
-
-minikube service --all -n default
----------------------------
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-sudo apt-get -y install podman
+-> localhost:3100/rollouts
 ---------------------------
 
 HELM
@@ -806,6 +820,66 @@ tar -xvzf k9s Linux amd64.tar.gz
 sudo mv ./k9s /usr/bin/
 
 ============================================================================
+AWS EKS
+============================================================================
+mkdir eks-terraform && cd eks-terraform
+
+vim main.tf
+
+------------------
+
+// Configure Terraform providers
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+// Define AWS provider configuration
+provider "aws" {
+  region = "us-east-1"   //provide your Region here
+}
+// Include modules for specific configurations
+
+module "eks_cluster" {
+  // source = "github.com/lily4499/terraform-aws-eks-dvpc.git/my_eks"
+  source = "lily4499/eks-dvpc/aws//my_eks"
+  version = ">= 1.0.0, < 2.0.0"
+
+  cluster_name                = "eks_cluster"  //provide your Cluster Name here
+  eks_version                 = "1.26"
+  ami_type                    = "AL2_x86_64"
+  instance_types              = ["t3.small", "t3.medium", "t3.large"]
+  subnet_ids = [
+    "subnet-062bafb72ff1b9c71",
+    "subnet-00f1308ab05d4d97a"
+  ]
+}
+
+---------------------------
+
+terraform init
+terraform apply --auto-approve
+---------------------------------------------------------------
+aws eks update-kubeconfig --region us-east-1 --name eks_cluster
+
+kubectl get nodes
+mkdir eks-jenkins-terraform && cd eks-jenkins-terraform
+
+#Create an EKS Cluster
+#eksctl create cluster --name my-cluster --region <AWS_REGION> --node-type <instance-type> --nodes <desired-nodes>
+eksctl create cluster --name lili-cluster --region us-east-1 --node-type t2.micro --nodes 2
+#aws eks update-kubeconfig --region us-east-1 --name eks_cluster
+
+#Verify Cluster Creation
+#aws eks describe-cluster --name my-cluster --region <AWS_REGION> --query "cluster.status"
+aws eks describe-cluster --name lili-cluster --region us-east-1 --query "cluster.status"
+#Get nodes to confirm your Cluster is up and running
+kubectl get nodes
+
+============================================================================
 BLUE & GREEN DEPLOYMENT
 ============================================================================
 kubectl create secret docker-registry dockerhub \
@@ -1204,9 +1278,9 @@ ISSUER & CLUSTERISSER
 Install Cert-Manager CustomResourceDefinitions (CRDs) Cert-Manager needs the appropriate CRDs installed for resources like ClusterIssuer and Certificate. If the CRDs are missing, install them:
 ->
 
+INSTALL CLUSTERISSUER:
+->
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.crds.yaml
-kubectl get clusterissuer
-
 kubectl get clusterissuer
 kubectl get pods -n cert-manager
 
@@ -1238,6 +1312,70 @@ Installing cert-manager
 05 kubectl get all -n cert-manager
 
 
+-----------------------------------------
+DOCKMENT: ->install cert-manager using kubectl and static manifests.
+-----------------------------------------
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.2/cert-manager.yaml
+kubectl get pods --namespace cert-manager
+cmctl check api
+cmctl check api --wait=2m
+
+--------------------------
+cat <<EOF > test-resources.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager-test
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: test-selfsigned
+  namespace: cert-manager-test
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: selfsigned-cert
+  namespace: cert-manager-test
+spec:
+  dnsNames:
+    - example.com
+  secretName: selfsigned-cert-tls
+  issuerRef:
+    name: test-selfsigned
+EOF
+--------------------------
+kubectl apply -f test-resources.yaml
+kubectl describe certificate -n cert-manager-test
+Events:
+  Type    Reason      Age   From          Message
+  ----    ------      ----  ----          -------
+  Normal  CertIssued  4s    cert-manager  Certificate issued successfully
+->
+kubectl delete -f test-resources.yaml
+
+-----------------------------------------
+------------------------------------
+HELM:
+->
+INSTALL HELM:
+->
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+------------------------------------
+helm repo add jetstack https://charts.jetstack.io --force-update
+helm repo update
+
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.0/cert-manager.crds.yaml
+
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.7.0
+------------------------------------
 k get pods -n cert-manager
 k get deployments -n cert-manager
 helm list -n cert-manager
@@ -1245,6 +1383,8 @@ k get crds | grep cert-manager
 k logs -n cert-manager deploy/cert-manager
 k get all --all-namespaces
 
+UNINSTALL CERT-MANAGER:
+helm uninstall cert-manager -n cert-manager
 -----------------------------------------------------------
 helm install \
   cert-manager jetstack/cert-manager \
@@ -1258,6 +1398,7 @@ helm install \
 ============================================================================
 INGRESS CONTROLLER
 ============================================================================
+minikube start --driver=docker --addons=ingress
 mkdir -p ./k8s/ingress-nginx/
 ls -l ./k8s/ingress-nginx/
 
@@ -1267,9 +1408,16 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm search repo ingress-nginx --versions
 
+
 -------------------------------------------
 CERT-MANAGER:
 -> TO INSTALL CERT MANAGER CLUSTER:
+
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.0/cert-manager.crds.yaml
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.7.0
+
 
 creating nodes :
 ->
@@ -1342,17 +1490,12 @@ kubectl describe clusterissuer
 k get secret --namespace cert-manager
 
 
-
-
 -------------------------------------------
 helm install ingress-nginx ingress-nginx/ingress-nginx  \
 --namespace ingress-nginx \
 --set controller.ingressClassResource.name=nginx
 
 kubectl -n ingress-nginx get svc
-
-
-
 
 
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -1572,12 +1715,6 @@ kubectl --kubeconfig ~/.kube/config-anvesh config use-context default
 Now, your config-anvesh file is configured with the necessary cluster, user, and context information. You can use it with kubectl commands by passing --kubeconfig ~/.kube/config-anvesh. Make sure to replace placeholder values with your actual configuration details.
 
 kubectl --kubeconfig ~/.kube/config-anvesh get pods
-
-
-
-
-
-
 
 
 kubectl certificate approve anvesh
