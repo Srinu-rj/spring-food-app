@@ -16,21 +16,21 @@ spec:
 #      nodeName: local-cluster-m04 # you can specify with in Particular node.
 #      nodeSelector:
 #        kubernetes.io/hostname: "new-cluster"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: app-node
-                    operator: In
-                    values:
-                      - available
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app: app-deployment
-              topologyKey: "kubernetes.io/hostname"
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#              - matchExpressions:
+#                  - key: app-node
+#                    operator: In
+#                    values:
+#                      - available
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            - labelSelector:
+#                matchLabels:
+#                  app: app-deployment
+#              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: app-deployment
           image: srinu641/spring-image:1.0
@@ -43,26 +43,37 @@ spec:
               memory: "128Mi"
               cpu: "500m"
           env:   # Setting Environmental Variables
-            - name: MYSQL_ROOT_PASSWORD
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: host
+
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
+
+            - name: DB_USERNAME  # Setting Database username from Secret
               valueFrom:
                 secretKeyRef:
-                  name: rds-secret
-                  key: root-password
-            - name: MYSQL_DATABASE
+                  name: mysql-secrets
+                  key: username
+
+            - name: DB_PASSWORD # Setting Database password from Secret
               valueFrom:
                 secretKeyRef:
-                  name: aws-rds-server
-                  key: secret
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: rds-secret
-                  key: user
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: rds-secret
+                  name: mysql-secrets
                   key: password
+#            - name: DB_HOST   # Setting Database host address
+#              value: mysql
+#            - name: DB_NAME  # Setting Database name
+#              value: jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring
+#            - name: DB_USERNAME  # Setting Database username
+#              value: root
+#            - name: DB_PASSWORD # Setting Database password
+#              value: srinu1234
           ports:
             - containerPort: 8998
               name: app-deployment

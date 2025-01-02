@@ -1,5 +1,8 @@
 k apply -f  db-deployment.yml -n app-namespace -f db-deployment.yml  -n app-namespace -f limit.yml -n app-namespace -f hpa.yml -n app-namespace
 
+3119: Kubernetes Cluster Monitoring.
+6417: Kubernetes Pods Monitoring.
+
 =================================
 TOKENS
 =================================
@@ -789,7 +792,12 @@ kubectl -n jenkins apply -f .
 -----------------------------------------------------------------------
 
 ============================================================================
-KUBERNATES TOPICS
+KUBERNATES TOPICS:
+sudo systemctl restart kubelet.service
+sudo systemctl enable kubelet.service
+
+
+minikube start --kubernates-version=v1.26.1 --driver=docker
 ============================================================================
 How to apply Kubernetes manifest :
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -880,7 +888,7 @@ aws eks describe-cluster --name lili-cluster --region us-east-1 --query "cluster
 kubectl get nodes
 
 ============================================================================
-BLUE & GREEN DEPLOYMENT
+KUBERNATES SERVICES BLUE & GREEN DEPLOYMENT
 ============================================================================
 kubectl create secret docker-registry dockerhub \
 --docker-server=docker.io \
@@ -973,8 +981,15 @@ kubectl describe service blue | grep Endpoints
 kubectl describe service green | grep Endpoints
 
 ============================================================================
-MINIKUBE :
+MINIKUBE | ADDONS LIST:
 ============================================================================
+ADDONS LIST ENABLE:
+------------------
+minikube profile list
+minikube addons enable ingress
+minikube addons eneble volumesnapshots
+
+
 MINIKUBE | KIND | K3S | KUBEADM
 minikube drivers:
 
@@ -999,7 +1014,7 @@ To know how many clustres:
 kubectl config get-contexts
 
 ============================================================================
-KUBERNATES NODES:
+KUBERNATES SERVICES NODES:
 ============================================================================
 In Kubernetes, both Pod Affinity and Node Affinity are mechanisms for controlling where Pods are scheduled within your cluster. They differ in their focus:
 In Kubernetes, you don't directly allocate resources to nodes. Instead, you define resource requests and limits for your Pods (collections of containers)
@@ -1039,7 +1054,10 @@ kubectl label nodes <node-name-1> node-type=worker
 kubectl label nodes <node-name-2> node-type=worker
 kubectl label nodes <node-name-3> node-type=worker
 kubectl label nodes <node-name-4> node-type=worker
-
+--------------------------------------------------
+k label node node_name team=analytics
+k get nodes --show-labels -> to know the witch pod label with node
+k get nodes -l team=analytics --> here  analytics is a label name || get nodes particular labels
 k label node minikube team=label_name
 ---------------------------------
 spec:
@@ -1070,11 +1088,8 @@ spec:
 Create ,Watch and Delete cluster| stop cluster | nodes:
 ->
 ----------------------------------------------
-minikube profile list
-
-minikube start -p new-cluster
-minikube node add --worker -p new-cluster  --> TO CREATE NEW NODE
-
+Create new cluster:
+->
 minikube start -p Your_cluster_name
 minikube node add --worker -p Your_cluster_name
 -----------------------------------------------
@@ -1147,7 +1162,7 @@ minikube node remove --worker -p node_nme --> TO CREATE NEW NODE
 minikube start -p my-node
 
 ============================================================================
-KUBERNATES VOLUMES: 192.168.67.2
+KUBERNATES SERVICES VOLUMES: 192.168.67.2
 ============================================================================
 - ReadWriteMany ->whitch means the voulmesas a read by many nodes , your pods running acroces many nodes this is best.
 - ReadwriteOnce -> whitch means the voulmesas a read by single node.
@@ -1212,6 +1227,23 @@ ps aux
 k port-forward svc/mongo-svc  32000:27017
 kill 1
 
+
+sudo apt-get update
+sudo apt-get install mysql-server-8.0.40
+sudo apt-get install mysql-client-8.0.40
+mysql -h localhost -u root -p --protocol=TCP
+
+kubectl -n database-production exec -ti pod_name -- mysql  --user=root --password=srinu1234
+kubectl -n database-production exec -it <mysql-pod-name> -- /bin/bash
+mysql -u root -p
+
+create database db_name;
+
+
+mysql -u root --password=srinu1234
+create database database_name;
+use database_name;
+
 ---------------------------
 Note : when pod is deleted port-forward is deleted ,need to port-forward:
      : in real time Pods  created by developer pvc created by k8s admin
@@ -1226,7 +1258,7 @@ Note : when pod is deleted port-forward is deleted ,need to port-forward:
 04 k port-forward svc/mongo-svc  31000:3306
 05 k apply -f sc.yml
 06 k get sc
-
+07 kubectl
 
 k get pods
 k -n database-production get pod mysql-5d66cf4675-bqdn5 -o yaml
@@ -1249,7 +1281,7 @@ ctrl+ R
 
 
 minikube ssh
-sudo ls /var/lib/kubectl/pods
+sudo ls /var/lib/mysql/pods
 sudo ls /var/lib/kubectl/pods/pod_id
 sudo ls /var/lib/kubectl/pods/pod_id/volumes
 sudo ls /var/lib/kubectl/pods/pod_id/volumes/kubernates.emty.dir
@@ -1262,7 +1294,7 @@ k delete pod pod_name
 
 
 ============================================================================
-NAMESPACES
+KUBERNATES SERVICES NAMESPACES
 ============================================================================
 kubectl get pods --all-namespaces -l app=my-app
 kubectl get all --all-namespaces -o wide
@@ -1273,7 +1305,7 @@ kubectl get all --all-namespaces
 
 
 ============================================================================
-ISSUER & CLUSTERISSER
+KUBERNATES SERVICES ISSUER & CLUSTERISSER
 ============================================================================
 Install Cert-Manager CustomResourceDefinitions (CRDs) Cert-Manager needs the appropriate CRDs installed for resources like ClusterIssuer and Certificate. If the CRDs are missing, install them:
 ->
@@ -1287,7 +1319,7 @@ kubectl get pods -n cert-manager
 
 
 ============================================================================
-CRONJOBS | JOBS
+KUBERNATES SERVICES CRONJOBS | JOBS
 ============================================================================
 USE CASES:
 
@@ -1396,8 +1428,20 @@ helm install \
   --set webhook.timeoutSeconds=4   # Example: changing the webhook timeout using a Helm parameter
 
 ============================================================================
-INGRESS CONTROLLER
+KUBERNATES SERVICES INGRESS CONTROLLER
 ============================================================================
+minikube addons enable ingress
+k get pod -n kube-system
+k get pod -n ingress-nginx -> to check if ingress is enable ot not!
+k get ing -n your_ns
+minikube ip
+vim /etc/hosts Yourip Host_name
+curl Host_name
+curl Host_name/sub_host
+-------------------------------------------------------------------
+
+
+
 minikube start --driver=docker --addons=ingress
 mkdir -p ./k8s/ingress-nginx/
 ls -l ./k8s/ingress-nginx/
@@ -1417,20 +1461,6 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.0/cert-manager.crds.yaml
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.7.0
-
-
-creating nodes :
-->
-minikube start -p local-cluster -> need to Create local-cluster for new NODES
-minikube node add --worker -p node_nme --> TO CREATE NEW NODE
-
-Enable nginx-cluster in addons list:
-->
-minikube addons list
-minikube addons enable ingress -p ingress-cluster
-minikube start driver=docker ingress -p ingress-cluster
-kubectl po -n ingress-nginx
-minikube logs --file=logs.txt
 
 
 KIND INSTALLATION:
@@ -1514,30 +1544,9 @@ Host-Based Routing::
 curl -H "Host: example.local" http://<INGRESS_CONTROLLER_IP>
 -------------------
 
-sudo KUBECONFIG=/var/lib/minikube/kubeconfig /var/lib/minikube/binaries/v1.31.0/kubectl apply --force --validate=false -f /etc/kubernetes/addons/storageclass.yaml
-sudo KUBECONFIG=/var/lib/minikube/kubeconfig /var/lib/minikube/binaries/v1.31.0/kubectl apply --force --validate=false -f /etc/kubernetes/addons/storage-provisioner.yaml
-
 
 kubectl config view
 kubectl cluster-info
-
-
-
-minikube start driver=docker -p ingress-cluster
-k apply -f nginx-deploy.yml
-k apply -f nginx-service.yml
--->
-minikube addons enable ingress -p ingress-cluster
--->
-k get po -n ingress-nginx
-k apply -f ing.yml
-k get ing
-minikube ip -p ingress-cluster -> 192.168.49.2 spring.boot.com
-sudo vim /ect/host
---> we ll map the domain name to the loadbalancer
-minikube_ip_address domain_name
-
-kubectl describe ing sevice/deployment
 
 -------------------------------------
 --> self singed certificated
@@ -1553,7 +1562,7 @@ o1 openssl reg -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.cr
 02 kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
 
 ============================================================================
-RESCORCE MANAGEMENT && LINIMT RANGE
+KUBERNATES SERVICES RESCORCE MANAGEMENT && LINIMT RANGE
 ============================================================================
 When several users or teams share a cluster with a fixed number of nodes,
 there is a concern that one team could use more than its fair share of resources.:
@@ -1618,7 +1627,7 @@ spec:
 ---
 
 ===========================================================================
-KUBERNATES RBAC
+KUBERNATES SERVICES RBAC
 ===========================================================================
 #to know how many clusters in
 ->
@@ -1628,7 +1637,7 @@ code ~/.kube/config
 openssl genrsa -out srinu.key 2048
 
 certificate signing request:
-openssl req -new -key srinu.key -out srinu.csr -subj "/CN=username/O=srinu"
+openssl req -new -key srinu.key -out srinu.csr -subj "/CN=srinu/O=srinu"
 openssl req -new -key raju.key -out raju.csr -subj "/CN=raju/O=dev/O=Srinu.org"
 -> here Srinu.org is a grope name
 ls | grep Srinu
@@ -1638,6 +1647,8 @@ sudo openssl x509 -req -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreat
 kubectl config set-credentials raju --client-certificate=raju.crt --client-key=raju.key
 kubectl config set-context raju-minikube --cluster=minikube --user=raju --namespace=default
 
+
+
 YOU NEED TO CREATE role rolebinding in minikube context then switch to user_context know you can access the roles and :
 k config get-contexts
 k config use-context minikube
@@ -1645,6 +1656,15 @@ k apply -f role.yml
 k get roles
 k apply -f role-binding.yml -n role-namespace
 k config use-context raju-minikube
+
+Possible operations over these resources are:
+• create      • 	get
+• delete
+• list
+• update
+• edit
+• watch
+• exec
 
 ------------------------------------------------------
 Generate a private key for rajuusing RSA algorithm (4096 bits):
@@ -1734,12 +1754,16 @@ kubectl apply -f pod-list-clusterrole.yaml
 kubectl apply -f anvesh-pod-lister-clusterrolebinding.yaml
 kubectl --kubeconfig ~/.kube/config-anvesh get pods -A
 ===========================================================================
-SERVICE HPA::
+KUBERNATES SERVICE HPA| AUTO SCALELR::
 ===========================================================================
+
+
 kubectl get hpa -n <namespace>
 kubectl describe hpa <hpa-name> -n <namespace>
 kubectl describe hpa horizontal-deployment -n app-namespace
 kubectl logs -l app=<deployment-label> -n <namespace>
+k autoscale  deployment dep_name --cpu-present=20 --min=1 --max=7
+k exec deply_name -it -- /bin/bash
 
 --------------------------------------------------------
 one way
@@ -1750,15 +1774,46 @@ cd autoscaler
 k get vpa utility-api -> to check if vpa installed or not
 
 --------------------------------------------------------
-second way
+second way -> BEST ONE
 --------------------------------------------------------
+----------------
+INSTALL PROCESS HPA:
+----------------
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+ls | grep comp
+vim components.yaml
+->add under spec:
+hostNetwork: true
+->add argd under metric-resolutions line:
+- --kubelet-insecure-tls
+
+Now, you have to apply this by the below command
+kubectl apply -f components.yml
+To validate, run the command below :
+kubectl get pods -n kube-system
+-----------------------------------------
+
+
+
 kubectl get deployment metrics-server -n kube-system
 kubectl top nodes
 kubectl top pods
 kubectl api-versions | grep autoscaling
 kubectl get hpa
 kubectl get pods -n kube-system -> Verify metrics server is running:
+============================================================================
+KUBERNATES SERVICE NETWORK POLICIES
+============================================================================
+INSTALLATION PROCESS:
+
+minikube start --network-plugin=cni
+curl -LO https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz
+sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+cilium install
+kubectl get pods — namespace=kube-system -l k8s-app=cilium
+
+rm cilium-linux-amd64.tar.gz
+
 
 ============================================================================
 SERVICE STATEFULL && STATELESS
@@ -1774,27 +1829,6 @@ Headlesss-> services cant be direct access out said of the cluster
 statefull doset create replica we need to create manually replicas
 
 ============================================================================
-
-
-============================================================================
-SERVICE AFFINITY NODENAME NODESELECTOR TAINT AND TOLERATION
-============================================================================
-the information schedule pod level not container level
-============================================================================
-minikube start --nodes 4
-k get nodes
-k applt -f demo.yml
-k get
-k label node node_name team=analytics
-k get nodes --show-labels -> to know the witch pod label with node
-k get nodes -l team=analytics --> here  analytics is a label name || get nodes particular labels
-
-
-nodeaffinty::
-
-============================================================================
-
-
 
 MINIKUBE: MIIKUBE IP::-> 192.168.49.2
 --------------------------------------------------------------------------
@@ -2152,4 +2186,3 @@ k get svc -n production
 k get nodes -o  wide
 curl node-IP:NodePort
 k edit svc frentndEndSvc -n producation
-

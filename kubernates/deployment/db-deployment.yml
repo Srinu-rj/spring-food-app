@@ -31,7 +31,7 @@ spec:
     - protocol: TCP
       port: 3307
       targetPort: 3307
-  type: NodePort
+  type: NodePort # None # We Use DNS, Thus ClusterIP is not relevant
 ---
 ---
 # Deployment specification begins here
@@ -65,8 +65,8 @@ spec:
   selector: # mySQL Pod Should contain same labels
     matchLabels:
       app: mysql
-  strategy:
-    type: Recreate
+#  strategy:
+#    type: Recreate
   template:
     metadata:
       labels: # todo -> Must match 'Service' and 'Deployment' selectors
@@ -81,25 +81,26 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: rds-secret
-                  key: user
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: rds-secret
+                  name: mysql-secrets
                   key: password
+
+            - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
 #            - name: MYSQL_ROOT_PASSWORD
-#              value: root
-#            - name: MYSQL_DATABASE
 #              value: srinu1234
+#            - name: MYSQL_DATABASE
+#              value: spring
           ports:
             - containerPort: 3306
               name: mysql
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: mysql-volume
+              name: mysql-persistent-storage
       volumes:
-        - name: mysql-volume
+        - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
 ---
