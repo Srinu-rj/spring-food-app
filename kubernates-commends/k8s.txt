@@ -1562,7 +1562,7 @@ o1 openssl reg -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.cr
 02 kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
 
 ============================================================================
-KUBERNATES SERVICES RESCORCE MANAGEMENT && LINIMT RANGE
+VICES RESCORCE MANAGEMENT && LINIMT RKUBERNATES SERANGE
 ============================================================================
 When several users or teams share a cluster with a fixed number of nodes,
 there is a concern that one team could use more than its fair share of resources.:
@@ -1792,9 +1792,6 @@ kubectl apply -f components.yml
 To validate, run the command below :
 kubectl get pods -n kube-system
 -----------------------------------------
-
-
-
 kubectl get deployment metrics-server -n kube-system
 kubectl top nodes
 kubectl top pods
