@@ -1,0 +1,906 @@
+=============================================================
+NEXUS ->
+nexus.exe /run
+cd nexus.exe /install Nexus-Repository-Service ->administrator
+cd nexus.exe /start Nexus-Repository-Service ->administrator -> start perinatally
+cd nexus.exe /stop Nexus-Repository-Service -> to stop service
+
+http://192.168.0.100:8081/
+=============================================================
+
+
+=============================================================
+NGROK && NEXUS -> nexus.exe /run
+=============================================================
+ngrok version
+ngrok config edit
+nano ~/.ngrok2/ngrok.yml
+ngrok start --all
+
+ngrok authtoken <your-ngrok-auth-token>
+# For Jenkins
+ngrok http 8080
+
+# For SonarQube
+ngrok http 9000
+
+# For ArgoCD
+ngrok http 8081
+
+---------------------
+authtoken: <your-ngrok-auth-token>
+
+tunnels:
+  jenkins:
+    addr: 8080
+    proto: http
+  sonarqube:
+    addr: 9000
+    proto: http
+  argocd:
+    addr: 8081
+    proto: http
+-------------------
+---------------------
+SUB DOMIAN
+---------------------
+tunnels:
+  jenkins:
+    addr: 8080
+    proto: http
+    subdomain: jenkins-application.com
+  sonarqube:
+    addr: 9000
+    proto: http
+    subdomain: sonarqube-application.com
+  argocd:
+    addr: 8081
+    proto: http
+    subdomain: argocd-yourname
+---------------------
+
+
+
+=============================================================
+JENKINS:
+=============================================================
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins
+
+ sudo apt update
+ sudo apt install Jenkins
+
+ sudo apt update && upgrade
+ sudo systemctl start Jenkins
+ sudo systemctl enable Jenkins
+ sudo systemctl status jenkins
+
+=============================================================
+=============================================================
+docker tag docker-spring-image:latest srinu641/kubernates
+docker push srinu641/kubernates:latest
+
+=============================================================
+GITHUB-> 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
+C:\Program Files\Git\bin\git.exe
+=============================================================
+
+ 1 docker pull mysql:latest
+ 2 docker network create spring-network-mysql
+ 3 docker network ls
+ 4 docker run --name mysqldb --network spring-network-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=foodapp -e MYSQL_USER=spring -e  MYSQL_PASSWORD=root -d mysql:latest
+ 5 docker exec -it containerfastthreenumber bash
+ 6 mysql -uspring -proot
+ 7 spring.datasource.url=jdbc:mysql://mysqldb:3306/foodapp ->>change MySQL container name
+   spring.datasource.username=spring
+   spring.datasource.password=root
+ 8 clean mvn -> install Jarfile
+ 9 FROM openjdk:17
+   EXPOSE 8080
+   COPY target/docker-spring-image.jar .
+   ENTRYPOINT ["java","-jar","/docker-spring-image.jar"]
+10 docker build -t docker-spring-image .
+11 docker run --network spring-network-mysql --name springboot-container -p 8080:8080 -d srinu641/docker-spring-image
+
+12 docker tag docker-spring-image:latest srinu641/kubernates ->optional
+   docker push srinu641/kubernates:latest
+
+
+please Join scrum call
+=============================================================
+=============================================================
+
+=============================================================
+https://github.com/bkrrajmali/helloworld aws cicd-bala sir
+=============================================================
+
+EMAIL --> jpfwaiwcjcxvwyjx
+
+Install Docker Scout:
+curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sudo sh -s -- -b /usr/local/bin
+docker scout version
+
+
+=============================================================
+GIVE Permission to Build docker image:
+sudo chmod 777 /var/run/docker.sock
+=============================================================
+
+=============================================================
+Access key-> AKIAVRUVVEGWOLVMQ7BZ
+secret key-> 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
+=============================================================
+
+
+=============================================================
+ARGOCD
+=============================================================
+USER: admin PASSWORD: srinu1234
+127.0.0.1:8082/
+TO RUN ARGOCD: kubectl port-forward svc/argocd-server -n argocd 8082:443
+
+--------------------------------------------
+CREATE ARGOCD:
+--------------------------------------------
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl port-forward svc/argocd-server -n argocd 8081:80
+kubectl get pods -n argocd
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+
+--------------------------------------------
+Install ArgoCD using Helm (for Kubernetes)::
+
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+helm install argocd argo/argo-cd --namespace argocd --create-namespace
+kubectl port-forward svc/argocd-server -n argocd 8081:80
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+
+--------------------------------------------
+Install ArgoCD on a Non-Kubernetes Environment::
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/ingress.yaml
+
+
+
+=============================================================
+kubectl cluster-info dump
+Kubernetes control plane is running at https://<server-endpoint>
+CoreDNS is running at https://<server-endpoint>/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+kubectl config view --minify --output 'jsonpath={.clusters[0].cluster.server}'
+nano ~/.kube/config
+clusters:
+- cluster:
+    server: https://<server-endpoint>
+
+=============================================================
+UBUNTU:
+=============================================================
+INSTALL SONARQUBE IN UBUNTU: TOKEN--> squ_2212402325d5f9730e67e1c7f18b4b4cb89512fb
+TO START SONARQUBE ->docker start 2052455ca384
+Git Token --> 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
+----------------------------------------------------------------
+GIVE Permission to Build docker image:
+sudo chmod 777 /var/run/docker.sock
+-> password : srinu1234@aA
+=============================================================
+1 sudo apt update && upgrade
+2 sudo apt install openjdk-17-jdk
+2 docker pull sonarqube:latest
+3 docker run -d --name sonarqube \
+    -p 9000:9000 \
+    -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+    -v sonarqube_conf:/opt/sonarqube/conf \
+    -v sonarqube_data:/opt/sonarqube/data \
+    -v sonarqube_logs:/opt/sonarqube/logs \
+    -v sonarqube_extensions:/opt/sonarqube/extensions \
+    sonarqube:latest
+
+-----------------------
+JENKINS:
+-----------------------
+sudo apt update
+sudo apt install openjdk-11-jdk -y  # Install Java
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+
+-------------------
+TRIVY
+-------------------
+sudo apt update
+sudo apt install snapd
+=============================================================
+JENKINS INSTALL:  Ubuntu SonarToken-> squ_caf3b18b3cc5a8d44159e8fd48c22e7d7c4f30b0
+docker SonarQube Token -> squ_ce88551387c0f2f2694cef2b9234acc301d5f916
+=============================================================
+-----------------------------------------
+1 sudo apt update && upgrade
+2 sudo apt install openjdk-17-jdk
+3 http://172.20.99.79:8080/
+4 http://192.168.0.107:9000
+5 sudo chmod 777 /var/run/docker.sock
+-----------------------------------------
+wget -q -O —
+https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add
+sudo sh -c ‘echo deb
+http://pkg.jenkins.io/debian-stable binary/ >
+ /etc/apt/sources.list.d/jenkins.list’
+
+ sudo apt update
+ sudo apt install Jenkins
+
+ sudo apt update && upgrade
+ sudo systemctl start Jenkins
+ sudo systemctl enable Jenkins
+ sudo systemctl status jenkins
+============================================================
+
+=============================================================
+NEXUX INSTALL:
+=============================================================
+1 docker pull sonatype/nexus3:latest
+2 docker run -d --name nexus \
+    -p 8081:8081 \
+    -v nexus-data:/nexus-data \
+    sonatype/nexus3:latest
+
+3 docker ps -> TO CHEK IF NEXUX INSTALLED OR NOT
+4 http://localhost:8081
+5 docker logs nexus
+6 Admin password: xxxxxxxxxxxxxx
+7 docker logs nexus
+8 docker stop nexus
+9 docker start nexus
+
+
+-------------------------------------------------------------
+sudo docker stop sonarqube
+sudo docker rm SonarQube
+sudo docker stop <container_id_or_name>
+ <container_id_or_name>
+
+sudo docker run -d --name sonarqube -p 9000:9000 sonarqube
+sudo docker restart sonarqube
+sudo docker ps
+sudo docker logs sonarqube
+
+-> rm filename.sh
+-> rm -f filename.sh
+-> rm *.sh
+==========================================================================================================================
+DOCKER IP:
+172.20.99.79
+Jenkins:
+http://172.20.99.79:8080/
+sonar:Docker:
+http://172.20.99.79:9000/
+==========================================================================================================================
+WINDOWS Nexus:
+nexus.exe /run ->to start nexus
+C:\nexus-3.72.0-04\bin -> perminatlly run
+nexus.exe /start Nexus-Repository-Service ->start nexus
+http://192.168.0.104:8081/
+
+NEXUS APPLICATION:
+
+nexusArtifactUploader artifacts: [[artifactId: 'spring-food-app', classifier: '', file: 'target/spring-image.jar', type: 'jar']], credentialsId: 'nexus', groupId: 'com.foodapp', nexusUrl: '192.168.0.104:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'demo-app', version: '0.0.1-SNAPSHOT'
+
+==========================================================================================================================
+-->
+  <distributionManagement>
+ <!-- Publish the versioned releases here -->
+
+  <snapshotRepository>
+  <id>snapshotnexus</id>
+  <name>snapshot nexus</name>
+  <url>http://localhost:8081/repository/maven-snapshots/</url>
+ </snapshotRepository>
+
+ <repository>
+  <id>releasenexus</id>
+  <name>release nexus</name>
+  <url>http://localhost:8081/repository/maven-releases/</url>
+ </repository>
+
+</distributionManagement>
+
+--> in maven xml file nexus user and password
+   <server>
+      <id>releasenexus</id>
+      <username>admin</username>
+      <password>srinu</password>
+   </server>
+   <server>
+      <id>snapshotnexus</id>
+      <username>admin</username>
+      <password>srinu</password>
+   </server>
+
+=============================================================
+=============================================================
+
+
+=============================================================
+DOCKER:
+
+docker ps
+docker ps -a
+docker logs -f <container_id_or_name>
+docker logs <container_id_or_name>
+docker stop <container_id_or_name>
+docker rm <container_id_or_name>
+docker rm -f <container_id_or_name>
+docker container prune --> remove all container in docker
+docker container prune -f
+docker images
+docker history <image_id_or_name>
+docker rmi <image_id_or_name>
+docker rmi -f <image_id_or_name>
+docker image prune -a  -->To remove all unused images
+docker image prune -a -f  -->remove all Images in docker
+sudo journalctl -u docker.service -->If you're looking for general Docker logs (daemon-level)
+
+=============================================================
+UBUNTU:
+
+touch <filename>
+mkdir <directory_name>
+mkdir -p /path/to/directory
+cp <source_file> <destination_file>
+cp -r <source_directory> <destination_directory>
+mv <source> <destination>
+rm <file_name>
+rm -r <directory_name>
+rm -rf <directory_name>
+rm -rf <directory_name>
+less <file_name>
+head <file_name>
+tail <file_name>
+tail -f <file_name>
+
+chmod 755 <file_or_directory>
+
+chmod u+x <file>  # Give execute permission to the owner
+chmod g-w <file>  # Remove write permission from group
+chmod o=r <file>  # Set read-only for others
+sudo chown <new_owner> <file_or_directory>
+sudo chown <new_owner>:<new_group> <file_or_directory>
+sudo chown -R <new_owner>:<new_group> <directory>
+tar -czvf <archive_name>.tar.gz <file_or_directory>
+tar -xzvf <archive_name>.tar.gz
+zip -r <archive_name>.zip <file_or_directory>
+unzip <archive_name>.zip
+
+Searching:
+grep "search_string" <file_name>
+grep -r "search_string" /path/to/directory
+grep -n "search_string" <file_name>
+
+
+tail -f <file_name>
+watch -n 2 ls -lh <directory>  # Refresh every 2 seconds
+sudo apt-get install inotify-tools
+inotifywait -m /path/to/directory  # Monitor for changes
+
+
+
+
+
+
+0: 1 docker build -t docker-spring-image
+   2 docker tag  docker-spring-image srinu641/docker-spring-image
+   3 docker push srinu641/docker-spring-image
+1:
+server.port=8080
+spring.datasource.url=jdbc:mysql://mysqldb:3306/employeedb?useSSL=false
+spring.datasource.username=sa
+spring.datasource.password=1234
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+2:
+FROM openjdk:8
+ADD target/backend-0.0.1-SNAPSHOT.jar backend-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "backend-0.0.1-SNAPSHOT.jar"]
+
+3:
+docker pull mysql:8.0.36
+
+4:
+docker build -t docker-spring-image .
+
+5:
+docker network create spring-network-mysql
+docker network ls
+
+6:
+docker run --name mysqldb --network springmysql-net -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=employeedb -e MYSQL_USER=sa -e MYSQL_PASSWORD=1234 -d mysql:8.0.36
+
+7:
+docker logs -f <container_name>
+
+8:
+- docker exec -it <container_id> bash
+- mysql -u<username> -p<password>
+- show databases;
+
+9:
+docker run --network springmysql-net --name backend-container -p 8080:8080 -d backend
+
+10:
+docker ps
+
+11:
+docker logs -f <container_id>
+
+
+
+
+=============================================================
+
+=============================================================
+=============================================================
+=============================================================
+ mam Here is the weekly Performance Metrics of
+AWS Cloud Eng.- Training Session [Balakrishna ]
+Cycle 10 | Session 44
+12-Sep- 2024 | 10:30 AM EST
+Present: 5/4
+Absent: Dhanu (informed)
+
+
+
+
+wgat is ci
+tcp ip
+The scrum call
+ip
+ip class
+url
+network address
+ip address class
+
+
+sudo apt-get update
+sudo apt-get install -y wget gnupg
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo "deb https://aquasecurity.github.io/trivy-repo/deb stable main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install -y trivy
+
+=============================================================
+=============================================================
+
+        stage('Quality Gate') {
+            steps {
+              script {
+                timeout(time: 1, unit: 'HOURS') {
+                   def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                       error "Pipeline aborted due to Quality Gate failure: ${qg.status}"
+                      }
+                    }
+                }
+            }
+       }
+TO INSTALL DOCKER IN JENKINS:
+
+ stage ("Build Docker Image") {
+            steps {
+                sh "docker build -t netflix ."
+            }
+        }
+        stage ("Tag & Push to DockerHub") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker') {
+                        sh "docker tag netflix vijaygiduthuri/netflix:latest"
+                        sh "docker push vijaygiduthuri/netflix:latest"
+                    }
+                }
+            }
+        }
+        stage ("Docker Scout Image Analysis ") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker') {
+                        sh 'docker-scout quickview vijaygiduthuri/netflix:latest'
+                        sh 'docker-scout cves vijaygiduthuri/netflix:latest'
+                        sh 'docker-scout recommendations vijaygiduthuri/netflix:latest'
+                    }
+                }
+            }
+        }
+        stage ("Deploy to Docker Conatiner") {
+            steps {
+                sh "docker run -itd --name netflix -p 4000:80 netflix:latest"
+            }
+        }
+    }
+post {
+    always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: """
+                <html>
+                <body>
+                    <div style="background-color: #FFA07A; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Project: ${env.JOB_NAME}</p>
+                    </div>
+                    <div style="background-color: #90EE90; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Build Number: ${env.BUILD_NUMBER}</p>
+                    </div>
+                    <div style="background-color: #87CEEB; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">URL: ${env.BUILD_URL}</p>
+                    </div>
+                </body>
+                </html>
+            """,
+            to: 'Provide_email_here',
+            mimeType: 'text/html'
+        }
+    }
+==========================================================================================
+==========================================================================================
+pipeline {
+    agent any
+
+    environment {
+        SPRINGBOOT_IMAGE = 'springboot-app'
+        SPRINGBOOT_CONTAINER = 'springboot-app-container'
+        MYSQL_IMAGE = 'mysql:8.0'
+        MYSQL_CONTAINER = 'mysql-db'
+        MYSQL_DATABASE = 'login_system'
+        MYSQL_PORT = '3306'
+        SPRING_DATASOURCE_URL = "jdbc:mysql://${MYSQL_CONTAINER}:${MYSQL_PORT}/${MYSQL_DATABASE}"
+        DOCKER_NETWORK = 'my-network'
+        SPRINGBOOT_PORT = '8081'
+        SONARQUBE_URL = '<Your-SonarQube-URL>'
+        NEXUS_DOCKER_REPO = '<DockerImagesRepo-Nexus-URL>'
+        NEXUS_DOCKER_IMAGE = '<DockerImagesRepo>:<Repo-Port>/docker-hosted-repo/springboot-app'
+        NEXUS_RELEASE_REPO = '<Your-Nexus-ReleaseRepo-URL>'
+        NEXUS_SNAPSHOT_REPO = '<Your-Nexus-SnapshotRepo-URL>'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo 'Cloning repository...'
+                git credentialsId: 'github-credentials', url: 'https://github.com/SubbuTechTutorials/registration-login-springboot-mysql-app.git'
+            }
+        }
+
+        stage('Create Docker Network') {
+            steps {
+                echo 'Creating Docker network...'
+                sh '''
+                if ! docker network ls --format "{{.Name}}" | grep -q ${DOCKER_NETWORK}; then
+                    docker network create ${DOCKER_NETWORK}
+                fi
+                '''
+            }
+        }
+
+        stage('Start MySQL Container') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'db1dbd74-22a6-4e9e-8879-b256aec8f334', passwordVariable: 'MYSQL_ROOT_PASSWORD', usernameVariable: 'MYSQL_ROOT_USERNAME')]) {
+                    echo 'Starting MySQL container...'
+                    sh '''
+                    if docker ps -a --format "{{.Names}}" | grep -q ${MYSQL_CONTAINER}; then
+                        docker stop ${MYSQL_CONTAINER} || true
+                        docker rm ${MYSQL_CONTAINER} || true
+                    fi
+
+                    docker run -d --name ${MYSQL_CONTAINER} \
+                    --network ${DOCKER_NETWORK} \
+                    -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+                    -e MYSQL_DATABASE=${MYSQL_DATABASE} \
+                    -p ${MYSQL_PORT}:${MYSQL_PORT} \
+                    ${MYSQL_IMAGE} \
+                    --default-authentication-plugin=mysql_native_password
+                    '''
+                }
+            }
+        }
+
+        stage('Wait for MySQL') {
+            steps {
+                echo 'Waiting for MySQL to be ready...'
+                sh '''
+                until docker exec ${MYSQL_CONTAINER} mysqladmin ping -h "${MYSQL_CONTAINER}" --silent; do
+                    echo "MySQL is not ready yet. Waiting..."
+                    sleep 5
+                done
+                echo "MySQL is ready."
+                '''
+            }
+        }
+
+
+        stage('Build Spring Boot Docker Image') {
+            steps {
+                echo 'Building Docker image for Spring Boot app...'
+                sh 'docker build -t ${SPRINGBOOT_IMAGE} .'
+            }
+        }
+
+        stage('Start Spring Boot App Container') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'db1dbd74-22a6-4e9e-8879-b256aec8f334', usernameVariable: 'SPRING_DATASOURCE_USERNAME', passwordVariable: 'SPRING_DATASOURCE_PASSWORD')]) {
+                    echo 'Starting Spring Boot app container...'
+                    sh '''
+                    if docker ps -a --format "{{.Names}}" | grep -q ${SPRINGBOOT_CONTAINER}; then
+                        docker stop ${SPRINGBOOT_CONTAINER} || true
+                        docker rm ${SPRINGBOOT_CONTAINER} || true
+                    fi
+
+                    docker run -d --name ${SPRINGBOOT_CONTAINER} \
+                    --network ${DOCKER_NETWORK} \
+                    -e SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL} \
+                    -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME} \
+                    -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD} \
+                    -p ${SPRINGBOOT_PORT}:8080 ${SPRINGBOOT_IMAGE}
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Application') {
+            steps {
+                echo 'Verifying that the Spring Boot app is running...'
+                sh '''
+                echo "Sleeping for 30 seconds to ensure the app is fully up and running."
+                sleep 30
+                curl --fail http://<Your-Docker-Server-URL>:${SPRINGBOOT_PORT}/actuator/health || exit 1
+                '''
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                echo 'Running tests after containers are up...'
+                sh '''
+                echo "Starting Maven tests at $(date)"
+                mvn clean test -DskipITs=false || (echo "Tests failed. Exiting..." && exit 1)
+                '''
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    echo 'Running SonarQube analysis...'
+                    withCredentials([string(credentialsId: 'sonarqube-credentials', variable: 'SONARQUBE_TOKEN')]) {
+                        sh '''
+                        mvn clean verify sonar:sonar \
+                          -Dsonar.projectKey=registration-login-demo \
+                          -Dsonar.host.url=${SONARQUBE_URL} \
+                          -Dsonar.login=${SONARQUBE_TOKEN} \
+                          -Dsonar.java.binaries=target/classes \
+                        '''
+                    }
+                }
+            }
+        }
+
+    stage('Deploy Artifact to Nexus') {
+        steps {
+            script {
+                // Retrieve the version of the project from Maven
+                 def version = sh(returnStdout: true, script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout").trim()
+
+                // Determine the Nexus repository URL and repository ID based on version
+                 def nexusRepoUrl = version.endsWith('-SNAPSHOT') ? "${NEXUS_SNAPSHOT_REPO}" : "${NEXUS_RELEASE_REPO}"
+                 def repositoryId = version.endsWith('-SNAPSHOT') ? 'nexus-snapshots' : 'nexus-releases'
+
+                // Deploy the artifact to Nexus
+                 withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    sh """
+                     mvn clean deploy \
+                        -DrepositoryId=${repositoryId} \
+                        -Durl=${nexusRepoUrl} \
+                        -Dusername=${NEXUS_USERNAME} \
+                        -Dpassword=${NEXUS_PASSWORD}
+                    """
+            }
+        }
+    }
+}
+
+        stage('Push Docker Image to Nexus') {
+            steps {
+                echo 'Pushing Docker image to Nexus...'
+                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    sh """
+                    docker tag ${SPRINGBOOT_IMAGE} ${NEXUS_DOCKER_IMAGE}:latest
+                    echo "${NEXUS_PASSWORD}" | docker login ${NEXUS_DOCKER_REPO} --username ${NEXUS_USERNAME} --password-stdin
+                    docker push ${NEXUS_DOCKER_IMAGE}:latest
+                    """
+                }
+            }
+        }
+
+        stage('Cleanup Docker Images') {
+            steps {
+                echo 'Removing dangling and unused Docker images...'
+                sh '''
+                docker image prune -f
+                docker system prune -f --volumes
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished'
+            cleanWs()
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+    }
+}
+
+==========================================================================================
+pipeline {
+    agent any
+
+    tools {
+     jdk 'jdk17'
+     maven 'maven3'
+
+    }
+
+    environment{
+        SCANNER_HOHE= tool 'sonar-scanner'
+    }
+
+    stages {
+        stage('Git CheckOut') {
+            steps {
+              git branch: 'main', url: 'https://github.com/Srinu-rj/spring-food-app.git'
+            }
+        }
+        stage('Compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+
+        stage('Test') {
+            steps {
+               sh "mvn clean install -DskipTests=true"
+            }
+        }
+
+        stage("Trivy Scanner") {
+            steps {
+              sh "trivy fs --format table -o trivy-fs-report.html ."
+            }
+        }
+
+        stage("SonarQube-Analysis") {
+            steps {
+              withSonarQubeEnv('sonar') {
+                  sh ''' $SCANNER_HOHE/bin/sonar-scanner -Dsonar.projectName=spring-application  -Dsonar.projectKey=spring-application \
+                  -Dsonar.java.binaries=. '''
+                 }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                script {
+                 waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
+
+        stage("OWASP CHECK"){
+            steps{
+                script{
+                    dependencyCheck additionalArguments: '', odcInstallation: 'Dependency-Check installations'
+                    dependencyCheckPublisher pattern: '**/dependencyCheck-check-report.xml'
+                }
+            }
+        }
+
+        stage("Publish To Nexus"){
+            steps{
+                script {
+                    nexusArtifactUploader artifacts:
+                    [
+                        [
+                            artifactId: 'spring-food-app',
+                            classifier: '',
+                            file: 'target/spring-image.jar',
+                            type: 'jar'
+                            ]
+                        ],
+                        credentialsId: 'nexus',
+                        groupId: 'com.foodapp',
+                        nexusUrl: '192.168.0.104:8081',
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        repository: 'demo-app',
+                        version: '0.0.1'
+
+                }
+            }
+        }
+
+        stage("docker images") {
+            steps {
+                script {
+                 sh "docker build -t spring-image ."
+                }
+            }
+        }
+
+        stage("Tag & Push to DockerHub"){
+            steps{
+                script {
+                    withDockerRegistry(credentialsId: 'docker-credentials', toolName: 'docker') {
+                      sh "docker tag spring-image srinu641/spring-image:latest"
+                      sh "docker push srinu641/spring-image:latest"
+                    }
+                }
+            }
+        }
+
+        stage("Docker Scout Image Analysis"){
+            steps{
+                script {
+                    withDockerRegistry(credentialsId: 'docker-credentials') {
+                        sh 'docker-scout quickview srinu641/spring-image:latest'
+                        sh 'docker-scout cves srinu641/spring-image:latest'
+                        sh 'docker-scout recommendations srinu641/spring-image:latest'
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+    post {
+    always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: """
+                <html>
+                <body>
+                    <div style="background-color: #FFA07A; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Project: ${env.JOB_NAME}</p>
+                    </div>
+                    <div style="background-color: #90EE90; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">Build Number: ${env.BUILD_NUMBER}</p>
+                    </div>
+                    <div style="background-color: #87CEEB; padding: 10px; margin-bottom: 10px;">
+                        <p style="color: white; font-weight: bold;">URL: ${env.BUILD_URL}</p>
+                    </div>
+                </body>
+                </html>
+            """,
+            to: 'dnsrinu143@gmail.com',
+            mimeType: 'text/html'
+        }
+    }
+
+}
+
+==========================================================================================
