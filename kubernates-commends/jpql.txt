@@ -1,0 +1,224 @@
+================================
+@Transactional(readOnly = true)
+public interface MyRepository extends JpaRepository<User, Long>, QueryRewriter
+================================
+@Query("select u from User u where u.emailAddress = ?1")
+User findByEmailAddress(String emailAddress);
+
+@Query(value = "select original_user_alias.* from SD_USER original_user_alias", nativeQuery = true, queryRewriter = MyQueryRewriter.class)
+List<User> findByNativeQuery(String param);
+
+@Query(value = "select original_user_alias from User original_user_alias", queryRewriter = MyQueryRewriter.class)
+List<User> findByNonNativeQuery(String param);
+
+@Query("select u from User u where u.firstname like %?1")
+List<User> findByFirstnameEndsWith(String firstname);
+
+@Query(value = "SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1", nativeQuery = true)
+User findByEmailAddress(String emailAddress);
+
+@Query(value = "SELECT * FROM USERS WHERE LASTNAME = ?1", countQuery = "SELECT count(*) FROM USERS WHERE LASTNAME = ?1", nativeQuery = true)
+Page<User> findByLastname(String lastname, Pageable pageable);
+
+@NativeQuery("SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1")
+Map<String, Object> findRawMapByEmail(String emailAddress);
+
+@NativeQuery("SELECT * FROM USERS WHERE LASTNAME = ?1")
+List<Map<String, Object>> findRawMapByLastname(String lastname);
+
+@Query("select u from User u where u.firstname = :firstname or u.lastname = :lastname")
+User findByLastnameOrFirstname(@Param("lastname") String lastname, @Param("firstname") String firstname);
+
+@Query("select u from User u where u.firstname = ?1 and u.firstname=?#{[0]} and u.emailAddress = ?#{principal.emailAddress}")
+List<User> findByFirstnameAndCurrentUserWithCustomQuery(String firstname);
+
+@Query("select u from User u where u.lastname like %:#{[0]}% and u.lastname like %:lastname%")
+List<User> findByLastnameWithSpelExpression(@Param("lastname") String lastname);
+
+@Query("select u from User u where u.firstname like %?#{escape([0])}% escape ?#{escapeCharacter()}")
+List<User> findContainingEscaped(String namePart);
+
+@Query("select u from User u where u.firstname like %?#{escape([0])}% escape ?#{escapeCharacter()}")
+List<User> findContainingEscaped(String namePart);
+
+@Modifying
+@Transactional
+@Query("delete from User u where u.active = false")
+void deleteInactiveUsers();
+
+@Modifying
+@Query("delete from User u where u.role.id = ?1")
+void deleteInBulkByRoleId(long roleId);
+
+@QueryHints(value = { @QueryHint(name = "name", value = "value")}, forCounting = false)
+Page<User> findByLastname(String lastname, Pageable pageable);
+
+// In AddressEntity1Repository
+@Modifying
+@Transactional
+@Query(value = "INSERT INTO address_entity1 (area, city, state, country, pin_code) VALUES (:area, :city, :state, :country, :pinCode)", nativeQuery = true)
+void insertIntoAddressEntity1(@Param("area") String area, @Param("city") String city, @Param("state") String state, @Param("country") String country, @Param("pinCode") String pinCode);
+
+// In AddressEntity2Repository
+@Modifying
+@Transactional
+@Query(value = "INSERT INTO address_entity2 (area, city, state, country, pin_code) VALUES (:area, :city, :state, :country, :pinCode)", nativeQuery = true)
+void insertIntoAddressEntity2(@Param("area") String area, @Param("city") String city, @Param("state") String state, @Param("country") String country @Param("pinCode") String pinCode);
+
+--------------------------------------------------------------------------------------------------------------
+
+@Modifying
+@Query(value = "INSERT INTO Address (area, city, state, country, pin_code) VALUES (:area, :city, :state, :country, :pinCode)", nativeQuery = true)
+void insertAddress(@Param("area") String area, @Param("city") String city, @Param("state") String state, @Param("country") String country, @Param("pinCode") String pinCode);
+
+@Query("SELECT a FROM Address a WHERE a.city = :city")
+List<Address> findAddressesByCity(@Param("city") String city);
+
+@Query("SELECT a.state, COUNT(a) FROM Address a GROUP BY a.state")
+List<Object[]> countAddressesByState();
+
+@Query("SELECT DISTINCT a.city FROM Address a")
+List<String> findDistinctCities();
+
+@Modifying
+@Query(value = "UPDATE Address SET city = :newCity WHERE state = :state", nativeQuery = true)
+void updateCityByState(@Param("newCity") String newCity, @Param("state") String state);
+
+@Modifying
+@Query(value = "DELETE FROM Address WHERE country = :country", nativeQuery = true)
+void deleteAddressesByCountry(@Param("country") String country);
+
+@Query("SELECT a FROM Address a WHERE a.pinCode LIKE :pattern")
+List<Address> findAddressesByPinCodePattern(@Param("pattern") String pattern);
+
+@Query("SELECT a.country, COUNT(a) FROM Address a GROUP BY a.country")
+List<Object[]> countAddressesByCountry();
+
+@Query("SELECT a FROM Address a WHERE a.area = :area AND a.state = :state")
+List<Address> findAddressesByAreaAndState(@Param("area") String area, @Param("state") String state);
+
+@Query(value = "SELECT * FROM Address WHERE LENGTH(pin_code) = (SELECT MAX(LENGTH(pin_code)) FROM Address)", nativeQuery = true)
+List<Address> findAddressesWithLongestPinCode();
+
+@Modifying
+@Query("UPDATE Address a SET a.country = :country WHERE a.state = :state")
+void updateCountryByState(@Param("country") String country, @Param("state") String state);
+
+@Query("SELECT a FROM Address a WHERE a.city <> :city")
+List<Address> findAddressesNotInCity(@Param("city") String city);
+
+@Modifying
+@Query(value = "INSERT INTO Address (area, city, state, country, pin_code) VALUES (:area1, :city1, :state1, :country1, :pinCode1), (:area2, :city2, :state2, :country2, :pinCode2)", nativeQuery = true)
+void insertMultipleAddresses(
+    @Param("area1") String area1, @Param("city1") String city1, @Param("state1") String state1, @Param("country1") String country1, @Param("pinCode1") String pinCode1,
+    @Param("area2") String area2, @Param("city2") String city2, @Param("state2") String state2, @Param("country2") String country2, @Param("pinCode2") String pinCode2
+);
+
+@Query("SELECT a FROM Address a WHERE a.state = :state OR a.city = :city")
+List<Address> findAddressByStateOrCity(@Param("state") String state, @Param("city") String city);
+
+@Query("SELECT a FROM Address a WHERE a.state = :state OR a.city = :city")
+List<Address> findAddressByStateOrCity(@Param("state") String state, @Param("city") String city);
+
+@Query("SELECT a FROM Address a WHERE a.country IS NOT NULL")
+List<Address> findAddressesWithCountryNotNull();
+
+@Query("SELECT COUNT(a) FROM Address a")
+Long findTotalAddressCount();
+
+@Query(value = "SELECT * FROM Address WHERE LENGTH(pin_code) = (SELECT MIN(LENGTH(pin_code)) FROM Address)", nativeQuery = true)
+List<Address> findAddressesWithShortestPinCode();
+
+@Query("SELECT a FROM Address a WHERE a.city = :city AND a.country = :country")
+List<Address> findAddressesByCityAndCountry(@Param("city") String city, @Param("country") String country);
+
+@Modifying
+@Query(value = "DELETE FROM Address WHERE pin_code LIKE :pattern", nativeQuery = true)
+void deleteAddressByPinCodePattern(@Param("pattern") String pattern);
+
+@Query("SELECT a FROM Address a WHERE a.area LIKE %:keyword%")
+List<Address> findAddressesByAreaKeyword(@Param("keyword") String keyword);
+
+@Query("SELECT a FROM Address a ORDER BY a.country, a.city")
+List<Address> findAllAddressesSortedByCountryAndCity();
+
+@Query("SELECT DISTINCT a.state FROM Address a")
+List<String> findDistinctStates();
+
+@Query("SELECT a FROM Address a WHERE a.area = :area ORDER BY a.city")
+List<Address> findAddressesByAreaSortedByCity(@Param("area") String area);
+
+@Query("SELECT a FROM Address a WHERE a.country LIKE %:partialCountry%")
+List<Address> findAddressesByPartialCountry(@Param("partialCountry") String partialCountry);
+
+@Query("SELECT a.state, a.city, COUNT(a) FROM Address a GROUP BY a.state, a.city HAVING COUNT(a) = 1")
+List<Object[]> findUniqueStateCityCombinations();
+
+@Query("SELECT a FROM Address a WHERE a.state = :state ORDER BY a.pinCode")
+List<Address> findAddressesByStateSortedByPinCode(@Param("state") String state);
+
+@Query(value = "SELECT COUNT(DISTINCT pin_code) FROM Address", nativeQuery = true)
+Long countUniquePinCodes();
+
+@Query("SELECT a.country, a.state, COUNT(a) FROM Address a GROUP BY a.country, a.state")
+List<Object[]> findAddressesGroupedByCountryAndState();
+
+@Query("SELECT a FROM Address a WHERE a.city = a.state")
+List<Address> findAddressesWhereCityEqualsState();
+
+:Update State for Multiple Cities (Native SQL)
+@Modifying
+@Query(value = "UPDATE Address SET state = :newState WHERE city IN :cities", nativeQuery = true)
+void updateStateForMultipleCities(@Param("newState") String newState, @Param("cities") List<String> cities);
+
+
+====================================
+
+--------------------------------------------
+@Query(value = "SELECT * FROM address WHERE city = ?1 OR state = ?2 OR pin_code = ?3", nativeQuery = true)
+List<Address> findByCityOrStateOrPinCode(String city, String state, String pinCode);
+
+@Query(value = "(SELECT * FROM address WHERE city = ?1) UNION (SELECT * FROM address WHERE city = ?2)", nativeQuery = true)
+List<Address> findByMultipleCities(String city1, String city2);
+
+@Query(value = """
+    SELECT
+        CASE
+            WHEN city = ?1 THEN 'City Match'
+            WHEN state = ?2 THEN 'State Match'
+            ELSE 'No Match'
+        END AS matchResult, *
+    FROM address
+    """, nativeQuery = true)
+List<Object[]> findMatchResult(String city, String state);
+
+Using Dynamic IN Clause-->
+
+@Query(value = "SELECT * FROM address WHERE city IN (?1)", nativeQuery = true)
+List<Address> findByCities(List<String> cities);
+
+
+--------------------------------------------
+
+@Query("SELECT w FROM Worker w WHERE w.address.id IN :addressIds")
+List<Worker> findWorkersByAddressIds(@Param("addressIds") List<Integer> addressIds);
+
+@Query("SELECT w FROM Worker w JOIN w.address a WHERE a.city = :city")
+List<Worker> findWorkersByCity(@Param("city") String city);
+
+@Query("SELECT w FROM Worker w JOIN w.address a WHERE a.city IN :cities")
+List<Worker> findWorkersByCities(@Param("cities") List<String> cities);
+
+@Query("""
+    SELECT w
+    FROM Worker w
+    JOIN w.address a
+    WHERE a.city = :city AND a.state = :state AND w.name LIKE %:namePattern%
+""")
+List<Worker> findWorkersByCityStateAndName(
+    @Param("city") String city,
+    @Param("state") String state,
+    @Param("namePattern") String namePattern
+);
+
+

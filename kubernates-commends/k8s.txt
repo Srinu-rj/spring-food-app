@@ -1438,6 +1438,9 @@ minikube ip
 vim /etc/hosts Yourip Host_name
 curl Host_name
 curl Host_name/sub_host
+
+Test Your Ingress: The Grand Finale:
+curl - resolve "hello-world.info:8998:$(minikube ip)" -i http://hello-world.info
 -------------------------------------------------------------------
 
 
@@ -1562,7 +1565,7 @@ o1 openssl reg -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.cr
 02 kubectl create secret tls nginx-demo-com-tls --cert tls.crt --key tls.key
 
 ============================================================================
-VICES RESCORCE MANAGEMENT && LINIMT RKUBERNATES SERANGE
+KUBERNATES SERVICES RESCORCE MANAGEMENT && LINIMT RANGE
 ============================================================================
 When several users or teams share a cluster with a fixed number of nodes,
 there is a concern that one team could use more than its fair share of resources.:
@@ -1647,6 +1650,7 @@ sudo openssl x509 -req -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreat
 kubectl config set-credentials raju --client-certificate=raju.crt --client-key=raju.key
 kubectl config set-context raju-minikube --cluster=minikube --user=raju --namespace=default
 
+kubectl auth can-i list pods --as=srinu -n myapp
 
 
 YOU NEED TO CREATE role rolebinding in minikube context then switch to user_context know you can access the roles and :
@@ -1754,7 +1758,7 @@ kubectl apply -f pod-list-clusterrole.yaml
 kubectl apply -f anvesh-pod-lister-clusterrolebinding.yaml
 kubectl --kubeconfig ~/.kube/config-anvesh get pods -A
 ===========================================================================
-KUBERNATES SERVICE HPA| AUTO SCALELR::
+KUBERNATES SERVICE HPA::
 ===========================================================================
 
 
@@ -1792,6 +1796,9 @@ kubectl apply -f components.yml
 To validate, run the command below :
 kubectl get pods -n kube-system
 -----------------------------------------
+
+
+
 kubectl get deployment metrics-server -n kube-system
 kubectl top nodes
 kubectl top pods
@@ -2183,3 +2190,4 @@ k get svc -n production
 k get nodes -o  wide
 curl node-IP:NodePort
 k edit svc frentndEndSvc -n producation
+
