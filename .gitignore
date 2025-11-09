@@ -1,0 +1,5 @@
+# Project exclude paths
+/target/
+.env
+src/main/resources/application.properties
+src/main/resources/application-dev.properties
