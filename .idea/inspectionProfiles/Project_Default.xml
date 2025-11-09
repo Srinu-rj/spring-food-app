@@ -1,0 +1,68 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+          <option value="spring-food-app" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="org.apache.commons:commons-lang3:3.13.0" />
+          <option value="io.netty:netty-common:4.1.101.Final" />
+          <option value="ch.qos.logback:logback-classic:1.4.11" />
+          <option value="ch.qos.logback:logback-core:1.4.11" />
+          <option value="org.springframework:spring-context:6.1.1" />
+          <option value="org.springframework:spring-webmvc:6.1.1" />
+          <option value="org.springframework:spring-beans:6.1.1" />
+          <option value="com.google.guava:guava:20.0" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.16" />
+          <option value="io.netty:netty-codec-http:4.1.101.Final" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-websocket:10.1.16" />
+          <option value="io.netty:netty-handler:4.1.101.Final" />
+          <option value="com.jayway.jsonpath:json-path:2.8.0" />
+          <option value="org.springframework:spring-web:6.1.1" />
+          <option value="net.minidev:json-smart:2.5.0" />
+          <option value="org.xmlunit:xmlunit-core:2.9.1" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="In progress" />
+          <option value="Not exploitable" />
+          <option value="In progress" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

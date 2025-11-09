@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mysql-cronjob
+  namespace: app-namespace
+spec:
+  schedule: "0 2 * * *" # Runs every day at 2:00 AM (adjust as needed)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mysql-job
+              image: mysql:8.0.40 # Same version as your MySQL StatefulSet
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Starting MySQL task..."
+                  mysql -h mysql.app-namespace.svc.cluster.local -u root -proot srinu1234 -e "select *from address;"
+                  echo "MySQL task completed."
+              env:
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-root-credentials
+                      key: root-password
+          restartPolicy: OnFailure
+---

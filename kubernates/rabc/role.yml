@@ -1,0 +1,22 @@
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: Role
+#metadata:
+#  name: pod-reader
+##  namespace: role-namespace
+#rules:
+#  - apiGroups: [""] # "" indicates the core API group
+#    verbs: ["get", "watch", "list"]
+#    resources: ["pods", "pods/log"]
+##    resourceNames: ["nginx"]
+---
+# 🚀 Example Role: pod-reader-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: role-based-namespace
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---

@@ -1,0 +1,29 @@
+# A ClusterRole can be used to grant the same permissions as a Role.
+# Because ClusterRoles are cluster-scoped,
+# you can also use them to grant access to:]
+
+#01 cluster-scoped resources (like nodes)
+#02 non-resource endpoints (like /healthz)
+#03 namespaced resources (like Pods), across all namespaces
+#---
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: ClusterRole
+#metadata:
+#  name: pod-reader
+#  namespace: role-namespace
+#rules:
+#  - apiGroups: [""]
+#    # at the HTTP level, the name of the resource for accessing Secret
+#    # objects is "secrets"
+#    verbs: ["get", "watch", "list"]
+#    resources: ["pods", "pods/log"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-viewer
+  namespace: role-namespace
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list"]

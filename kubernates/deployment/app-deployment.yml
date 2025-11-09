@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment
+  namespace: database-production
+spec:
+  selector:
+    matchLabels:
+      app: application-deployment
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: application-deployment
+    spec:
+      nodeName: fargate-ip-192-168-102-168.ec2.internal  #node name
+      containers:
+        - name: app-deployment
+          image: srinu641/application-mysql:V2.0
+          spec:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: disktype
+                          operator: In
+                          values:
+                            - ssd
+#          readinessProbe: # todo Readiness Probe: Checks if a container is ready to start accepting traffic.
+#            httpGet:
+#              path: /ready
+#              port: 8998
+#            initialDelaySeconds: 5
+#            periodSeconds: 10
+#          livenessProbe: # todo Liveness Probe: Checks if a container is still alive and should be restarted if it fails.
+#            httpGet:
+#              path: /live
+#              port: 8998
+#            initialDelaySeconds: 3
+#            periodSeconds: 5
+          ports:
+            - containerPort: 8998
+          imagePullPolicy: IfNotPresent    #todo imagePullPolicy: "IfNotPresent"
+          resources:
+            requests:
+              memory: "56Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          env:   # Setting Environmental Variables
+            - name: DB_HOST   # Setting Database host address
+              value: mysql
+            - name: DB_NAME  # Setting Database name
+              value: spring
+            - name: DB_USERNAME  # Setting Database username
+              value: admin
+            - name: DB_PASSWORD # Setting Database password
+              value: raju1234aA
+#          volumeMounts:
+#            - name: mysql-persistent-storage
+#              mountPath: /var/lib/mysql
+#      restartPolicy: Always
+#      volumes:
+#        - name: mysql-persistent-storage # Obtaining 'volume' from PVC
+#          persistentVolumeClaim:
+#            claimName: mysql-pv-claim
+---
+#todo  Define a 'Service' To Expose the application
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: database-production
+#  annotations: # expose aws-load-balancer
+#    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+#    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enable: "true"
+#    service.beta.kubernetes.io/aws-load-balancer-connection-draining-enable: "true"
+#    service.beta.kubernetes.io/aws-load-balancer-connection-draining-timeout: "30"
+spec:
+  selector:
+    app: application-deployment
+  ports:
+    - protocol: "TCP"
+      port: 8998    # TODO Port inside the cluster
+      targetPort: 8998   #TODO  Port exposed to the outside
+  type: NodePort  #todo ClusterIP
+---
+#kubectl create secret docker-registry docker-pwd \
+#--docker-server=docker.io --docker-username=srinu641 \
+#--docker-password=srinu1234 \
+#--docker-email=dnsrinu143@gmai.com
+#secret/docker-pwd created

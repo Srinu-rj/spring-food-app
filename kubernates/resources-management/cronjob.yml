@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CornJob
+metadata:
+  name: mysql-cron-job
+  namespace: app-namespace
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Allow
+  successfulJobHistoryLimit: 2
+  failedJobHistoryLimit: 3
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 60 # delete job after 60 seconds
+      template:
+        spec:
+          containers:
+            -name: mysql-db
+            image: mysql
+#            command: ["/bin/bash", "-c"]
+#            args:
+#              [
+#                'mysql --url' "jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring" ' # todo ->need to Impl
+#              ]
+#            volumeMounts:
+#              - mountPath: "" #todo ->
+#                name:
+#            env:
+#              - name: MYSQL_PASSWORD
+#                value: srinu1234
+#          volumes:
+#            - name:
+#              persistentVolumeClaim:
+#                claimName: ###
+#          restartPolicy: Never
+---
+

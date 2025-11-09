@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: spring-boot
+  template:
+    metadata:
+      labels:
+        app: spring-boot
+    spec:
+      containers:
+      - name: spring-boot
+        image: srinu641/application-mysql:V2.0
+        ports:
+        - containerPort: 8998
+        env: # Setting Environmental Variables
+          - name: DB_HOST   # Setting Database host address
+            value: mysql
+          - name: DB_NAME  # Setting Database name
+            value: spring
+          - name: DB_USERNAME  # Setting Database username
+            value: admin
+          - name: DB_PASSWORD # Setting Database password
+            value: raju1234aA
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: spring-boot
+  ports:
+    - protocol: TCP
+      port: 8998
+      targetPort: 9376
+  type: NodePort
+---

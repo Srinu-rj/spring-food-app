@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Srinu-rj/spring-food-app.git
+    targetRevision: main
+    path: /kubernates/.
+    helm:
+      values: |
+        replicaCount: 2
+        service:
+          port: 8998
+          targetPort: 8998
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: database-production
+  syncPolicy:
+    automated: {}

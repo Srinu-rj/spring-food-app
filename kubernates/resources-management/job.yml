@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-backup-job
+spec:
+  backoffLimit: 5 # todo to Create BackUp Pods
+  activeDeadlineSeconds: 100 # Stop the job after 100 seconds if incomplete
+  ttlSecondsAfterFinished: 60 # Delete the job 60 seconds after completion
+  template:
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.40
+          command: [ "/bin/sh", "-c" ]
+          args:
+            [
+              'mysqldump -h mysql-service.app-namespace.svc.cluster.local -u root -p${MYSQL_PASSWORD} --all-databases > /usr/share/mysqlbackup/backup-$(date +"%d%m%Y-%H%M%S").sql',
+            ]
+          volumeMounts:
+            - mountPath: "/usr/share/mysqlbackup/"
+              name: mysqlbackup
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: root # I HAVE TO CHANGE
+                  name: srinu1234
+      volumes:
+        - name: mysqlbackup
+          persistentVolumeClaim:
+            claimName: mysqlbackup
+      restartPolicy: Never
+---

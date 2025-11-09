@@ -1,0 +1,822 @@
+Index: k8s1/app-deployment.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apiVersion: apps/v1\r\nkind: Deployment\r\nmetadata:\r\n  name: app-deployment\r\nspec:\r\n  selector:\r\n    matchLabels:\r\n      app: app-deployment\r\n  replicas: 6\r\n  template:\r\n    metadata:\r\n      labels:\r\n        app: app-deployment\r\n    spec:\r\n      containers:\r\n        - name: app-deployment\r\n          image: srinu641/spring-image:latest\r\n          imagePullPolicy: Always    #todo imagePullPolicy: \"IfNotPresent\"\r\n          ports:\r\n            - containerPort: 8998\r\n          env:   # Setting Environmental Variables\r\n            - name: DB_HOST   # Setting Database host address\r\n              value: mysql\r\n            - name: DB_NAME  # Setting Database name\r\n              value: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring\r\n            - name: DB_USERNAME  # Setting Database username\r\n              value: root\r\n            - name: DB_PASSWORD # Setting Database password\r\n              value: srinu1234\r\n---\r\n\r\n\r\n#            - name: DB_HOST   # Setting Database host address from configMap\r\n#              valueFrom :\r\n#                configMapKeyRef :\r\n#                  name : db-config\r\n#                  key :  host\r\n#\r\n#            - name: DB_NAME  # Setting Database name from configMap\r\n#              valueFrom :\r\n#                configMapKeyRef :\r\n#                  name : db-config # todo call the yml file name\r\n#                  key :  dbName\r\n#\r\n#            - name: DB_USERNAME  # Setting Database username from Secret\r\n#              valueFrom :\r\n#                secretKeyRef :\r\n#                  name : mysql-secrets # todo call the yml file name\r\n#                  key :  username\r\n#\r\n#            - name: DB_PASSWORD # Setting Database password from Secret\r\n#              valueFrom :\r\n#                secretKeyRef :\r\n#                  name : mysql-secrets\r\n#                  key : password\r\n---\r\n#todo  Define a 'Service' To Expose the application\r\napiVersion: v1\r\nkind: Service\r\nmetadata:\r\n  name: app-service\r\nspec:\r\n  ports:\r\n    - protocol: \"TCP\"\r\n      port: 8998    # TODO Port inside the cluster\r\n      targetPort: 8998   #TODO  Port exposed to the outside\r\n  selector:\r\n    app: app-deployment\r\n  type: NodePort\r\n---\r\n\r\n#          env:\r\n#            - name: SPRING_DATASOURCE_URL\r\n#              valueFrom:\r\n#                configMapKeyRef:\r\n#                  name: spring-boot-config\r\n#                  key: SPRING_DATASOURCE_URL\r\n#            - name: SPRING_DATASOURCE_USERNAME\r\n#              valueFrom:\r\n#                secretKeyRef:\r\n#                  name: db-credentials\r\n#                  key: username\r\n#            - name: SPRING_DATASOURCE_PASSWORD\r\n#              valueFrom:\r\n#                secretKeyRef:\r\n#                  name: db-credentials\r\n#                  key: password\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s1/app-deployment.yml b/k8s1/app-deployment.yml
+--- a/k8s1/app-deployment.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s1/app-deployment.yml	(date 1729678205536)
+@@ -1,58 +1,57 @@
++# springboot-deployment.yaml
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+-  name: app-deployment
++  name: springboot-deployment
+ spec:
++  replicas: 1
+   selector:
+     matchLabels:
+-      app: app-deployment
+-  replicas: 6
++      app: springboot-app
+   template:
+     metadata:
+       labels:
+-        app: app-deployment
++        app: springboot-app
+     spec:
+       containers:
+-        - name: app-deployment
+-          image: srinu641/spring-image:latest
+-          imagePullPolicy: Always    #todo imagePullPolicy: "IfNotPresent"
++        - name: springboot-container
++          image: srinu641/spring-image:latest # e.g., your Docker image from Docker Hub or ECR
+           ports:
+             - containerPort: 8998
+-          env:   # Setting Environmental Variables
+-            - name: DB_HOST   # Setting Database host address
+-              value: mysql
+-            - name: DB_NAME  # Setting Database name
+-              value: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring
+-            - name: DB_USERNAME  # Setting Database username
+-              value: root
+-            - name: DB_PASSWORD # Setting Database password
+-              value: srinu1234
++          env:
++            - name: MYSQL_DATABASE
++              valueFrom:
++                configMapKeyRef:
++                  name: mysql-configmap
++                  key: database
++            - name: MYSQL_HOST
++              valueFrom:
++                configMapKeyRef:
++                  name: mysql-configmap
++                  key: host
++            - name: MYSQL_PORT
++              valueFrom:
++                configMapKeyRef:
++                  name: mysql-configmap
++                  key: port
++            - name: MYSQL_USER
++              valueFrom:
++                secretKeyRef:
++                  name: mysql-secret
++                  key: username
++            - name: MYSQL_PASSWORD
++              valueFrom:
++                secretKeyRef:
++                  name: mysql-secret
++                  key: password
++          volumeMounts:
++            - mountPath: "/data"
++              name: mysql-volume
++      volumes:
++        - name: mysql-volume
++          persistentVolumeClaim:
++            claimName: mysql-pvc
+ ---
+-
+-
+-#            - name: DB_HOST   # Setting Database host address from configMap
+-#              valueFrom :
+-#                configMapKeyRef :
+-#                  name : db-config
+-#                  key :  host
+-#
+-#            - name: DB_NAME  # Setting Database name from configMap
+-#              valueFrom :
+-#                configMapKeyRef :
+-#                  name : db-config # todo call the yml file name
+-#                  key :  dbName
+-#
+-#            - name: DB_USERNAME  # Setting Database username from Secret
+-#              valueFrom :
+-#                secretKeyRef :
+-#                  name : mysql-secrets # todo call the yml file name
+-#                  key :  username
+-#
+-#            - name: DB_PASSWORD # Setting Database password from Secret
+-#              valueFrom :
+-#                secretKeyRef :
+-#                  name : mysql-secrets
+-#                  key : password
+ ---
+ #todo  Define a 'Service' To Expose the application
+ apiVersion: v1
+@@ -69,6 +68,8 @@
+   type: NodePort
+ ---
+ 
++
++#
+ #          env:
+ #            - name: SPRING_DATASOURCE_URL
+ #              valueFrom:
+@@ -85,3 +86,38 @@
+ #                secretKeyRef:
+ #                  name: db-credentials
+ #                  key: password
++
++
++#          env:   # Setting Environmental Variables
++#            - name: DB_HOST   # Setting Database host address
++#              value: mysql
++#            - name: DB_NAME  # Setting Database name
++#              value: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring
++#            - name: DB_USERNAME  # Setting Database username
++#              value: root
++#            - name: DB_PASSWORD # Setting Database password
++#              value: srinu1234
++#---
++#            - name: DB_HOST   # Setting Database host address from configMap
++#              valueFrom :
++#                configMapKeyRef :
++#                  name : db-config
++#                  key :  host
++#
++#            - name: DB_NAME  # Setting Database name from configMap
++#              valueFrom :
++#                configMapKeyRef :
++#                  name : db-config # todo call the yml file name
++#                  key :  dbName
++#
++#            - name: DB_USERNAME  # Setting Database username from Secret
++#              valueFrom :
++#                secretKeyRef :
++#                  name : mysql-secrets # todo call the yml file name
++#                  key :  username
++#
++#            - name: DB_PASSWORD # Setting Database password from Secret
++#              valueFrom :
++#                secretKeyRef :
++#                  name : mysql-secrets
++#                  key : password
+\ No newline at end of file
+Index: k8s/db-deployment.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster\r\napiVersion: v1\r\nkind: PersistentVolumeClaim\r\nmetadata:\r\n  name: mysql-pv-claim # todo name of PVC essential for identifying the storage data\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  accessModes:\r\n    - ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.\r\n  resources:\r\n    requests:\r\n      storage: 1Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.\r\n---\r\n# Define a 'Service' To Expose MySQL to Other Services\r\napiVersion: v1\r\nkind: Service\r\nmetadata:\r\n  name: mysql\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  ports:\r\n    - port: 3307\r\n      targetPort: 3307\r\n  selector:\r\n    app: mysql\r\n    tier: database\r\n  clusterIP: None # DNS is used, so clusterIP is not needed\r\n---\r\n# Deployment specification begins here\r\napiVersion: apps/v1\r\nkind: Deployment\r\nmetadata:\r\n  name: mysql\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  selector: # mySQL Pod Should contain same labels\r\n    matchLabels:\r\n      app: mysql\r\n  strategy:\r\n    type: Recreate\r\n  template:\r\n    metadata:\r\n      labels: # todo -> Must match 'Service' and 'Deployment' selectors\r\n        app: mysql\r\n        tier: database\r\n    spec:\r\n      containers:\r\n        - name: mysql\r\n          image: mysql\r\n          imagePullPolicy: \"IfNotPresent\"\r\n          env:\r\n            - name: MYSQL_ROOT_PASSWORD\r\n              valueFrom :\r\n                secretKeyRef :\r\n                  name : mysql-secrets\r\n                  key :  password\r\n\r\n            - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'\r\n              valueFrom :\r\n                configMapKeyRef :\r\n                  name : db-config\r\n                  key :  dbName\r\n          ports:\r\n            - containerPort: 3306\r\n              name: mysql\r\n          volumeMounts:\r\n            - mountPath: /var/lib/mysql\r\n              name: mysql-persistance-storage\r\n      volumes:\r\n        - name: mysql-persistance-storage\r\n          persistentVolumeClaim:\r\n            claimName: mysql-pv-claim\r\n---\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s/db-deployment.yml b/k8s/db-deployment.yml
+--- a/k8s/db-deployment.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s/db-deployment.yml	(date 1729680460555)
+@@ -1,18 +1,3 @@
+-# Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster
+-apiVersion: v1
+-kind: PersistentVolumeClaim
+-metadata:
+-  name: mysql-pv-claim # todo name of PVC essential for identifying the storage data
+-  labels:
+-    app: mysql
+-    tier: database
+-spec:
+-  accessModes:
+-    - ReadWriteOnce   #todo This specifies the mode of the claim that we are trying to create.
+-  resources:
+-    requests:
+-      storage: 1Gi    #todo This will tell kubernetes about the amount of space we are trying to claim.
+----
+ # Define a 'Service' To Expose MySQL to Other Services
+ apiVersion: v1
+ kind: Service
+@@ -23,18 +8,33 @@
+     tier: database
+ spec:
+   ports:
+-    - port: 3307
+-      targetPort: 3307
++    - port: 3306
++      targetPort: 3306
+   selector:
+     app: mysql
+     tier: database
+   clusterIP: None # DNS is used, so clusterIP is not needed
+ ---
++# Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster
++apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  name: mysql-pv-claim # name of PVC essential for identifying the storage data
++  labels:
++    app: mysql
++    tier: database
++spec:
++  accessModes:
++    - ReadWriteOnce   #This specifies the mode of the claim that we are trying to create.
++  resources:
++    requests:
++      storage: 1Gi    #This will tell kubernetes about the amount of space we are trying to claim.
++---
+ # Deployment specification begins here
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+-  name: mysql
++  name: mysql-Deployment
+   labels:
+     app: mysql
+     tier: database
+@@ -46,7 +46,7 @@
+     type: Recreate
+   template:
+     metadata:
+-      labels: # todo -> Must match 'Service' and 'Deployment' selectors
++      labels: # Must match 'Service' and 'Deployment' selectors
+         app: mysql
+         tier: database
+     spec:
+@@ -56,18 +56,11 @@
+           imagePullPolicy: "IfNotPresent"
+           env:
+             - name: MYSQL_ROOT_PASSWORD
+-              valueFrom :
+-                secretKeyRef :
+-                  name : mysql-secrets
+-                  key :  password
+-
+-            - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'
+-              valueFrom :
+-                configMapKeyRef :
+-                  name : db-config
+-                  key :  dbName
++              value: root
++            - name: MYSQL_DATABASE
++              value: srinu1234
+           ports:
+-            - containerPort: 3306
++            - containerPort: 3307
+               name: mysql
+           volumeMounts:
+             - mountPath: /var/lib/mysql
+Index: k8s1/secret.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apiVersion: v1\r\nkind: Secret\r\nmetadata:\r\n  name: db-credentials\r\ntype: Opaque\r\ndata:\r\n  username: cm9vdAo=\r\n  password: c3JpbnUxMjM0Cg==
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s1/secret.yml b/k8s1/secret.yml
+--- a/k8s1/secret.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s1/secret.yml	(date 1729678358616)
+@@ -1,8 +1,19 @@
++# mysql-secret.yaml
+ apiVersion: v1
+ kind: Secret
+ metadata:
+-  name: db-credentials
++  name: mysql-secret
+ type: Opaque
+ data:
+-  username: cm9vdAo=
+-  password: c3JpbnUxMjM0Cg==
+\ No newline at end of file
++  root-password: cGFzc3dvcmQ=  # Base64 encoded MySQL root password (e.g., 'password')
++---
++# mysql-secret.yaml
++apiVersion: v1
++kind: Secret
++metadata:
++  name: mysql-secret
++type: Opaque
++data:
++  username: cm9vdAo=     # Base64 encoded MySQL username (e.g., 'admin')
++  password: c3JpbnUxMjM0Cg==  # Base64 encoded MySQL password (e.g., 'password')
++---
+Index: Jenkinsfile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// @Library('my-shared-library') _\r\n\r\n// pipeline {\r\n//     agent any\r\n    \r\n//     tools { \r\n//      jdk 'jdk17' \r\n//      maven 'maven3' \r\n//     } \r\n    \r\n//     parameters{\r\n//         choice(name: 'action', choices: 'create\\ndelete', description: 'Choose create/Destroy')\r\n//         string(name: 'ImageName', defaultValue: 'spring-image', description: 'Docker image name')\r\n//         string(name: 'ImageTag', defaultValue: '1.0', description: 'Docker image tag')\r\n//         string(name: 'DockerHubUser', defaultValue: 'srinu641', description: 'DockerHub Username')\r\n//         string(name: 'action', defaultValue: 'create', description: 'Pipeline action to perform')\r\n//     }\r\n\r\n//     environment{\r\n//         SCANNER_HOHE= tool 'sonar-scanner'\r\n//         // DOCKER_HUB_USER = credentials('dnsrinu143@gmail.com')  // Docker Hub username\r\n//         // DOCKER_HUB_PASSWORD = credentials('srinu1234')  // Docker Hub password stored in Jenkins credentials\r\n    \r\n        \r\n//     }\r\n\r\n//     stages {\r\n//         stage('Git CheckOut') {\r\n            \r\n//             when {expression {params.action == 'create'} }\r\n//             steps {\r\n//               echo \"Running Git CheckOut...\"\r\n//               gitCheckOut(\r\n//                 branch: \"main\",\r\n//                 url: \"https://github.com/Srinu-rj/spring-food-app.git\"   \r\n//               )\r\n//             }\r\n//         }\r\n        \r\n//         stage('Unit Test maven'){\r\n//             when {expression {params.action == 'create'} }\r\n//             steps{\r\n//                 echo \"Running Unit Test maven...\"  \r\n//                 mvnTest()\r\n//             }\r\n//         }\r\n        \r\n//         stage('Integration Test maven'){\r\n//             when {\r\n//                 expression { params.action == 'create'}\r\n//             }\r\n//             steps{\r\n//                 echo \"Running Integration Test maven...\"\r\n//                 mvnIntegratenTest()\r\n//             }\r\n//         }\r\n        \r\n//         stage('Static code analysis: Sonarqube'){\r\n//          when {\r\n//              expression {  params.action == 'create' }\r\n//          }\r\n//             steps{\r\n//                echo \"Running Static code analysis: Sonarqube...\"    \r\n//                script{\r\n//                    statiCodeAnalysis()\r\n//                }\r\n//             }\r\n//         }\r\n        \r\n//         stage('Quality Gate Status Check : Sonarqube'){\r\n//          when { \r\n//             expression {  params.action == 'create' }\r\n//          }\r\n//             steps{\r\n//                script{\r\n//                    echo \"Running Quality Gate Status Check : Sonarqube...\"  \r\n//               //   def SonarQubecredentialsId = 'sonar-scanner'\r\n//                    sonarQualityGate()\r\n//                }\r\n//             }\r\n//         }\r\n        \r\n//         stage('Maven Build : maven'){\r\n//          when { expression {  params.action == 'create' } }\r\n//             steps{\r\n//                script{\r\n//                    echo \"Running Maven Build : maven ...\"  \r\n//                    mvnBuild()\r\n//                }\r\n//             }\r\n//         }\r\n        \r\n//         // stage('DEPN Check'){\r\n//         //  when { \r\n//         //     expression {  params.action == 'create' }\r\n//         //  }\r\n//         //     steps{\r\n//         //       script{\r\n//         //           dependencyCheck()\r\n//         //       }\r\n//         //     }\r\n//         // }\r\n        \r\n//         stage('Docker Image Build '){\r\n//          when { expression {  params.action == 'create' } }\r\n//             steps{\r\n//               script{\r\n//                 echo \"Running Docker Image Build...\"     \r\n//                 dockerBuild(\"${params.ImageName}\", \"${params.ImageTag}\", \"${params.DockerHubUser}\")\r\n//               }\r\n//             }\r\n//         }\r\n        \r\n//         stage('Docker Image Scan: trivy '){\r\n//          when { expression {  params.action == 'create' } }\r\n//             steps{\r\n//                script{\r\n//                    echo \"Running Docker Image Scan With trivy...\"  \r\n//                    DockerScannTry(\"${params.ImageName}\",\"${params.ImageTag}\",\"${params.DockerHubUser}\")\r\n//                }\r\n//             }\r\n//         }\r\n        \r\n//         stage('Docker Image Push : DockerHub '){\r\n//          when { expression {  params.action == 'create' } }\r\n//             steps{\r\n//               script{\r\n//                   echo \"Running Docker Image Push : DockerHub...\"    \r\n//                  dockerBuildAndPushToHub(\"${params.ImageName}\", \"${params.ImageTag}\", \"${params.DockerHubUser}\")\r\n                \r\n//               }\r\n//             }\r\n//         }   \r\n        \r\n//     }\r\n// }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Jenkinsfile b/Jenkinsfile
+--- a/Jenkinsfile	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/Jenkinsfile	(date 1729693609564)
+@@ -1,136 +1,136 @@
+-// @Library('my-shared-library') _
++@Library('my-shared-library') _
++
++pipeline {
++    agent any
++    
++    tools {
++     jdk 'jdk17'
++     maven 'maven3'
++    }
++    
++    parameters{
++        choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
++        string(name: 'ImageName', defaultValue: 'spring-image', description: 'Docker image name')
++        string(name: 'ImageTag', defaultValue: '1.0', description: 'Docker image tag')
++        string(name: 'DockerHubUser', defaultValue: 'srinu641', description: 'DockerHub Username')
++        string(name: 'action', defaultValue: 'create', description: 'Pipeline action to perform')
++    }
+ 
+-// pipeline {
+-//     agent any
++    environment{
++        SCANNER_HOHE= tool 'sonar-scanner'
++        // DOCKER_HUB_USER = credentials('dnsrinu143@gmail.com')  // Docker Hub username
++        // DOCKER_HUB_PASSWORD = credentials('srinu1234')  // Docker Hub password stored in Jenkins credentials
+     
+-//     tools { 
+-//      jdk 'jdk17' 
+-//      maven 'maven3' 
+-//     } 
+-    
+-//     parameters{
+-//         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
+-//         string(name: 'ImageName', defaultValue: 'spring-image', description: 'Docker image name')
+-//         string(name: 'ImageTag', defaultValue: '1.0', description: 'Docker image tag')
+-//         string(name: 'DockerHubUser', defaultValue: 'srinu641', description: 'DockerHub Username')
+-//         string(name: 'action', defaultValue: 'create', description: 'Pipeline action to perform')
+-//     }
++        
++    }
+ 
+-//     environment{
+-//         SCANNER_HOHE= tool 'sonar-scanner'
+-//         // DOCKER_HUB_USER = credentials('dnsrinu143@gmail.com')  // Docker Hub username
+-//         // DOCKER_HUB_PASSWORD = credentials('srinu1234')  // Docker Hub password stored in Jenkins credentials
+-    
++    stages {
++        stage('Git CheckOut') {
++            
++            when {expression {params.action == 'create'} }
++            steps {
++              echo "Running Git CheckOut..."
++              gitCheckOut(
++                branch: "main",
++                url: "https://github.com/Srinu-rj/spring-food-app.git"
++              )
++            }
++        }
+         
+-//     }
+-
+-//     stages {
+-//         stage('Git CheckOut') {
+-            
+-//             when {expression {params.action == 'create'} }
+-//             steps {
+-//               echo "Running Git CheckOut..."
+-//               gitCheckOut(
+-//                 branch: "main",
+-//                 url: "https://github.com/Srinu-rj/spring-food-app.git"   
+-//               )
+-//             }
+-//         }
++        stage('Unit Test maven'){
++            when {expression {params.action == 'create'} }
++            steps{
++                echo "Running Unit Test maven..."
++                mvnTest()
++            }
++        }
++        
++        stage('Integration Test maven'){
++            when {
++                expression { params.action == 'create'}
++            }
++            steps{
++                echo "Running Integration Test maven..."
++                mvnIntegratenTest()
++            }
++        }
++        
++        stage('Static code analysis: Sonarqube'){
++         when {
++             expression {  params.action == 'create' }
++         }
++            steps{
++               echo "Running Static code analysis: Sonarqube..."
++               script{
++                   statiCodeAnalysis()
++               }
++            }
++        }
+         
+-//         stage('Unit Test maven'){
+-//             when {expression {params.action == 'create'} }
+-//             steps{
+-//                 echo "Running Unit Test maven..."  
+-//                 mvnTest()
+-//             }
+-//         }
++        stage('Quality Gate Status Check : Sonarqube'){
++         when {
++            expression {  params.action == 'create' }
++         }
++            steps{
++               script{
++                   echo "Running Quality Gate Status Check : Sonarqube..."
++              //   def SonarQubecredentialsId = 'sonar-scanner'
++                   sonarQualityGate()
++               }
++            }
++        }
+         
+-//         stage('Integration Test maven'){
+-//             when {
+-//                 expression { params.action == 'create'}
+-//             }
+-//             steps{
+-//                 echo "Running Integration Test maven..."
+-//                 mvnIntegratenTest()
+-//             }
+-//         }
+-        
+-//         stage('Static code analysis: Sonarqube'){
+-//          when {
+-//              expression {  params.action == 'create' }
+-//          }
+-//             steps{
+-//                echo "Running Static code analysis: Sonarqube..."    
+-//                script{
+-//                    statiCodeAnalysis()
+-//                }
+-//             }
+-//         }
++        stage('Maven Build : maven'){
++         when { expression {  params.action == 'create' } }
++            steps{
++               script{
++                   echo "Running Maven Build : maven ..."
++                   mvnBuild()
++               }
++            }
++        }
++        
++        // stage('DEPN Check'){
++        //  when {
++        //     expression {  params.action == 'create' }
++        //  }
++        //     steps{
++        //       script{
++        //           dependencyCheck()
++        //       }
++        //     }
++        // }
+         
+-//         stage('Quality Gate Status Check : Sonarqube'){
+-//          when { 
+-//             expression {  params.action == 'create' }
+-//          }
+-//             steps{
+-//                script{
+-//                    echo "Running Quality Gate Status Check : Sonarqube..."  
+-//               //   def SonarQubecredentialsId = 'sonar-scanner'
+-//                    sonarQualityGate()
+-//                }
+-//             }
+-//         }
++        stage('Docker Image Build '){
++         when { expression {  params.action == 'create' } }
++            steps{
++              script{
++                echo "Running Docker Image Build..."
++                dockerBuild("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
++              }
++            }
++        }
+         
+-//         stage('Maven Build : maven'){
+-//          when { expression {  params.action == 'create' } }
+-//             steps{
+-//                script{
+-//                    echo "Running Maven Build : maven ..."  
+-//                    mvnBuild()
+-//                }
+-//             }
+-//         }
++        stage('Docker Image Scan: trivy '){
++         when { expression {  params.action == 'create' } }
++            steps{
++               script{
++                   echo "Running Docker Image Scan With trivy..."
++                   DockerScannTry("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
++               }
++            }
++        }
+         
+-//         // stage('DEPN Check'){
+-//         //  when { 
+-//         //     expression {  params.action == 'create' }
+-//         //  }
+-//         //     steps{
+-//         //       script{
+-//         //           dependencyCheck()
+-//         //       }
+-//         //     }
+-//         // }
+-        
+-//         stage('Docker Image Build '){
+-//          when { expression {  params.action == 'create' } }
+-//             steps{
+-//               script{
+-//                 echo "Running Docker Image Build..."     
+-//                 dockerBuild("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+-//               }
+-//             }
+-//         }
+-        
+-//         stage('Docker Image Scan: trivy '){
+-//          when { expression {  params.action == 'create' } }
+-//             steps{
+-//                script{
+-//                    echo "Running Docker Image Scan With trivy..."  
+-//                    DockerScannTry("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+-//                }
+-//             }
+-//         }
+-        
+-//         stage('Docker Image Push : DockerHub '){
+-//          when { expression {  params.action == 'create' } }
+-//             steps{
+-//               script{
+-//                   echo "Running Docker Image Push : DockerHub..."    
+-//                  dockerBuildAndPushToHub("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
++        stage('Docker Image Push : DockerHub '){
++         when { expression {  params.action == 'create' } }
++            steps{
++              script{
++                  echo "Running Docker Image Push : DockerHub..."
++                 dockerBuildAndPushToHub("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                 
+-//               }
+-//             }
+-//         }   
++              }
++            }
++        }
+         
+-//     }
+-// }
++    }
++}
+Index: k8s/app-deployment.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apiVersion: apps/v1\r\nkind: Deployment\r\nmetadata:\r\n  name: app-deployment\r\nspec:\r\n  selector:\r\n    matchLabels:\r\n      app: app-deployment\r\n  replicas: 6\r\n  template:\r\n    metadata:\r\n      labels:\r\n        app: app-deployment\r\n    spec:\r\n      containers:\r\n        - name: app-deployment\r\n          image: srinu641/spring-image:latest\r\n          imagePullPolicy: Always    #todo imagePullPolicy: \"IfNotPresent\"\r\n          ports:\r\n            - containerPort: 8998\r\n          env:   # Setting Environmental Variables            - name: DB_HOST   # Setting Database host address from configMap\r\n            - name: DB_HOST   # Setting Database host address from configMap\r\n              valueFrom :\r\n                configMapKeyRef :\r\n                  name : db-config\r\n                  key :  host\r\n\r\n            - name: DB_NAME  # Setting Database name from configMap\r\n              valueFrom :\r\n                configMapKeyRef :\r\n                  name : db-config # todo call the yml file name\r\n                  key :  dbName\r\n\r\n            - name: DB_USERNAME  # Setting Database username from Secret\r\n              valueFrom :\r\n                secretKeyRef :\r\n                  name : mysql-secrets # todo call the yml file name\r\n                  key :  username\r\n\r\n            - name: DB_PASSWORD # Setting Database password from Secret\r\n              valueFrom :\r\n                secretKeyRef :\r\n                  name : mysql-secrets\r\n                  key : password\r\n---\r\n\r\n#todo  Define a 'Service' To Expose the application\r\napiVersion: v1\r\nkind: Service\r\nmetadata:\r\n  name: app-service\r\nspec:\r\n  ports:\r\n    - protocol: \"TCP\"\r\n      port: 8998    # TODO Port inside the cluster\r\n      targetPort: 8998   #TODO  Port exposed to the outside\r\n  selector:\r\n    app: app-deployment\r\n  type: NodePort\r\n---\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s/app-deployment.yml b/k8s/app-deployment.yml
+--- a/k8s/app-deployment.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s/app-deployment.yml	(date 1729680932503)
+@@ -1,61 +1,61 @@
++---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+-  name: app-deployment
++  name: Spring-Deployment
+ spec:
+   selector:
+     matchLabels:
+-      app: app-deployment
+-  replicas: 6
++      app: fleetms-v2
++  replicas: 3
+   template:
+     metadata:
+       labels:
+-        app: app-deployment
++        app: fleetms-v2
+     spec:
+       containers:
+-        - name: app-deployment
++        - name: springboot-container
+           image: srinu641/spring-image:latest
+-          imagePullPolicy: Always    #todo imagePullPolicy: "IfNotPresent"
+           ports:
+             - containerPort: 8998
+-          env:   # Setting Environmental Variables            - name: DB_HOST   # Setting Database host address from configMap
+-            - name: DB_HOST   # Setting Database host address from configMap
+-              valueFrom :
+-                configMapKeyRef :
+-                  name : db-config
+-                  key :  host
+-
+-            - name: DB_NAME  # Setting Database name from configMap
+-              valueFrom :
+-                configMapKeyRef :
+-                  name : db-config # todo call the yml file name
+-                  key :  dbName
+-
+-            - name: DB_USERNAME  # Setting Database username from Secret
+-              valueFrom :
+-                secretKeyRef :
+-                  name : mysql-secrets # todo call the yml file name
+-                  key :  username
+-
+-            - name: DB_PASSWORD # Setting Database password from Secret
+-              valueFrom :
+-                secretKeyRef :
+-                  name : mysql-secrets
+-                  key : password
++          env:   # Setting Environmental Variables
++            - name: DB_HOST   # Setting Database host address
++              value: mysql
++            - name: DB_NAME  # Setting Database name
++              value: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring
++            - name: DB_USERNAME  # Setting Database username
++              value: root
++            - name: DB_PASSWORD # Setting Database password
++              value: srinu1234
+ ---
+-
+-#todo  Define a 'Service' To Expose the application
++# Define a 'Service' To Expose the application
+ apiVersion: v1
+ kind: Service
+ metadata:
+-  name: app-service
++  name: App-service
+ spec:
+   ports:
+     - protocol: "TCP"
+-      port: 8998    # TODO Port inside the cluster
+-      targetPort: 8998   #TODO  Port exposed to the outside
++      port: 8080    # Port inside the cluster
++      targetPort:   # Port exposed to the outside
+   selector:
+-    app: app-deployment
++    app: fleetms-v2
+   type: NodePort
+ ---
+ 
++## springboot-service.yaml
++#apiVersion: v1
++#kind: Service
++#metadata:
++#  name: springboot-service
++#spec:
++#  type: NodePort
++#  selector:
++#    app: springboot-app
++#  ports:
++#    - protocol: TCP
++#      port: 80
++#      targetPort: 8998
++#      nodePort: 30036
++#---
++
+Index: k8s1/configmap.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apiVersion: v1\r\nkind: ConfigMap\r\nmetadata:\r\n  name: spring-boot-config\r\ndata:\r\n  SPRING_DATASOURCE_URL: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring\r\n  SPRING_DATASOURCE_USERNAME: root\r\n  SPRING_DATASOURCE_PASSWORD: srinu1234\r\n  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s1/configmap.yml b/k8s1/configmap.yml
+--- a/k8s1/configmap.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s1/configmap.yml	(date 1729678916521)
+@@ -1,9 +1,20 @@
++#apiVersion: v1
++#kind: ConfigMap
++#metadata:
++#  name: spring-boot-config
++#data:
++#  SPRING_DATASOURCE_URL: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring
++#  SPRING_DATASOURCE_USERNAME: root
++#  SPRING_DATASOURCE_PASSWORD: srinu1234
++#  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
++---
++# mysql-configmap.yaml
+ apiVersion: v1
+ kind: ConfigMap
+ metadata:
+-  name: spring-boot-config
++  name: mysql-configmap
+ data:
+-  SPRING_DATASOURCE_URL: jdbc:mysql://database-one.c5u6c62qgth3.us-east-1.rds.amazonaws.com/spring
+-  SPRING_DATASOURCE_USERNAME: root
+-  SPRING_DATASOURCE_PASSWORD: srinu1234
+-  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+\ No newline at end of file
++  database: spring
++  host: database-1.c5gs8ey0ghui.us-east-1.rds.amazonaws.com/spring
++  port: "3306"
++---
+\ No newline at end of file
+Index: k8s1/db-deployment.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster\r\napiVersion: v1\r\nkind: PersistentVolumeClaim\r\nmetadata:\r\n  name: mysql-pv-claim # name of PVC essential for identifying the storage data\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  accessModes:\r\n    - ReadWriteOnce   #This specifies the mode of the claim that we are trying to create.\r\n  resources:\r\n    requests:\r\n      storage: 1Gi    #This will tell kubernetes about the amount of space we are trying to claim.\r\n---\r\n# Define a 'Service' To Expose MySQL to Other Services\r\napiVersion: v1\r\nkind: Service\r\nmetadata:\r\n  name: mysql\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  ports:\r\n    - port: 3306\r\n      targetPort: 3306\r\n  selector:\r\n    app: mysql\r\n    tier: database\r\n  clusterIP: None # DNS is used, so clusterIP is not needed\r\n---\r\n# Deployment specification begins here\r\napiVersion: apps/v1\r\nkind: Deployment\r\nmetadata:\r\n  name: mysql\r\n  labels:\r\n    app: mysql\r\n    tier: database\r\nspec:\r\n  selector: # mySQL Pod Should contain same labels\r\n    matchLabels:\r\n      app: mysql\r\n  strategy:\r\n    type: Recreate\r\n  template:\r\n    metadata:\r\n      labels: # Must match 'Service' and 'Deployment' selectors\r\n        app: mysql\r\n        tier: database\r\n    spec:\r\n      containers:\r\n        - name: mysql\r\n          image: mysql\r\n          imagePullPolicy: \"IfNotPresent\"\r\n#          env:\r\n#            - name: SPRING_DATASOURCE_PASSWORD\r\n#              valueFrom:\r\n#                secretKeyRef:\r\n#                  name: db-credentials\r\n#                  key: password\r\n#            - name: SPRING_DATASOURCE_URL\r\n#              valueFrom:\r\n#                configMapKeyRef:\r\n#                  name: spring-boot-config\r\n#                  key: SPRING_DATASOURCE_URL\r\n          env:\r\n            - name: MYSQL_ROOT_PASSWORD\r\n              value: srinu1234\r\n            - name: MYSQL_DATABASE\r\n              value: database-1.c5gs8ey0ghui.us-east-1.rds.amazonaws.com/spring\r\n          ports:\r\n            - containerPort: 3306\r\n              name: mysql\r\n          volumeMounts:\r\n            - mountPath: /var/lib/mysql\r\n              name: mysql-persistance-storage\r\n      volumes:\r\n        - name: mysql-persistance-storage\r\n          persistentVolumeClaim:\r\n            claimName: mysql-pv-claim\r\n---\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/k8s1/db-deployment.yml b/k8s1/db-deployment.yml
+--- a/k8s1/db-deployment.yml	(revision efea22ad4798fb000a93086ec636f130bdcf0267)
++++ b/k8s1/db-deployment.yml	(date 1729678739473)
+@@ -1,34 +1,28 @@
+-# Define a 'Persistent Volume Claim'(PVC) for MySQL Storage, dynamically provisioned by cluster
++# mysql-pvc.yaml
+ apiVersion: v1
+ kind: PersistentVolumeClaim
+ metadata:
+-  name: mysql-pv-claim # name of PVC essential for identifying the storage data
+-  labels:
+-    app: mysql
+-    tier: database
++  name: mysql-pvc
+ spec:
+   accessModes:
+-    - ReadWriteOnce   #This specifies the mode of the claim that we are trying to create.
++    - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 1Gi    #This will tell kubernetes about the amount of space we are trying to claim.
++      storage: 5Gi
+ ---
+-# Define a 'Service' To Expose MySQL to Other Services
++# mysql-service.yaml
+ apiVersion: v1
+ kind: Service
+ metadata:
+-  name: mysql
+-  labels:
++  name: mysql-service
++spec:
++  type: ClusterIP  # This exposes MySQL only within the cluster
++  selector:
+     app: mysql
+-    tier: database
+-spec:
+   ports:
+     - port: 3306
+       targetPort: 3306
+-  selector:
+-    app: mysql
+-    tier: database
+-  clusterIP: None # DNS is used, so clusterIP is not needed
++---
+ ---
+ # Deployment specification begins here
+ apiVersion: apps/v1
+@@ -54,17 +48,6 @@
+         - name: mysql
+           image: mysql
+           imagePullPolicy: "IfNotPresent"
+-#          env:
+-#            - name: SPRING_DATASOURCE_PASSWORD
+-#              valueFrom:
+-#                secretKeyRef:
+-#                  name: db-credentials
+-#                  key: password
+-#            - name: SPRING_DATASOURCE_URL
+-#              valueFrom:
+-#                configMapKeyRef:
+-#                  name: spring-boot-config
+-#                  key: SPRING_DATASOURCE_URL
+           env:
+             - name: MYSQL_ROOT_PASSWORD
+               value: srinu1234
+@@ -81,3 +64,39 @@
+           persistentVolumeClaim:
+             claimName: mysql-pv-claim
+ ---
++# mysql-deployment.yaml
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  name: mysql-deployment
++spec:
++  selector:
++    matchLabels:
++      app: mysql
++  replicas: 2
++  template:
++    metadata:
++      labels:
++        app: mysql
++    spec:
++      containers:
++        - name: mysql
++          image: mysql
++          ports:
++            - containerPort: 3306
++          env:
++            - name: MYSQL_ROOT_PASSWORD
++              valueFrom:
++                secretKeyRef:
++                  name: mysql-secret
++                  key: srinu1234
++            - name: MYSQL_DATABASE
++              value: database-1.c5gs8ey0ghui.us-east-1.rds.amazonaws.com/spring # Optional: Create a default database
++          volumeMounts:
++            - name: mysql-storage
++              mountPath: /var/lib/mysql  # MySQL data directory
++      volumes:
++        - name: mysql-storage
++          persistentVolumeClaim:
++            claimName: mysql-pvc
++---
+\ No newline at end of file

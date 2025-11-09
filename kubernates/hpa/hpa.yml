@@ -1,0 +1,142 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: example-hpa
+  namespace: database-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-deployment # Replace with your deployment name
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50 # Scale if CPU usage exceeds 50%
+---
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: horizontal-deployment # Updated to meet naming conventions
+#  namespace: app-namespace
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: app-deployment # Replace with the name of your target deployment
+#  minReplicas: 1
+#  maxReplicas: 10
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        target:
+#          type: Utilization
+#          averageUtilization: 80
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: spring-boot
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: app-deployment
+#  minReplicas: 1
+#  maxReplicas: 10
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        target:
+#          type: Utilization
+#          averageUtilization: 50
+#status:
+#  observedGeneration: 1
+#  lastScaleTime: <some-time>
+#  currentReplicas: 1
+#  desiredReplicas: 5
+#  currentMetrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        current:
+#          averageUtilization: 0
+#          averageValue: 0
+#---
+#---
+#apiVersion: autoscaling/v2
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: php-apache
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: php-apache
+#  minReplicas: 1
+#  maxReplicas: 10
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        target:
+#          type: Utilization
+#          averageUtilization: 50
+#    - type: Pods
+#      pods:
+#        metric:
+#          name: packets-per-second
+#        target:
+#          type: AverageValue
+#          averageValue: 1k
+#    - type: Object
+#      object:
+#        metric:
+#          name: requests-per-second
+#        describedObject:
+#          apiVersion: networking.k8s.io/v1
+#          kind: Ingress
+#          name: main-route
+#        target:
+#          type: Value
+#          value: 10k
+#status:
+#  observedGeneration: 1
+#  lastScaleTime: <some-time>
+#  currentReplicas: 1
+#  desiredReplicas: 1
+#  currentMetrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#      current:
+#        averageUtilization: 0
+#        averageValue: 0
+#    - type: Object
+#      object:
+#        metric:
+#          name: requests-per-second
+#        describedObject:
+#          apiVersion: networking.k8s.io/v1
+#          kind: Ingress
+#          name: main-route
+#        current:
+#          value: 10k
+##VerticalPodAutoscaler
+#apiVersion: autoscaling.k8s.io/v1
+#kind: VerticalPodAutoscaler
+#metadata:
+#  name: utility-api
+#spec:
+#  targetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: utility-api
+#  updatePolicy:
+#    updateMode: "Off"
+---

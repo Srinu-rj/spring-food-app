@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: app-statefulset
+  namespace: app-namespace
+spec:
+  serviceName: "app-service"  # Mandatory for StatefulSets
+  replicas: 5  # Example: Number of replicas
+  selector:
+    matchLabels:
+      app: app-statefulset
+  template:
+    metadata:
+      labels:
+        app: app-statefulset
+    spec:
+#      nodeName: # Here mention Your node name
+#      nodeSelector:
+#        kubernetes.io/hostname: "node1"
+      containers:
+        - name: app-container
+          image: srinu641/spring-image:latest
+          imagePullPolicy: Always
+          startupProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
+
+          env:  # Environmental Variables
+            - name: DB_HOST
+              value: mysql
+            - name: DB_NAME
+              value: jdbc:mysql://rds-database.cn2aysi4umep.us-east-1.rds.amazonaws.com/spring
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: srinu1234
+          volumeMounts:
+            - name: mysql-pv-claim
+              mountPath: /var/lib/mysql  # Mount path inside the container
+  volumeClaimTemplates:
+    - metadata:
+        name: app-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# Service for StatefulSet (ClusterIP type for internal communication)
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: app-namespace
+spec:
+  ports:
+    - protocol: TCP
+      port: 8998
+      targetPort: 8998
+  selector:
+    app: app-statefulset
+  clusterIP: None  # Required for StatefulSet (headless service)
+---
