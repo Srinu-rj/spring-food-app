@@ -1,5 +1,9 @@
 # Project exclude paths
 /target/
+# Ignore environment files
 .env
+.env.*
+
+# Ignore Spring Boot application config files
 src/main/resources/application.properties
-src/main/resources/application-dev.properties
+src/main/resources/application-*.properties
