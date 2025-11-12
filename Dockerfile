@@ -1,26 +1,21 @@
-# ---- Build Stage ----
-FROM maven:3.8.5-openjdk-17 AS builder
+# Build stage
+FROM eclipse-temurin:17-jdk-jammy AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
-COPY --from=builder /app/target/application-mysql.jar application-mysql.jar
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+RUN chmod +x ./mvnw
+RUN ./mvnw clean package -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:17-jdk-jammy
+ARG PROFILE=dev
+ARG APP_VERSION=1.0.0
+WORKDIR /app
+COPY --from=build /app/target/*.jar /app/
 EXPOSE 8998
-
-# ---- Runtime Stage ----
-FROM openjdk:17-jdk
-WORKDIR /app
-ENTRYPOINT ["java", "-jar", "application-mysql.jar"]
-
-
-
-
-# Step 1: Use official OpenJDK as base image
-# FROM openjdk:17-jdk-slim
-# # Step 2: Set working directory inside the container
-# WORKDIR /app
-# # Step 3: Copy the JAR file from the host to the container
-# COPY target/application-mysql.jar application-mysql.jar
-# # Step 4: Expose the application port
-# EXPOSE  8998
-# # Step 5: Run the Spring Boot application
-# ENTRYPOINT ["java", "-jar", "application-mysql.jar"]
+ENV DB_URL=jdbc:postgresql://localhost:5432/spring
+ENV ACTIVE_PROFILE=${PROFILE}
+ENV JAR_VERSION=${APP_VERSION}
+CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} spring-security-asymmetric-encryption-${JAR_VERSION}.jar
