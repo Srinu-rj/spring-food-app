@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 
 @SpringBootApplication
-@EnableCaching
+//@EnableCaching
 public class SpringFoodAppApplication {
 //    private static final ByteBuf CONTENE_BUFFER = Unpooled.copiedBuffer("Helo from Netty", StandardCharsets.UTF_8).asReadOnly();
 //    private static final String METRICS_PATH = "/actuator/prometheus";

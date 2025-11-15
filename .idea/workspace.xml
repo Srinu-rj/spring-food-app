@@ -101,6 +101,9 @@
     &quot;accountId&quot;: &quot;fb1681a0-8ad5-429e-9a56-59931dc463f5&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/SpringFoodAppApplication.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
@@ -167,9 +170,9 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.55172414&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.build.tools.auto.reload&quot;: &quot;ALL&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
@@ -238,6 +241,9 @@
       <method v="2" />
     </configuration>
     <configuration name="SpringFoodAppApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+      <envs>
+        <env name="DB_URL" value="localhost, DB_PORT=5432, DB_NAME=spring, DB_USERNAME=postgres, DB_PASSWORD=raju " />
+      </envs>
       <option name="MAIN_CLASS_NAME" value="com.foodapp.springfoodapp.SpringFoodAppApplication" />
       <module name="spring-food-app" />
       <extension name="coverage">
@@ -339,14 +345,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00233" summary="Updated Dockerfile">
-      <option name="closed" value="true" />
-      <created>1737457703094</created>
-      <option name="number" value="00233" />
-      <option name="presentableId" value="LOCAL-00233" />
-      <option name="project" value="LOCAL" />
-      <updated>1737457703095</updated>
     </task>
     <task id="LOCAL-00234" summary="updated Multi_stage Docker images">
       <option name="closed" value="true" />
@@ -732,7 +730,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762714190313</updated>
     </task>
-    <option name="localTasksCounter" value="282" />
+    <task id="LOCAL-00282" summary="env">
+      <option name="closed" value="true" />
+      <created>1762958666055</created>
+      <option name="number" value="00282" />
+      <option name="presentableId" value="LOCAL-00282" />
+      <option name="project" value="LOCAL" />
+      <updated>1762958666055</updated>
+    </task>
+    <option name="localTasksCounter" value="283" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -815,7 +821,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Jenkins file" />
     <MESSAGE value="jenkins file" />
     <MESSAGE value="jenkins" />
     <MESSAGE value="Nexus" />
@@ -840,6 +845,7 @@
     <MESSAGE value="env Ignore" />
     <MESSAGE value="ignore" />
     <MESSAGE value="Env and Properties ignored" />
+    <MESSAGE value="env" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
@@ -857,5 +863,13 @@
     <SUITE FILE_PATH="coverage/spring_food_app$SpringFoodAppApplication.ic" NAME="SpringFoodAppApplication Coverage Results" MODIFIED="1726685840331" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>com.foodapp.springfoodapp.democontroller.*</FILTER>
     </SUITE>
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
