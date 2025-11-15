@@ -1,0 +1,37 @@
+name: spring boot CICD Deploying to AWS ECR AND EKS
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  Building-and-Testing: #Job Name
+    runs-on: ubuntu-latest #TODO The type of machine to run the job on Ubuntu | Windows | MacOS
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      # TODO
+      - name: just a test step
+        run: echo "This workflow runs at Every One Hour "
+      # TODO  Code checkout step
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}   # Todo Make It '21'
+          distribution: 'temurin' # 'adopt'
+          architecture: x64
+          cache: 'maven' # Strongly recommended for faster builds!
+          cache-dependency-path: 'pom.xml' # Or '**/pom.xml' for multi-module projects
+
+      - name: mvn clean package
+        run: mvn clean package
+      - name: Build project with Maven
+        run: mvn -B package --file pom.xml

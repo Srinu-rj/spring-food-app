@@ -185,6 +185,9 @@
     ]
   }
 }</component>
+  <component name="QodanaGithubNotificationPromoProjectDismissalState">
+    <option name="dismissed" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.foodapp.springfoodapp.exception" />
@@ -345,22 +348,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00234" summary="updated Multi_stage Docker images">
-      <option name="closed" value="true" />
-      <created>1737458810431</created>
-      <option name="number" value="00234" />
-      <option name="presentableId" value="LOCAL-00234" />
-      <option name="project" value="LOCAL" />
-      <updated>1737458810431</updated>
-    </task>
-    <task id="LOCAL-00235" summary="AWS RDS">
-      <option name="closed" value="true" />
-      <created>1737809990095</created>
-      <option name="number" value="00235" />
-      <option name="presentableId" value="LOCAL-00235" />
-      <option name="project" value="LOCAL" />
-      <updated>1737809990095</updated>
     </task>
     <task id="LOCAL-00236" summary="Jenkinsfile added">
       <option name="closed" value="true" />
@@ -738,7 +725,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762958666055</updated>
     </task>
-    <option name="localTasksCounter" value="283" />
+    <task id="LOCAL-00283" summary="Added Application properties">
+      <option name="closed" value="true" />
+      <created>1763226223365</created>
+      <option name="number" value="00283" />
+      <option name="presentableId" value="LOCAL-00283" />
+      <option name="project" value="LOCAL" />
+      <updated>1763226223368</updated>
+    </task>
+    <task id="LOCAL-00284" summary="env">
+      <option name="closed" value="true" />
+      <created>1763226262612</created>
+      <option name="number" value="00284" />
+      <option name="presentableId" value="LOCAL-00284" />
+      <option name="project" value="LOCAL" />
+      <updated>1763226262612</updated>
+    </task>
+    <option name="localTasksCounter" value="285" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -821,7 +824,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="jenkins file" />
     <MESSAGE value="jenkins" />
     <MESSAGE value="Nexus" />
     <MESSAGE value="nexus" />
@@ -845,6 +847,7 @@
     <MESSAGE value="env Ignore" />
     <MESSAGE value="ignore" />
     <MESSAGE value="Env and Properties ignored" />
+    <MESSAGE value="Added Application properties" />
     <MESSAGE value="env" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
