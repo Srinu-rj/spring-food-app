@@ -185,9 +185,6 @@
     ]
   }
 }</component>
-  <component name="QodanaGithubNotificationPromoProjectDismissalState">
-    <option name="dismissed" value="true" />
-  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.foodapp.springfoodapp.exception" />
@@ -348,22 +345,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00236" summary="Jenkinsfile added">
-      <option name="closed" value="true" />
-      <created>1737810306684</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
-      <option name="project" value="LOCAL" />
-      <updated>1737810306684</updated>
-    </task>
-    <task id="LOCAL-00237" summary="bkhj">
-      <option name="closed" value="true" />
-      <created>1737810469491</created>
-      <option name="number" value="00237" />
-      <option name="presentableId" value="LOCAL-00237" />
-      <option name="project" value="LOCAL" />
-      <updated>1737810469491</updated>
     </task>
     <task id="LOCAL-00238" summary=",fjgkfdjgdfk">
       <option name="closed" value="true" />
@@ -741,7 +722,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763226262612</updated>
     </task>
-    <option name="localTasksCounter" value="285" />
+    <task id="LOCAL-00285" summary="GitHub Action CICD">
+      <option name="closed" value="true" />
+      <created>1763227170435</created>
+      <option name="number" value="00285" />
+      <option name="presentableId" value="LOCAL-00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1763227170435</updated>
+    </task>
+    <task id="LOCAL-00286" summary="GitHub Actions CICD">
+      <option name="closed" value="true" />
+      <created>1763227295302</created>
+      <option name="number" value="00286" />
+      <option name="presentableId" value="LOCAL-00286" />
+      <option name="project" value="LOCAL" />
+      <updated>1763227295303</updated>
+    </task>
+    <option name="localTasksCounter" value="287" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -824,8 +821,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="jenkins" />
-    <MESSAGE value="Nexus" />
     <MESSAGE value="nexus" />
     <MESSAGE value="Jenkins" />
     <MESSAGE value="Application deployment In Kubernates" />
@@ -849,6 +844,8 @@
     <MESSAGE value="Env and Properties ignored" />
     <MESSAGE value="Added Application properties" />
     <MESSAGE value="env" />
+    <MESSAGE value="GitHub Action CICD" />
+    <MESSAGE value="GitHub Actions CICD" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">

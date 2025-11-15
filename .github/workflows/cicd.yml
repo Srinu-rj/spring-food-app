@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+    JAVA_VERSION: '21'  # TODO Set the Java Version to 21
+
+
 jobs:
   Building-and-Testing: #Job Name
     runs-on: ubuntu-latest #TODO The type of machine to run the job on Ubuntu | Windows | MacOS
