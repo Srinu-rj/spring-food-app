@@ -7,16 +7,43 @@ trigger:
 - master
 
 pool:
-  name: azure-pool
+  name: azure-devops
 
 steps:
-- task: Maven@3
+- task: Maven@4
   inputs:
+    azureSubscription: 'Azure subscription 1(5c13e26b-0015-4f32-aace-8ea1b3236fd8)'
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
+    goals: 'clean'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenVersionOption: 'Default'
+    mavenOptions: '-Xmx3072m'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+- task: Maven@4
+  inputs:
+    azureSubscription: 'Azure subscription 1(1)(5c13e26b-0015-4f32-aace-8ea1b3236fd8)'
+    mavenPomFile: 'pom.xml'
+    goals: 'validate'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+- task: Maven@4
+  inputs:
+    azureSubscription: 'Azure subscription 1(1)(5c13e26b-0015-4f32-aace-8ea1b3236fd8)'
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
