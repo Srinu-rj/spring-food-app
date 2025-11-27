@@ -18,8 +18,8 @@ pipeline {
         SONAR_TOKEN    = credentials('SONAR_CREDS')
         NEXUS_URL      = "http://10.0.2.87:8081/repository/maven-releases/"
         ARTIFACT_ID    = "simple-java-maven-app"
-
-        IMAGE_TAG      = "${BUILD_NUMBER}"   // unique tag for each build
+        //TODO unique tag for each build
+        IMAGE_TAG      = "${BUILD_NUMBER}"
     }
 
     stages {

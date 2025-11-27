@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3b18375-654a-4b0b-bae5-3979ec4c1afa" name="Changes" comment="" />
+    <list default="true" id="b3b18375-654a-4b0b-bae5-3979ec4c1afa" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/main.tf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/outputs.tf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/providers.tf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/variables.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
+    </list>
     <list id="cb1c13d1-3e5f-4223-96a2-1efbdd54b582" name="Uncommitted changes before Update at 10/23/2024 7:57 PM" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +99,17 @@
   ],
   &quot;lastFilter&quot;: {}
 }</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQSYbyM60-Ld5&quot;,
+        &quot;number&quot;: 3
+      },
+      &quot;lastSeen&quot;: 1764087456464
+    }
+  ]
+}</component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
   </component>
@@ -132,60 +150,60 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.SpringFoodAppApplication.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Docker.Docker Image.executor": "Run",
-    "Docker.Dockerfile.executor": "Run",
-    "Docker.docker-compose.yaml: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "Docker.promethus: Compose Deployment.executor": "Run",
-    "JUnit.All in spring-food-app (1).executor": "Debug",
-    "JUnit.All in spring-food-app.executor": "Run",
-    "JUnit.SpringFoodAppApplicationTests.contextLoads.executor": "Run",
-    "Maven.spring-food-app [--update-plugins].executor": "Run",
-    "Maven.spring-food-app [clean].executor": "Run",
-    "Maven.spring-food-app [compile].executor": "Run",
-    "Maven.spring-food-app [compiler:compile].executor": "Run",
-    "Maven.spring-food-app [deploy].executor": "Run",
-    "Maven.spring-food-app [install].executor": "Run",
-    "Maven.spring-food-app [org.apache.maven.plugins:maven-clean-plugin:3.3.2:clean].executor": "Run",
-    "Maven.spring-food-app [org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile].executor": "Run",
-    "Maven.spring-food-app [package].executor": "Run",
-    "Maven.spring-food-app [test].executor": "Run",
-    "Maven.spring-food-app [validate].executor": "Run",
-    "Maven.spring-food-app [verify].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
-    "Notification.DoNotAsk-Vcs Important Messages": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHELLCHECK.PATH": "C:\\Users\\dnsri\\AppData\\Roaming\\JetBrains\\IdeaIC2025.2\\plugins\\Shell Script\\shellcheck.exe",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "appmap.toolWindow.appMaps.collapsed": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/spring-food-app",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.55172414",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.build.tools.auto.reload": "ALL",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Application.SpringFoodAppApplication.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Docker.Docker Image.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.promethus: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in spring-food-app (1).executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.All in spring-food-app.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SpringFoodAppApplicationTests.contextLoads.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [--update-plugins].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [compiler:compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [org.apache.maven.plugins:maven-clean-plugin:3.3.2:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-food-app [verify].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-Vcs Important Messages&quot;: &quot;VCS important messages&quot;,
+    &quot;Notification.DoNotAsk-Vcs Important Messages&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\dnsri\\AppData\\Roaming\\JetBrains\\IdeaIC2025.2\\plugins\\Shell Script\\shellcheck.exe&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;appmap.toolWindow.appMaps.collapsed&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.55172414&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;ALL&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "GitStage.ChangesTree.GroupingKeys": [
-      "directory",
-      "module",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.foodapp.springfoodapp.exception" />
@@ -346,30 +364,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00239" summary="Aws RDS Added">
-      <option name="closed" value="true" />
-      <created>1738249378752</created>
-      <option name="number" value="00239" />
-      <option name="presentableId" value="LOCAL-00239" />
-      <option name="project" value="LOCAL" />
-      <updated>1738249378752</updated>
-    </task>
-    <task id="LOCAL-00240" summary="Jenkins Pipeline">
-      <option name="closed" value="true" />
-      <created>1738809436821</created>
-      <option name="number" value="00240" />
-      <option name="presentableId" value="LOCAL-00240" />
-      <option name="project" value="LOCAL" />
-      <updated>1738809436821</updated>
-    </task>
-    <task id="LOCAL-00241" summary="Jenkins Pipeline">
-      <option name="closed" value="true" />
-      <created>1738809733300</created>
-      <option name="number" value="00241" />
-      <option name="presentableId" value="LOCAL-00241" />
-      <option name="project" value="LOCAL" />
-      <updated>1738809733301</updated>
     </task>
     <task id="LOCAL-00242" summary="Jenkins pipeline">
       <option name="closed" value="true" />
@@ -739,7 +733,31 @@
       <option name="project" value="LOCAL" />
       <updated>1763227382596</updated>
     </task>
-    <option name="localTasksCounter" value="288" />
+    <task id="LOCAL-00288" summary="Jenkins | GitHub Actions">
+      <option name="closed" value="true" />
+      <created>1763697313040</created>
+      <option name="number" value="00288" />
+      <option name="presentableId" value="LOCAL-00288" />
+      <option name="project" value="LOCAL" />
+      <updated>1763697313041</updated>
+    </task>
+    <task id="LOCAL-00289" summary="Jenkins">
+      <option name="closed" value="true" />
+      <created>1763697325939</created>
+      <option name="number" value="00289" />
+      <option name="presentableId" value="LOCAL-00289" />
+      <option name="project" value="LOCAL" />
+      <updated>1763697325939</updated>
+    </task>
+    <task id="LOCAL-00290" summary="Azure Terraform">
+      <option name="closed" value="true" />
+      <created>1764055233821</created>
+      <option name="number" value="00290" />
+      <option name="presentableId" value="LOCAL-00290" />
+      <option name="project" value="LOCAL" />
+      <updated>1764055233822</updated>
+    </task>
+    <option name="localTasksCounter" value="291" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -822,9 +840,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="nexus" />
-    <MESSAGE value="Jenkins" />
-    <MESSAGE value="Application deployment In Kubernates" />
     <MESSAGE value="Kubernates added" />
     <MESSAGE value="Jenkins pipeline" />
     <MESSAGE value="some files added" />
@@ -847,6 +862,9 @@
     <MESSAGE value="env" />
     <MESSAGE value="GitHub Action CICD" />
     <MESSAGE value="GitHub Actions CICD" />
+    <MESSAGE value="Jenkins | GitHub Actions" />
+    <MESSAGE value="Jenkins" />
+    <MESSAGE value="Azure Terraform" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
