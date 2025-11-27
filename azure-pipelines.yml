@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: srinu-vm
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: Maven@4
