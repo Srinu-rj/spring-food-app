@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: azure
+  name: srinu-vm
 
 steps:
 - task: Maven@4
