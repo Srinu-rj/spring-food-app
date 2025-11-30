@@ -78,12 +78,17 @@ stages:
         - task: SonarQubePrepare@7
           inputs:
             SonarQube: 'sonarserver'
-            scannerMode: 'other'
+            scannerMode: 'cli'
+            configMode: 'file'
+            cliScannerVersion: '5.0.1.3006'   # specify CLI version
             extraProperties: |
               # Additional properties that will be passed to the scanner, 
               # Put one key=value per line, example:
               # sonar.exclusions=**/*.bin
-              sonar.java.binaries=.
+              sonar.projectKey=my-springboot-app
+              sonar.projectName=Spring Boot App
+              sonar.projectVersion=1.0 
         
+
         
 
