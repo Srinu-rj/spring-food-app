@@ -79,15 +79,22 @@ stages:
           inputs:
             SonarQube: 'sonarserver'
             scannerMode: 'cli'
+            cliScannerVersion: '5.0.1.3006'
             configMode: 'file'
-            cliScannerVersion: '5.0.1.3006'   # specify CLI version
             extraProperties: |
               # Additional properties that will be passed to the scanner, 
               # Put one key=value per line, example:
               # sonar.exclusions=**/*.bin
-              sonar.projectKey=my-springboot-app
-              sonar.projectName=Spring Boot App
-              sonar.projectVersion=1.0 
+              #sonar.projectKey=my-springboot-app
+              #sonar.projectName=Spring Boot App
+              #sonar.projectVersion=1.0 
+              sonar.projectKey=srinu_srinu_1b4a2efc-bb31-4f14-a18f-d4d93507087c
+              sonar.projectName=srinu
+        - task: JavaToolInstaller@1
+          inputs:
+            versionSpec: '17'
+            jdkArchitectureOption: 'x64'
+            jdkSourceOption: 'PreInstalled'
         - task: SonarQubePublish@7
           inputs:
             pollingTimeoutSec: '300'
