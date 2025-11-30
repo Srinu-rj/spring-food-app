@@ -188,7 +188,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app/azure-terraform/sql&quot;,
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.55172414&quot;,
@@ -213,11 +213,11 @@
       <recent name="com.foodapp.springfoodapp.email.service" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\spring-food-app\azure-terraform\sql" />
+      <recent name="D:\spring-food-app\azure-terraform\load-balancer" />
+      <recent name="D:\spring-food-app\azure-terraform" />
       <recent name="D:\spring-food-app" />
       <recent name="D:\spring-food-app\src\main\java\com\foodapp\springfoodapp" />
-      <recent name="D:\spring-food-app\src\main\java\com\foodapp\springfoodapp\config" />
-      <recent name="D:\spring-food-app\src\main\java\com\foodapp\springfoodapp\dto" />
-      <recent name="D:\spring-food-app\kubernates\deployment1" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\spring-food-app\kubernates\deployment1" />
@@ -364,14 +364,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00242" summary="Jenkins pipeline">
-      <option name="closed" value="true" />
-      <created>1738809969921</created>
-      <option name="number" value="00242" />
-      <option name="presentableId" value="LOCAL-00242" />
-      <option name="project" value="LOCAL" />
-      <updated>1738809969921</updated>
     </task>
     <task id="LOCAL-00243" summary="jenkins file updated">
       <option name="closed" value="true" />
@@ -757,7 +749,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764055233822</updated>
     </task>
-    <option name="localTasksCounter" value="291" />
+    <task id="LOCAL-00291" summary="Azure-Devops">
+      <option name="closed" value="true" />
+      <created>1764236161540</created>
+      <option name="number" value="00291" />
+      <option name="presentableId" value="LOCAL-00291" />
+      <option name="project" value="LOCAL" />
+      <updated>1764236161540</updated>
+    </task>
+    <option name="localTasksCounter" value="292" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -840,7 +840,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Kubernates added" />
     <MESSAGE value="Jenkins pipeline" />
     <MESSAGE value="some files added" />
     <MESSAGE value="Web page Added" />
@@ -865,6 +864,7 @@
     <MESSAGE value="Jenkins | GitHub Actions" />
     <MESSAGE value="Jenkins" />
     <MESSAGE value="Azure Terraform" />
+    <MESSAGE value="Azure-Devops" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
