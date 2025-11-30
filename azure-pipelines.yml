@@ -68,7 +68,6 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-            findBugsRunAnalysis: true
 
   - stage: maven_test
     jobs:
