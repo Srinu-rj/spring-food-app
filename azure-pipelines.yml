@@ -69,12 +69,21 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-  - stage: sonar-server
+  - stage: sonar_server
     jobs:
       - job: sonarqube
-        displayName: 'sonar-scanner-security'
+        displayName: 'sonar scanner security'
         steps:
         - checkout: self
+        - task: SonarQubePrepare@7
+          inputs:
+            SonarQube: 'sonarserver'
+            scannerMode: 'other'
+            extraProperties: |
+              # Additional properties that will be passed to the scanner, 
+              # Put one key=value per line, example:
+              # sonar.exclusions=**/*.bin
+              sonar.java.binaries=.
         
-
+        
 
