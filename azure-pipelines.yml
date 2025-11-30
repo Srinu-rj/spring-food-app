@@ -28,26 +28,7 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-
-  - stage: maven_validate
-    jobs:
-      - job: maven_validate
-        displayName: 'maven validate'
-        steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            goals: 'validate'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-            
+          
   - stage: maven_package
     jobs:
       - job: maven_package
