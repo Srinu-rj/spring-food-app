@@ -88,6 +88,12 @@ stages:
               sonar.projectKey=my-springboot-app
               sonar.projectName=Spring Boot App
               sonar.projectVersion=1.0 
+        - task: SonarQubePublish@7
+          inputs:
+            pollingTimeoutSec: '300'
+        - task: SonarQubeAnalyze@7
+          inputs:
+            jdkversion: 'JAVA_HOME_17_X64'
         
 
         
