@@ -95,12 +95,12 @@ stages:
             versionSpec: '17'
             jdkArchitectureOption: 'x64'
             jdkSourceOption: 'PreInstalled'
-        - task: SonarQubePublish@7
-          inputs:
-            pollingTimeoutSec: '300'
         - task: SonarQubeAnalyze@7
           inputs:
             jdkversion: 'JAVA_HOME_17_X64'
+        - task: SonarQubePublish@7
+          inputs:
+            pollingTimeoutSec: '300'
         
 
         
