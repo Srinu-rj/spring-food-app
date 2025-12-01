@@ -28,27 +28,6 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-          
-
-
-  - stage: maven_verify
-    jobs:
-      - job: maven_verify
-        displayName: 'maven verify'
-        steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            goals: 'verify'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
 
   - stage: maven_package
     jobs:
@@ -69,39 +48,56 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-  - stage: sonar_server
+  - stage: Publish_build_artifacts
     jobs:
-      - job: sonarqube
-        displayName: 'sonar scanner security'
+      - job: Publish_artifacts
+        displayName: 'Publish build artifacts'
+        steps:
+        - checkout: self      
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+  # - stage: sonar_server
+  #   jobs:
+  #     - job: sonarqube
+  #       displayName: 'sonar scanner security'
+  #       steps:
+  #       - checkout: self
+  #       - task: SonarQubePrepare@7
+  #         inputs:
+  #           SonarQube: 'sonarserver'
+  #           scannerMode: 'cli'
+  #           cliScannerVersion: '5.0.1.3006'
+  #           configMode: 'file'
+  #           extraProperties: |
+  #             # Additional properties that will be passed to the scanner, 
+  #             # Put one key=value per line, example:
+  #             # sonar.exclusions=**/*.bin
+  #             #sonar.projectKey=my-springboot-app
+  #             #sonar.projectName=Spring Boot App
+  #             #sonar.projectVersion=1.0 
+  #             sonar.java.binaris=target
+  #       - task: JavaToolInstaller@1
+  #         inputs:
+  #           versionSpec: '17'
+  #           jdkArchitectureOption: 'x64'
+  #           jdkSourceOption: 'PreInstalled'
+  #       - task: SonarQubeAnalyze@7
+  #         inputs:
+  #           jdkversion: 'JAVA_HOME_17_X64'
+  #       - task: SonarQubePublish@7
+  #         inputs:
+  #           pollingTimeoutSec: '300'
+
+  - stage: Helm
+    jobs:
+      - job: helm_install
+        displayName: 'Installing Helm For Spring Boot Application'
         steps:
         - checkout: self
-        - task: SonarQubePrepare@7
+        - task: HelmInstaller@1
           inputs:
-            SonarQube: 'sonarserver'
-            scannerMode: 'cli'
-            cliScannerVersion: '5.0.1.3006'
-            configMode: 'file'
-            extraProperties: |
-              # Additional properties that will be passed to the scanner, 
-              # Put one key=value per line, example:
-              # sonar.exclusions=**/*.bin
-              #sonar.projectKey=my-springboot-app
-              #sonar.projectName=Spring Boot App
-              #sonar.projectVersion=1.0 
-              sonar.java.binaris=target
-
-        - task: JavaToolInstaller@1
-          inputs:
-            versionSpec: '17'
-            jdkArchitectureOption: 'x64'
-            jdkSourceOption: 'PreInstalled'
-        - task: SonarQubeAnalyze@7
-          inputs:
-            jdkversion: 'JAVA_HOME_17_X64'
-        - task: SonarQubePublish@7
-          inputs:
-            pollingTimeoutSec: '300'
-        
-
-        
-
+            helmVersionToInstall: 'latest'
