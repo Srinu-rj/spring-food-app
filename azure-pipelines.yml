@@ -6,8 +6,8 @@
 trigger: none
 
 variables:
-  imageRepository: 'my-app' # The name of your Docker image in ACR
-  dockerRegistryServiceConnection: 'myacr' # Your Azure Container Registry service connection name
+  imageRepository: 'spring' # The name of your Docker image in ACR
+  dockerRegistryServiceConnection: 'spring-acr' # Your Azure Container Registry service connection name
   aksServiceConnection: 'Azure service connection' # Your AKS cluster service connection name
   helmChartPath: 'helm/my-app' # Path to Helm chart in repo
 
@@ -102,6 +102,7 @@ stages:
   #       - task: SonarQubePublish@7
   #         inputs:
   #           pollingTimeoutSec: '300'
+
   - stage: spring_acr
     jobs:
       - job: acr
@@ -110,17 +111,15 @@ stages:
         - checkout: self
         - task: Docker@2
           inputs:
-            containerRegistry: 'spring-acr'
-            repository: 'spring'
+            containerRegistry: '$(dockerRegistryServiceConnection)'
+            repository: '$(imageRepository)'
             command: 'buildAndPush'
             Dockerfile: '**/Dockerfile'
-
-  - stage: Helm
-    jobs:
-      - job: helm_install
-        displayName: 'Installing Helm For Spring Boot Application'
-        steps:
-        - checkout: self
+            tags: |
+              $(Build.BuildId)
+              latest
         - task: HelmInstaller@1
+          displayName: Install Helm
           inputs:
-            helmVersionToInstall: 'latest'
+            helmVersionToInstall: '3.11.0'
+
