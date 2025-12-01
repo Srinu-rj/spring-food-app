@@ -5,6 +5,12 @@
 
 trigger: none
 
+variables:
+  imageRepository: 'my-app' # The name of your Docker image in ACR
+  dockerRegistryServiceConnection: 'myacr' # Your Azure Container Registry service connection name
+  aksServiceConnection: 'Azure service connection' # Your AKS cluster service connection name
+  helmChartPath: 'helm/my-app' # Path to Helm chart in repo
+
 pool:
   # vmImage: ubuntu-latest
   name: pool
@@ -59,11 +65,11 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'drop'
             publishLocation: 'Container'
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'single'
-            downloadPath: '$(System.ArtifactsDirectory)'
+        # - task: DownloadBuildArtifacts@1
+        #   inputs:
+        #     buildType: 'current'
+        #     downloadType: 'single'
+        #     downloadPath: '$(System.ArtifactsDirectory)'
 
   # - stage: sonar_server
   #   jobs:
