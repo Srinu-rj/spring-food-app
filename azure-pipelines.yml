@@ -55,6 +55,9 @@ stages:
             sonarQubeRunAnalysis: false
         
         - task: MicrosoftSecurityDevOps@1
+          displayName: 'Test Container Mapping End'
+          timeoutInMinutes: 2
+          condition: always()
 
   - stage: Publish_build_artifacts
     jobs:
