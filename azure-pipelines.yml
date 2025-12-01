@@ -108,21 +108,21 @@ stages:
   #         inputs:
   #           pollingTimeoutSec: '300'
 
-  - stage: spring_acr
-    jobs:
-      - job: acr
-        displayName: 'packageing spring app'
-        steps:
-        - checkout: self
-        - task: Docker@2
-          inputs:
-            containerRegistry: '$(dockerRegistryServiceConnection)'
-            repository: '$(imageRepository)'
-            command: 'buildAndPush'
-            Dockerfile: '**/Dockerfile'
-            tags: |
-              $(Build.BuildId)
-              latest
+  # - stage: spring_acr
+  #   jobs:
+  #     - job: acr
+  #       displayName: 'packageing spring app'
+  #       steps:
+  #       - checkout: self
+  #       - task: Docker@2
+  #         inputs:
+  #           containerRegistry: '$(dockerRegistryServiceConnection)'
+  #           repository: '$(imageRepository)'
+  #           command: 'buildAndPush'
+  #           Dockerfile: '**/Dockerfile'
+  #           tags: |
+  #             $(Build.BuildId)
+  #             latest
         - task: HelmInstaller@1
           displayName: Install Helm
           inputs:
