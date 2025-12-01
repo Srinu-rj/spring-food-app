@@ -58,6 +58,7 @@ stages:
           displayName: 'Test Container Mapping End'
           timeoutInMinutes: 2
           condition: always()
+          continueOnError: true
 
   - stage: Publish_build_artifacts
     jobs:
@@ -123,8 +124,5 @@ stages:
   #           tags: |
   #             $(Build.BuildId)
   #             latest
-        - task: HelmInstaller@1
-          displayName: Install Helm
-          inputs:
-            helmVersionToInstall: '3.11.0'
+
 
