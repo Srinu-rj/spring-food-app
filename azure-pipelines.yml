@@ -96,6 +96,13 @@ stages:
   #       - task: SonarQubePublish@7
   #         inputs:
   #           pollingTimeoutSec: '300'
+  - stage: spring_acr
+    jobs:
+      - job: acr
+        displayName: 'packageing spring app'
+        steps:
+        - checkout: self
+        
 
   - stage: Helm
     jobs:
