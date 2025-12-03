@@ -10,6 +10,7 @@ variables:
   dockerRegistryServiceConnection: 'spring-acr' # Your Azure Container Registry service connection name
   aksServiceConnection: 'Azure service connection' # Your AKS cluster service connection name
   helmChartPath: 'helm/my-app' # Path to Helm chart in repo
+  storageAccountName : back-up
 
 pool:
   # vmImage: ubuntu-latest
@@ -45,7 +46,6 @@ stages:
           inputs:
             azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
             mavenPomFile: 'pom.xml'
-            goals: 'test'
             publishJUnitResults: true
             testResultsFiles: '**/surefire-reports/TEST-*.xml'
             javaHomeOption: 'JDKVersion'
@@ -69,7 +69,7 @@ stages:
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
+            ArtifactName: 'spring'
             publishLocation: 'Container'
           
         - task: DownloadBuildArtifacts@1
@@ -77,6 +77,34 @@ stages:
             buildType: 'current'
             downloadType: 'specific'
             downloadPath: '$(System.ArtifactsDirectory)'
+        
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your commands here
+              
+              echo 'Hello world'
+              mkdir outpot
+              echo "spring app" > output/apt.txt
+              zip -r $(artifactName) output/
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Pipeline.Workspace)'
+            artifact: 'spring'
+            publishLocation: 'pipeline'
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az storage blob upload \
+                  --account-name $(storageAccountName) \
+                  --container-name $(imageRepository) \
+                  --file $(file)
+                  --name $(Build.BuildId)-$(artifactName)
 
         # - task: DownloadBuildArtifacts@1
         #   inputs:
