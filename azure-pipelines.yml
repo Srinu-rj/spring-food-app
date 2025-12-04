@@ -3,7 +3,7 @@ trigger:
     include:
       - master
       - production
-    exclude: ["master", "feature*", "README.md"]
+    exclude: ["master", "feature*", "README.md","helm"] #
 
 pool:
   name: pool
@@ -40,101 +40,157 @@ variables:
 
 
 stages:
-  - stage: maven_clean
+    # DEV
+  - stage: DEV
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
     condition: and(succeeded(), eq(variables['isDev'], true))
-    variables:  #todo optinal
+    variables:  
       stage_version: "1.0.6"
-      stage_email: "dnsrinu143@gmail.com"        
+      stage_email: "dnsrinu143@gmail.com"      
     jobs:
-     - job: maven_clean
-       steps:
-         - task: Maven@4
-           inputs:
-             azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-             mavenPomFile: 'pom.xml'
-             publishJUnitResults: true
-             testResultsFiles: '**/surefire-reports/TEST-*.xml'
-             javaHomeOption: 'JDKVersion'
-             mavenVersionOption: 'Default'
-             mavenAuthenticateFeed: false
-             effectivePomSkip: false
-             sonarQubeRunAnalysis: false
-         - script: echo $(Build.BuildId)
-           displayName: "Display The Build-ID"
-         - script: mvn clean install 
-           displayName: "maven clean install"
-         - script: mvn package
-           displayName: "packaging the application"
-         - script: pwd && ls -al
-           displayName: "List Folder & Files"         
-         - task: CopyFiles@2
-           inputs:
+      - job: mavan_package
+        displayName: 'Create a jar File'
+        steps:
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+      - job: Trivy_scanning
+        dependsOn: mavan_package
+        displayName: 'trivy Scanning '
+        condition: always() 
+        variables:
+          stage_version: "1.0.6"
+          stage_email: "dnsrinu143@gmail.com"                    
+        steps:         
+          - script: pwd && ls -al
+            displayName: "List Folder & Files"   
+          - script: echo $(Build.BuildId)
+            displayName: "Display The Build-ID"       
+          - script: trivy fs .
+            displayName: 'Scan current directory' 
+          - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
+            displayName: 'scanning github Repository'   
+      - job: ArtifactName
+        dependsOn: Trivy_scanning
+        condition: always()
+        displayName: 'ArtifactName '
+        steps: 
+          - task: CopyFiles@2
+            inputs:
              SourceFolder: '$(System.DefaultWorkingDirectory)'
              Contents: '**'
-             TargetFolder: '$(System.DefaultWorkingDirectory)/target'
-         - task: PublishBuildArtifacts@1
-           inputs:
-             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-             ArtifactName: 'drop'
-             publishLocation: 'Container'
-
-  - stage: security
-    condition: and(succeeded(), eq(variables['isDev'], true))
-    pool:
-     name: pool 
-    variables:  
-      stage_version: "1.0.6"
-      stage_email: "dnsrinu143@gmail.com"   
-    jobs:
-     - job: security_check
-       steps:
-        - script: echo $(Build.BuildId)
-          displayName: "Display The Build-ID"       
-        - script: trivy fs .
-          displayName: 'Scan current directory' 
-        - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
-          displayName: 'scanning github Repository'
-
-  - stage: DockerBuildAndTrivyScan
-    condition: and(succeeded(), eq(variables['isDev'], true))
-    pool:
-     name: pool 
-    variables:  
-      stage_version: "1.0.6"
-      stage_email: "dnsrinu143@gmail.com"   
-    jobs:
-     - job: docker_build_and_push
-       steps:
-        - task: Docker@2
-          inputs:
+             TargetFolder: '$(System.DefaultWorkingDirectory)/target'                     
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+      - job: docker_build_and_push
+        dependsOn: ArtifactName
+        condition: always()
+        displayName: 'docker login'
+        steps:
+          - task: Docker@2
+            inputs:
              containerRegistry: 'dockerhub'
              command: 'login'
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-              az version
-          displayName: 'Install Azure CLI'
-          
-        - task: AzureCLI@2
-          displayName: 'acr login...'
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: 'az acr login --name=$(containerRegistory)'
-        - task: Docker@2
-          displayName: 'build image'
-          inputs:
-            containerRegistry: 'dockerhub'
-            repository: '$(imageRepository)'
-            command: 'build'
-            Dockerfile: '**/Dockerfile'
-            tags: 
-              $(tag)
+  
+  # TEST
+  - stage: TEST
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"      
+    jobs:
+      - job: mavan_package
+        displayName: 'Create a jar File'
+        steps:
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+      - job: Trivy_scanning
+        dependsOn: mavan_package
+        displayName: 'trivy Scanning '
+        condition: always() 
+        variables:
+          stage_version: "1.0.6"
+          stage_email: "dnsrinu143@gmail.com"                    
+        steps:         
+          - script: pwd && ls -al
+            displayName: "List Folder & Files"   
+          - script: echo $(Build.BuildId)
+            displayName: "Display The Build-ID"       
+          - script: trivy fs .
+            displayName: 'Scan current directory' 
+          - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
+            displayName: 'scanning github Repository'   
+      - job: ArtifactName
+        dependsOn: Trivy_scanning
+        condition: always()
+        displayName: 'ArtifactName '
+        steps: 
+          - task: CopyFiles@2
+            inputs:
+             SourceFolder: '$(System.DefaultWorkingDirectory)'
+             Contents: '**'
+             TargetFolder: '$(System.DefaultWorkingDirectory)/target'                     
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+      - job: docker_build_and_push
+        dependsOn: ArtifactName
+        condition: always()
+        displayName: 'docker login'
+        steps:
+          - task: Docker@2
+            inputs:
+             containerRegistry: 'dockerhub'
+             command: 'login'  
 
-        
+  # PROD 
+  - stage: PROD
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"     
+    jobs:
+      - job: prod_maven_package
+        displayName: 'PROD MAVEN PACKAGE'
+        steps:
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
 
 
 
