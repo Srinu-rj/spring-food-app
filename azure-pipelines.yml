@@ -52,8 +52,24 @@ stages:
          - script: mvn package
            displayName: "packaging the application"
          - script: pwd && ls -al
-           displayName: "List Folder & Files"           
+           displayName: "List Folder & Files"         
 
+  - stage: security
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    pool:
+     name: pool 
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"   
+    jobs:
+     - job: security_check
+       steps:
+        - script: trivy fs .
+          displayName: 'Scan current directory' 
+        - script: trivy repo --branch main https://github.com/Srinu-rj/spring-food-app
+          displayName: 'scanning github Repository'
+
+      
 
 
 
