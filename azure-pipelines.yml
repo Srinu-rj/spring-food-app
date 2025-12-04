@@ -85,10 +85,11 @@ stages:
         displayName: 'ArtifactName '
         steps: 
           - task: CopyFiles@2
+            displayName: "Copy JAR to Staging"
             inputs:
-             SourceFolder: 'target'
-             Contents: '*.jar'
-             TargetFolder: '$(Build.ArtifactStagingDirectory)'  
+              SourceFolder: 'target'
+              Contents: '*.jar'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
           - script: | 
               echo "Renaming JAR to app.jar"
