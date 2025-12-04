@@ -7,14 +7,14 @@ trigger: none
 
 pool:
   name: pool
-  demands:
-    - Java -equals 17.0.17
-    - Maven -equals 3.8.7
-    - Terraform -equals Yes
-    - Trivy -equals Yes
-    - Node.js -equals 18.20.8
-    - Snyk -equals Yes
-    - Agent.Name -equals raju
+  # demands:
+  #   - Java -equals 17.0.17
+  #   - Maven -equals 3.8.7
+  #   - Terraform -equals Yes
+  #   - Trivy -equals Yes
+  #   - Node.js -equals 18.20.8
+  #   - Snyk -equals Yes
+  #   - Agent.Name -equals raju
 
 
 variables:
@@ -24,7 +24,6 @@ variables:
   # azure_prod_sub: "298f2c19-014b-4195-b821-e3d8fc25c2a8"
   isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   isProd: $[eq(variables['Build.SourceBranch'], 'refs/heads/production')]
-
 
 stages:
   - stage: maven_clean
