@@ -1,163 +1,48 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
-trigger: none
-
-variables:
-  imageRepository: 'spring' # The name of your Docker image in ACR
-  dockerRegistryServiceConnection: 'spring-acr' # Your Azure Container Registry service connection name
-  aksServiceConnection: 'Azure service connection' # Your AKS cluster service connection name
-  helmChartPath: 'helm/my-app' # Path to Helm chart in repo
-  storageAccountName : back-up
+trigger:
+  branches:
+    include:
+      - main
+      - production
+    exclude: ["master", "feature*", "README.md"]
 
 pool:
-  # vmImage: ubuntu-latest
   name: pool
+  demands:
+    - JDK -equals 17
+    - Terraform -equals Yes
+    - Trivy -equals Yes
+    - Node.js -equals Yes
+    - Snyk -equals Yes
+    - Agent.Name -equals azurepool #TODO Specify the Agent name if you want to run in a particular agent.
+
+
+variables:
+  global_version: "1.0.0"
+  global_email: "dnsrinu143@gmail.com"
+  # azure_dev_sub: "9ce91e05-4b9e-4a42-95c1-4385c54920c6"
+  # azure_prod_sub: "298f2c19-014b-4195-b821-e3d8fc25c2a8"
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isProd: $[eq(variables['Build.SourceBranch'], 'refs/heads/production')]
+
 
 stages:
   - stage: maven_clean
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  #todo optinal
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"        
     jobs:
-      - job: maven_clean_install
-        displayName: 'maven clean'
-        steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            goals: 'clean'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
+     - job: maven_clean
+       steps:
+         - script: echo $(Build.BuildId)
+           displayName: "Display The Build-ID"
+         - script: mvn clean install 
+           displayName: "maven clean install"
+         - script: mvn package
+           displayName: "packaging the application"
+         - script: pwd && ls -al
+           displayName: "List Folder & Files"           
 
-  - stage: maven_package
-    jobs:
-      - job: maven_package
-        displayName: 'maven package'
-        steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-        
-        - task: MicrosoftSecurityDevOps@1
-          displayName: 'Test Container Mapping End'
-          timeoutInMinutes: 2
-          condition: always()
-          continueOnError: true
 
-  - stage: Publish_build_artifacts
-    jobs:
-      - job: Publish_artifacts
-        displayName: 'Publish build artifacts'
-        steps:
-        - checkout: self      
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'spring'
-            publishLocation: 'Container'
-          
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'specific'
-            downloadPath: '$(System.ArtifactsDirectory)'
-        
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              # Write your commands here
-              
-              echo 'Hello world'
-              mkdir outpot
-              echo "spring app" > output/apt.txt
-              zip -r $(artifactName) output/
-
-        - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: '$(Pipeline.Workspace)'
-            artifact: 'spring'
-            publishLocation: 'pipeline'
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              az storage blob upload \
-                  --account-name $(storageAccountName) \
-                  --container-name $(imageRepository) \
-                  --file $(file)
-                  --name $(Build.BuildId)-$(artifactName)
-
-        # - task: DownloadBuildArtifacts@1
-        #   inputs:
-        #     buildType: 'current'
-        #     downloadType: 'single'
-        #     downloadPath: '$(System.ArtifactsDirectory)'
-
-  # - stage: sonar_server
-  #   jobs:
-  #     - job: sonarqube
-  #       displayName: 'sonar scanner security'
-  #       steps:
-  #       - checkout: self
-  #       - task: SonarQubePrepare@7
-  #         inputs:
-  #           SonarQube: 'sonarserver'
-  #           scannerMode: 'cli'
-  #           cliScannerVersion: '5.0.1.3006'
-  #           configMode: 'file'
-  #           extraProperties: |
-  #             # Additional properties that will be passed to the scanner, 
-  #             # Put one key=value per line, example:
-  #             # sonar.exclusions=**/*.bin
-  #             #sonar.projectKey=my-springboot-app
-  #             #sonar.projectName=Spring Boot App
-  #             #sonar.projectVersion=1.0 
-  #             sonar.java.binaris=target
-  #       - task: JavaToolInstaller@1
-  #         inputs:
-  #           versionSpec: '17'
-  #           jdkArchitectureOption: 'x64'
-  #           jdkSourceOption: 'PreInstalled'
-  #       - task: SonarQubeAnalyze@7
-  #         inputs:
-  #           jdkversion: 'JAVA_HOME_17_X64'
-  #       - task: SonarQubePublish@7
-  #         inputs:
-  #           pollingTimeoutSec: '300'
-
-  # - stage: spring_acr
-  #   jobs:
-  #     - job: acr
-  #       displayName: 'packageing spring app'
-  #       steps:
-  #       - checkout: self
-  #       - task: Docker@2
-  #         inputs:
-  #           containerRegistry: '$(dockerRegistryServiceConnection)'
-  #           repository: '$(imageRepository)'
-  #           command: 'buildAndPush'
-  #           Dockerfile: '**/Dockerfile'
-  #           tags: |
-  #             $(Build.BuildId)
-  #             latest
 
 
