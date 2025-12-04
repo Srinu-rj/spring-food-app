@@ -106,7 +106,7 @@ stages:
         - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
           displayName: 'scanning github Repository'
 
-  - stage: docker
+  - stage: DockerBuildAndTrivyScan
     condition: and(succeeded(), eq(variables['isDev'], true))
     pool:
      name: pool 
@@ -118,6 +118,8 @@ stages:
        steps:
          - script: docker info & docker images
            displayName: 'checking docker iamges' 
+         - script: docker build -t application-mysql .
+           displayName: 'Craeteing docker image'  
 
 
         
