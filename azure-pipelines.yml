@@ -82,6 +82,9 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
               publishLocation: 'Container'
+          - script: ls -la $(Build.SourcesDirectory)/target
+            displayName: "List target folder"
+    
 
           # - task: PublishBuildArtifacts@1
           #   displayName: "Publish Artifact"
