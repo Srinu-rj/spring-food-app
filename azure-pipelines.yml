@@ -8,13 +8,13 @@ trigger: none
 pool:
   name: pool
   demands:
-    - JDK -equals Yes
-    - Maven -equals Yes
+    - Java -equals 17.0.17
+    - Maven -equals 3.8.7
     - Terraform -equals Yes
     - Trivy -equals Yes
-    - Node.js -equals Yes
+    - Node.js -equals 18.20.8
     - Snyk -equals Yes
-    - Agent.Name -equals raju #TODO Specify the Agent name if you want to run in a particular agent.
+    - Agent.Name -equals raju
 
 
 variables:
