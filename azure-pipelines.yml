@@ -67,7 +67,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy JAR to Staging"
             inputs:
-              SourceFolder: 'target'
+              SourceFolder: '$(Build.SourcesDirectory)/target'
               Contents: '*.jar'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
           - task: Bash@3
