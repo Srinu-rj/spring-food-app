@@ -8,7 +8,7 @@ trigger: none
 pool:
   name: pool
   demands:
-    - JDK -equals 17
+    - JDK -equals Yes
     - Maven -equals Yes
     - Terraform -equals Yes
     - Trivy -equals Yes
