@@ -87,9 +87,9 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy JAR to Staging"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)spring-food-app/target'
-              Contents: '*.jar'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+             SourceFolder: '$(System.DefaultWorkingDirectory)'
+             Contents: '**'
+             TargetFolder: '$(System.DefaultWorkingDirectory)/target'
 
           - script: | 
               echo "Renaming JAR to app.jar"
