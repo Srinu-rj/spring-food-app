@@ -106,7 +106,21 @@ stages:
         - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
           displayName: 'scanning github Repository'
 
-      
+  - stage: docker
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    pool:
+     name: pool 
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"   
+    jobs:
+     - job: docker_build_and_push
+       steps:
+         - script: docker info & docker images
+           displayName: 'checking docker iamges' 
+
+
+        
 
 
 
