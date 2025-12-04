@@ -35,6 +35,17 @@ stages:
     jobs:
      - job: maven_clean
        steps:
+         - task: Maven@4
+           inputs:
+             azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+             mavenPomFile: 'pom.xml'
+             publishJUnitResults: true
+             testResultsFiles: '**/surefire-reports/TEST-*.xml'
+             javaHomeOption: 'JDKVersion'
+             mavenVersionOption: 'Default'
+             mavenAuthenticateFeed: false
+             effectivePomSkip: false
+             sonarQubeRunAnalysis: false
          - script: echo $(Build.BuildId)
            displayName: "Display The Build-ID"
          - script: mvn clean install 
