@@ -1,163 +1,210 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
-trigger: none
-
-variables:
-  imageRepository: 'spring' # The name of your Docker image in ACR
-  dockerRegistryServiceConnection: 'spring-acr' # Your Azure Container Registry service connection name
-  aksServiceConnection: 'Azure service connection' # Your AKS cluster service connection name
-  helmChartPath: 'helm/my-app' # Path to Helm chart in repo
-  storageAccountName : back-up
+trigger:
+  branches:
+    include:
+      - master
+      - production
+    exclude: ["master", "feature*", "README.md","helm"] #
 
 pool:
-  # vmImage: ubuntu-latest
   name: pool
+  # demands:
+  #   - Java -equals 17.0.17
+  #   - Maven -equals 3.8.7
+  #   - Terraform -equals Yes
+  #   - Trivy -equals Yes
+  #   - Node.js -equals 18.20.8
+  #   - Snyk -equals Yes
+  #   - Agent.Name -equals raju
+
+
+variables:
+  - group: globel-variables
+  - name: version  
+    value: "1.0.0"
+  - name: email 
+    value: "dnsrinu143@gmail.com"
+  - name: isDev
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  - name: vd
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/production')]
+  - name: dockerRegistryServiceConnection
+    value: '25e8c454-3a15-4844-8f5b-c9998fd32ba9' 
+  - name: imageRepository
+    value: 'application-mysql' #Spring docker image name
+  - name: containerRegistory   #AZURE ACR IMAGE NAME
+    value: 'spring.azurecr.io'
+  - name: dockerfikePath
+    value: '${Build.SourceDirectory}/Dockerfile' 
+  - name: tag
+    value: v1.0.3 #$(Build.BuildId) 
+
 
 stages:
-  - stage: maven_clean
+    # DEV
+  - stage: DEV
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"      
     jobs:
-      - job: maven_clean_install
-        displayName: 'maven clean'
+      - job: mavan_package
+        displayName: 'Create a jar File'
         steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            goals: 'clean'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-
-  - stage: maven_package
-    jobs:
-      - job: maven_package
-        displayName: 'maven package'
-        steps:
-        - checkout: self
-        - task: Maven@4
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            mavenPomFile: 'pom.xml'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-        
-        - task: MicrosoftSecurityDevOps@1
-          displayName: 'Test Container Mapping End'
-          timeoutInMinutes: 2
-          condition: always()
-          continueOnError: true
-
-  - stage: Publish_build_artifacts
-    jobs:
-      - job: Publish_artifacts
-        displayName: 'Publish build artifacts'
-        steps:
-        - checkout: self      
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'spring'
-            publishLocation: 'Container'
-          
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'specific'
-            downloadPath: '$(System.ArtifactsDirectory)'
-        
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              # Write your commands here
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+      - job: Trivy_scanning
+        dependsOn: mavan_package
+        displayName: 'trivy Scanning '
+        condition: always() 
+        variables:
+          stage_version: "1.0.6"
+          stage_email: "dnsrinu143@gmail.com"                    
+        steps:         
+          - script: pwd && ls -al
+            displayName: "List Folder & Files"   
+          - script: echo $(Build.BuildId)
+            displayName: "Display The Build-ID"       
+          - script: trivy fs .
+            displayName: 'Scan current directory' 
+          - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
+            displayName: 'scanning github Repository'   
+      - job: ArtifactName
+        dependsOn: Trivy_scanning
+        condition: always()
+        displayName: 'ArtifactName '
+        steps: 
+          - task: Maven@3
+            displayName: "Build Spring Boot JAR"
+            inputs:
+             mavenPomFile: "pom.xml"
+             goals: "clean package -DskipTests"
+             publishJUnitResults: false          
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish Artifact"
+            inputs:
+              targetPath: "$(System.DefaultWorkingDirectory)/target"
+              artifact: "application-mysql"
+          - task: DownloadPipelineArtifact@2
+            displayName: "Download Artifact"
+            inputs:
+             artifact: application-mysql
+             path: "$(Pipeline.Workspace)/app"
               
-              echo 'Hello world'
-              mkdir outpot
-              echo "spring app" > output/apt.txt
-              zip -r $(artifactName) output/
+      - job: docker_build_and_push
+        dependsOn: ArtifactName
+        condition: always()
+        displayName: 'docker login'
+        steps:
+          - task: Docker@2
+            inputs:
+             containerRegistry: 'dockerhub'
+             command: 'login'
+  
+  # TEST
+  - stage: TEST
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"      
+    jobs:
+      - job: mavan_package
+        displayName: 'Create a jar File'
+        steps:
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+      - job: Trivy_scanning
+        dependsOn: mavan_package
+        displayName: 'trivy Scanning '
+        condition: always() 
+        variables:
+          stage_version: "1.0.6"
+          stage_email: "dnsrinu143@gmail.com"                    
+        steps:         
+          - script: pwd && ls -al
+            displayName: "List Folder & Files"   
+          - script: echo $(Build.BuildId)
+            displayName: "Display The Build-ID"       
+          - script: trivy fs .
+            displayName: 'Scan current directory' 
+          - script: trivy repo --branch master https://github.com/Srinu-rj/spring-food-app
+            displayName: 'scanning github Repository'   
+      - job: ArtifactName
+        dependsOn: Trivy_scanning
+        condition: always()
+        displayName: 'ArtifactName '
+        steps: 
+          - task: Maven@3
+            displayName: "Build Spring Boot JAR"
+            inputs:
+             mavenPomFile: "pom.xml"
+             goals: "clean package -DskipTests"
+             publishJUnitResults: false          
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish Artifact"
+            inputs:
+              targetPath: "$(System.DefaultWorkingDirectory)/target"
+              artifact: "application-mysql"
+          - task: DownloadPipelineArtifact@2
+            displayName: "Download Artifact"
+            inputs:
+             artifact: application-mysql
+             path: "$(Pipeline.Workspace)/app"
 
-        - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: '$(Pipeline.Workspace)'
-            artifact: 'spring'
-            publishLocation: 'pipeline'
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              az storage blob upload \
-                  --account-name $(storageAccountName) \
-                  --container-name $(imageRepository) \
-                  --file $(file)
-                  --name $(Build.BuildId)-$(artifactName)
+      - job: docker_build_and_push
+        dependsOn: ArtifactName
+        condition: always()
+        displayName: 'docker login'
+        steps:
+          - task: Docker@2
+            inputs:
+             containerRegistry: 'dockerhub'
+             command: 'login'  
 
-        # - task: DownloadBuildArtifacts@1
-        #   inputs:
-        #     buildType: 'current'
-        #     downloadType: 'single'
-        #     downloadPath: '$(System.ArtifactsDirectory)'
+  # PROD 
+  - stage: PROD
+    pool:
+      name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    variables:  
+      stage_version: "1.0.6"
+      stage_email: "dnsrinu143@gmail.com"     
+    jobs:
+      - job: prod_maven_package
+        displayName: 'PROD MAVEN PACKAGE'
+        steps:
+          - task: Maven@4
+            inputs:
+              azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
 
-  # - stage: sonar_server
-  #   jobs:
-  #     - job: sonarqube
-  #       displayName: 'sonar scanner security'
-  #       steps:
-  #       - checkout: self
-  #       - task: SonarQubePrepare@7
-  #         inputs:
-  #           SonarQube: 'sonarserver'
-  #           scannerMode: 'cli'
-  #           cliScannerVersion: '5.0.1.3006'
-  #           configMode: 'file'
-  #           extraProperties: |
-  #             # Additional properties that will be passed to the scanner, 
-  #             # Put one key=value per line, example:
-  #             # sonar.exclusions=**/*.bin
-  #             #sonar.projectKey=my-springboot-app
-  #             #sonar.projectName=Spring Boot App
-  #             #sonar.projectVersion=1.0 
-  #             sonar.java.binaris=target
-  #       - task: JavaToolInstaller@1
-  #         inputs:
-  #           versionSpec: '17'
-  #           jdkArchitectureOption: 'x64'
-  #           jdkSourceOption: 'PreInstalled'
-  #       - task: SonarQubeAnalyze@7
-  #         inputs:
-  #           jdkversion: 'JAVA_HOME_17_X64'
-  #       - task: SonarQubePublish@7
-  #         inputs:
-  #           pollingTimeoutSec: '300'
-
-  # - stage: spring_acr
-  #   jobs:
-  #     - job: acr
-  #       displayName: 'packageing spring app'
-  #       steps:
-  #       - checkout: self
-  #       - task: Docker@2
-  #         inputs:
-  #           containerRegistry: '$(dockerRegistryServiceConnection)'
-  #           repository: '$(imageRepository)'
-  #           command: 'buildAndPush'
-  #           Dockerfile: '**/Dockerfile'
-  #           tags: |
-  #             $(Build.BuildId)
-  #             latest
 
 
