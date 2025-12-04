@@ -67,37 +67,16 @@ stages:
            displayName: "packaging the application"
          - script: pwd && ls -al
            displayName: "List Folder & Files"         
-
-  # - stage: atrifact
-  #   condition: and(succeeded(), eq(variables['isDev'], true))
-  #   pool:
-  #    name: pool 
-  #   variables:  
-  #     stage_version: "1.0.6"
-  #     stage_email: "dnsrinu143@gmail.com"   
-  #   jobs:
-  #    - job: atrifact_check
-  #      steps:
-  #         - task: CopyFiles@2
-  #           displayName: "Copy JAR to Staging"
-  #           inputs:
-  #             SourceFolder: 'target'
-  #             Contents: '*.jar'
-  #             TargetFolder: '$(Build.ArtifactStagingDirectory)'
-  #         - task: Bash@3
-  #           inputs:
-  #             targetType: 'inline'
-  #             script: |
-  #               echo "Renaming JAR to app.jar"
-  #               mv $(Build.ArtifactStagingDirectory)/*.jar $(Build.ArtifactStagingDirectory)/application-mysql.jar
-  #         - task: PublishBuildArtifacts@1
-  #           displayName: 'Publish Artifact'
-  #           inputs:
-  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-  #             ArtifactName: 'drop'
-  #             publishLocation: 'Container'
-  #         - script: ls -la $(Build.SourcesDirectory)/target
-  #           displayName: "List target folder"
+         - task: CopyFiles@2
+           inputs:
+             SourceFolder: '$(System.DefaultWorkingDirectory)'
+             Contents: '**'
+             TargetFolder: '$(System.DefaultWorkingDirectory)/target'
+         - task: PublishBuildArtifacts@1
+           inputs:
+             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+             ArtifactName: 'drop'
+             publishLocation: 'Container'
 
   - stage: security
     condition: and(succeeded(), eq(variables['isDev'], true))
@@ -130,6 +109,14 @@ stages:
           inputs:
              containerRegistry: 'dockerhub'
              command: 'login'
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+              az version
+          displayName: 'Install Azure CLI'
+          
         - task: AzureCLI@2
           displayName: 'acr login...'
           inputs:
