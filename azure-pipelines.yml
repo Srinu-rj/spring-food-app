@@ -58,43 +58,36 @@ stages:
          - script: pwd && ls -al
            displayName: "List Folder & Files"         
 
-  - stage: atrifact
-    condition: and(succeeded(), eq(variables['isDev'], true))
-    pool:
-     name: pool 
-    variables:  
-      stage_version: "1.0.6"
-      stage_email: "dnsrinu143@gmail.com"   
-    jobs:
-     - job: atrifact_check
-       steps:
-          - task: CopyFiles@2
-            displayName: "Copy JAR to Staging"
-            inputs:
-              SourceFolder: 'target'
-              Contents: '*.jar'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                echo "Renaming JAR to app.jar"
-                mv $(Build.ArtifactStagingDirectory)/*.jar $(Build.ArtifactStagingDirectory)/application-mysql.jar
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact'
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
-          - script: ls -la $(Build.SourcesDirectory)/target
-            displayName: "List target folder"
-    
-
-          # - task: PublishBuildArtifacts@1
-          #   displayName: "Publish Artifact"
-          #   inputs:
-          #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          #     ArtifactName: 'drop'
+  # - stage: atrifact
+  #   condition: and(succeeded(), eq(variables['isDev'], true))
+  #   pool:
+  #    name: pool 
+  #   variables:  
+  #     stage_version: "1.0.6"
+  #     stage_email: "dnsrinu143@gmail.com"   
+  #   jobs:
+  #    - job: atrifact_check
+  #      steps:
+  #         - task: CopyFiles@2
+  #           displayName: "Copy JAR to Staging"
+  #           inputs:
+  #             SourceFolder: 'target'
+  #             Contents: '*.jar'
+  #             TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  #         - task: Bash@3
+  #           inputs:
+  #             targetType: 'inline'
+  #             script: |
+  #               echo "Renaming JAR to app.jar"
+  #               mv $(Build.ArtifactStagingDirectory)/*.jar $(Build.ArtifactStagingDirectory)/application-mysql.jar
+  #         - task: PublishBuildArtifacts@1
+  #           displayName: 'Publish Artifact'
+  #           inputs:
+  #             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+  #             ArtifactName: 'drop'
+  #             publishLocation: 'Container'
+  #         - script: ls -la $(Build.SourcesDirectory)/target
+  #           displayName: "List target folder"
 
   - stage: security
     condition: and(succeeded(), eq(variables['isDev'], true))
