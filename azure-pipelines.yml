@@ -22,7 +22,7 @@ variables:
   global_email: "dnsrinu143@gmail.com"
   # azure_dev_sub: "9ce91e05-4b9e-4a42-95c1-4385c54920c6"
   # azure_prod_sub: "298f2c19-014b-4195-b821-e3d8fc25c2a8"
-  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   isProd: $[eq(variables['Build.SourceBranch'], 'refs/heads/production')]
 
 
