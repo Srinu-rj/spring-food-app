@@ -18,6 +18,7 @@ pool:
 
 
 variables:
+  group: dkfd
   global_version: "1.0.0"
   global_email: "dnsrinu143@gmail.com"
   # azure_dev_sub: "9ce91e05-4b9e-4a42-95c1-4385c54920c6"
