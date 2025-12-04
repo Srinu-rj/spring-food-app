@@ -87,7 +87,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy JAR to Staging"
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)/target'
+              SourceFolder: '$(Build.SourcesDirectory)spring-food-app/target'
               Contents: '*.jar'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
