@@ -14,7 +14,7 @@ pool:
     - Trivy -equals Yes
     - Node.js -equals Yes
     - Snyk -equals Yes
-    - Agent.Name -equals azurepool #TODO Specify the Agent name if you want to run in a particular agent.
+    - Agent.Name -equals raju #TODO Specify the Agent name if you want to run in a particular agent.
 
 
 variables:
