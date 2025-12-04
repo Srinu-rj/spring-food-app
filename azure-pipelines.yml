@@ -86,14 +86,21 @@ stages:
         steps: 
           - task: CopyFiles@2
             inputs:
-             SourceFolder: '$(System.DefaultWorkingDirectory)'
-             Contents: '**'
-             TargetFolder: '$(System.DefaultWorkingDirectory)/target'                     
+             SourceFolder: 'target'
+             Contents: '*.jar'
+             TargetFolder: '$(Build.ArtifactStagingDirectory)'  
+
+          - script: | 
+              echo "Renaming JAR to app.jar"
+              mv $(Build.ArtifactStagingDirectory)/*.jar $(Build.ArtifactStagingDirectory)/app.jar
+            displayName: "Rename JAR to app.jar" 
+                                 
           - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
-              publishLocation: 'Container'
+              
       - job: docker_build_and_push
         dependsOn: ArtifactName
         condition: always()
