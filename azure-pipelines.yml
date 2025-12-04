@@ -84,23 +84,22 @@ stages:
         condition: always()
         displayName: 'ArtifactName '
         steps: 
-          - task: CopyFiles@2
-            displayName: "Copy JAR to Staging"
+          - task: Maven@3
+            displayName: "Build Spring Boot JAR"
             inputs:
-             SourceFolder: '$(System.DefaultWorkingDirectory)'
-             Contents: '**'
-             TargetFolder: '$(System.DefaultWorkingDirectory)/target'
-
-          - script: | 
-              echo "Renaming JAR to app.jar"
-              mv $(Build.ArtifactStagingDirectory)/*.jar $(Build.ArtifactStagingDirectory)/app.jar
-            displayName: "Rename JAR to app.jar" 
-                                 
-          - task: PublishBuildArtifacts@1
+             mavenPomFile: "pom.xml"
+             goals: "clean package -DskipTests"
+             publishJUnitResults: false          
+          - task: PublishPipelineArtifact@1
             displayName: "Publish Artifact"
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
+              targetPath: "$(System.DefaultWorkingDirectory)/target"
+              artifact: "application-mysql"
+          - task: DownloadPipelineArtifact@2
+            displayName: "Download Artifact"
+            inputs:
+             artifact: application-mysql
+             path: "$(Pipeline.Workspace)/app"
               
       - job: docker_build_and_push
         dependsOn: ArtifactName
