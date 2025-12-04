@@ -9,6 +9,7 @@ pool:
   name: pool
   demands:
     - JDK -equals 17
+    - Maven -equals Yes
     - Terraform -equals Yes
     - Trivy -equals Yes
     - Node.js -equals Yes
