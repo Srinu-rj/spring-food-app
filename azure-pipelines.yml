@@ -1,9 +1,9 @@
-trigger:
-  branches:
-    include:
-      - master
-      - production
-    exclude: ["master", "feature*", "README.md"]
+trigger: none
+  # branches:
+  #   include:
+  #     - master
+  #     - production
+  #   exclude: ["master", "feature*", "README.md"]
 
 pool:
   name: pool
