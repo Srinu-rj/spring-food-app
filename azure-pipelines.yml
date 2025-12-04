@@ -116,14 +116,15 @@ stages:
     jobs:
      - job: docker_build_and_push
        steps:
-         - task: Docker@2
-           inputs:
+        - task: Docker@2
+          inputs:
              containerRegistry: 'dockerhub'
              command: 'login'
-         - script: docker info & docker images
-           displayName: 'checking docker iamges' 
-         - script: docker build -t application-mysql .
-           displayName: 'Craeteing docker image'  
+             
+        - script: sudo docker info 
+          displayName: 'checking docker iamges' 
+        - script: sudo docker build -t application-mysql .
+          displayName: 'Craeteing docker image'  
 
 
         
