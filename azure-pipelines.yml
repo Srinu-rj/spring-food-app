@@ -1,9 +1,9 @@
-trigger: none
-  # branches:
-  #   include:
-  #     - master
-  #     - production
-  #   exclude: ["master", "feature*", "README.md"]
+trigger:
+  branches:
+    include:
+      - master
+      - production
+    exclude: ["master", "feature*", "README.md"]
 
 pool:
   name: pool
@@ -27,6 +27,16 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   - name: vd
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/production')]
+  - name: dockerRegistryServiceConnection
+    value: '25e8c454-3a15-4844-8f5b-c9998fd32ba9' 
+  - name: imageRepository
+    value: 'application-mysql' #Spring docker image name
+  - name: containerRegistory   #AZURE ACR IMAGE NAME
+    value: 'spring.azurecr.io'
+  - name: dockerfikePath
+    value: '${Build.SourceDirectory}/Dockerfile' 
+  - name: tag
+    value: v1.0.3 #$(Build.BuildId) 
 
 
 stages:
@@ -120,12 +130,22 @@ stages:
           inputs:
              containerRegistry: 'dockerhub'
              command: 'login'
-             
-        - script: sudo docker info 
-          displayName: 'checking docker iamges' 
-        - script: sudo docker build -t application-mysql .
-          displayName: 'Craeteing docker image'  
-
+        - task: AzureCLI@2
+          displayName: 'acr login...'
+          inputs:
+            azureSubscription: 'Azure subscription 1(25e8c454-3a15-4844-8f5b-c9998fd32ba9)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: 'az acr login --name=$(containerRegistory)'
+        - task: Docker@2
+          displayName: 'build image'
+          inputs:
+            containerRegistry: 'dockerhub'
+            repository: '$(imageRepository)'
+            command: 'build'
+            Dockerfile: '**/Dockerfile'
+            tags: 
+              $(tag)
 
         
 
