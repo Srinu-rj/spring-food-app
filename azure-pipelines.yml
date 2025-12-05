@@ -40,7 +40,6 @@ variables:
 
 
 stages:
-    # DEV
   - stage: DEV
     pool:
       name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
