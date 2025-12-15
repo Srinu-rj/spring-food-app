@@ -98,7 +98,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             displayName: "Download Artifact"
             inputs:
-             artifact: application-mysql-DEV
+             artifact: application-mysql
              path: "$(Pipeline.Workspace)/app"
       - job: sonar_scan_server
         displayName: 'sonarqube scanning'      
@@ -193,7 +193,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             displayName: "Download Artifact"
             inputs:
-             artifact: application-mysql-QA
+             artifact: application-mysql
              path: "$(Pipeline.Workspace)/app"
              
       - job: sonar_scan_server
