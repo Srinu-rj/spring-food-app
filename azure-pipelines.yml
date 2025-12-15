@@ -6,7 +6,8 @@ trigger:
     exclude: ["master", "feature*", "README.md","helm"] #
 
 pool:
-  name: pool
+ vmImage: Ubuntu
+  # name: pool
   # demands:
   #   - Java -equals 17.0.17
   #   - Maven -equals 3.8.7
@@ -99,9 +100,33 @@ stages:
             inputs:
              artifact: application-mysql
              path: "$(Pipeline.Workspace)/app"
+      - job: sonar_scan_server
+        displayName: 'sonarqube scanning'      
+        steps:
+          - task: SonarQubePrepare@8
+            inputs:
+              SonarQube: 'sonarserver'
+              scannerMode: 'other'
+              extraProperties: |
+                sonar.projectVersion=1.0.0.0
+                      sonar.projectName=springsonarqube
+                      sonar.sources=src/main/java/
+                      sonar.language=java
+                      sonar.sourceEncoding=UTF-8
+          # - task: Maven@3
+          #   inputs:
+          #     mavenPomFile: '$(Build.SourcesDirectory)/sonarqube/sonarqubespring/pom.xml'
+          #     goals: 'clean package'
+          #     publishJUnitResults: true
+          #     javaHomeOption: 'JDKVersion'
+          #     mavenVersionOption: 'Default'
+          #     mavenAuthenticateFeed: false
+          #     effectivePomSkip: false
+          #     sonarQubeRunAnalysis: true
+          #     enabled: true                      
               
       - job: docker_build_and_push
-        dependsOn: ArtifactName
+        dependsOn: sonar_scan_server
         condition: always()
         displayName: 'docker login'
         steps:
