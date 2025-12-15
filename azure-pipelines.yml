@@ -98,7 +98,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             displayName: "Download Artifact"
             inputs:
-             artifact: application-mysql
+             artifact: application-mysql-DEV
              path: "$(Pipeline.Workspace)/app"
       - job: sonar_scan_server
         displayName: 'sonarqube scanning'      
@@ -136,7 +136,7 @@ stages:
              command: 'login'
   
   # TEST
-  - stage: TEST
+  - stage: QA
     pool:
       name: pool # TODO CAN RUN EACH STAGE DIFFERENT AGENT POOL NAME 
     condition: and(succeeded(), eq(variables['isDev'], true))
@@ -193,9 +193,22 @@ stages:
           - task: DownloadPipelineArtifact@2
             displayName: "Download Artifact"
             inputs:
-             artifact: application-mysql
+             artifact: application-mysql-QA
              path: "$(Pipeline.Workspace)/app"
-
+             
+      - job: sonar_scan_server
+        displayName: 'sonarqube scanning'      
+        steps:
+          - task: SonarQubePrepare@8
+            inputs:
+              SonarQube: 'sonarserver'
+              scannerMode: 'other'
+              extraProperties: |
+                sonar.projectVersion=1.0.0.0
+                      sonar.projectName=springsonarqube
+                      sonar.sources=src/main/java/
+                      sonar.language=java
+                      sonar.sourceEncoding=UTF-8
       - job: docker_build_and_push
         dependsOn: ArtifactName
         condition: always()
