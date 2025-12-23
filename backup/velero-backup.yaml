@@ -1,0 +1,28 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: <unique_name>
+  namespace: openshift-adp
+spec:
+  storageLocation: <backup_storage_location>
+  includeClusterResources: true
+  snapshotVolumes: true
+  orLabelSelectors:
+    - matchExpressions:
+        - key: backup.events.ibm.com/component
+          operator: In
+          values:
+            - catalogsource
+            - operatorgroup
+            - subscription
+            - eventendpointmanagement
+            - eventgateway
+    - matchExpressions:
+        - key: events.ibm.com/backup
+          operator: In
+          values:
+            - required
+  includedNamespaces:
+    - <event-manager-instance-namespace>
+    - <event-gateway-instance-namespace>
+---

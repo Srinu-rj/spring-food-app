@@ -1,0 +1,24 @@
+# This YAML file defines Pod Disruption Budgets (PDBs) for two different services in a Kubernetes cluster.
+# k drain node_name --ignore-daemonsets
+# k uncordon node_name to allow scheduling pods on the node again.
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: backend-pdb
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: backendservice
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: databaseservice-pdb
+spec:
+  maxUnavailable: 7
+  selector:
+    matchLabels:
+      app: databaseservice
+---

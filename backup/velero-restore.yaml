@@ -1,0 +1,30 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: <unique_name>   # Unique name for this restore job
+  namespace: openshift-adp # Velero’s own namespace (often 'velero' or 'openshift-adp')
+spec:
+  backupName: <name_of_the_backup_to_restore>  # Name of the backup you want to restore S3 , Azure , GCP
+  existingResourcePolicy: update  # Update existing resources instead of skipping
+  restorePVs: true   # Restore PersistentVolumes and PVCs
+  orLabelSelectors:
+    - matchExpressions:
+        - key: backup.events.ibm.com/component
+          operator: In
+          values:  # TODO MUST BE UPDATED BASED ON ACTUAL COMPONENT LABELS [ DEPLOYMENT LABELS ]
+            - catalogsource
+            - operatorgroup
+            - subscription
+            - eventendpointmanagement
+            - eventgateway
+    - matchExpressions:
+        - key: events.ibm.com/backup
+          operator: In
+          values:
+            - required
+  includedNamespaces:
+    - dev                                   # Namespace where your Spring backend runs
+    - backend
+    - database                              # Namespace where your MySQL StatefulSet runs
+    - qa
+---
