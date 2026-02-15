@@ -1,48 +1,11 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: demo-storage
-provisioner: k8s.io/minikube-hostpath #data will be store in minikube path
-volumeBindingMode: Immediate
-reclaimPolicy: Delete  # default value is Delete
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: azurefile
-provisioner: kubernetes.io/azure-file
+  name: managed-csi-disk
+provisioner: disk.csi.azure.com
 parameters:
-  skuName: Standard_LRS
-  location: eastus
-  storageAccount: azure_storage_account_name # example value
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: low-latency
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-provisioner: csi-driver.example-vendor.example
-reclaimPolicy: Retain # default value is Delete
+  skuName: StandardSSD_LRS
+reclaimPolicy: Delete
 allowVolumeExpansion: true
-mountOptions:
-  - discard # this might enable UNMAP / TRIM at the block storage layer
 volumeBindingMode: WaitForFirstConsumer
-parameters:
-  guaranteedReadWriteLatency: "true" # provider-specific
 ---
-
-#  Creaye a service account for dynamic provisioning with azure storage class
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-    name: azurefile-csi-sa
-    namespace: default
-    labels:
-      app: azurefile-csi-sa
-    annotations:
-        azure.workload.identity/client-id: "<CLIENT_ID>" # Replace <CLIENT_ID> with
-        azure.workload.identity/tenant-id: "<TENANT_ID>" # Replace <TENANT_ID> with
-        azure.workload.identity/resource-id: "<RESOURCE_ID>" # Replace <RESOURCE_ID> with
-        azure.workload.identity/binding-type: "azureworkloadidentity"
-

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: backend-namespace
+    labels:
+        name: backend-namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database-namespace
+  labels:
+    name: database-namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    name: dev-namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod
+  labels:
+    name: prod-namespace
+---
+

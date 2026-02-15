@@ -1,0 +1,17 @@
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mysql
+#  labels:
+#    app: mysql
+#    tier: database
+#spec:
+#  clusterIP: None   # Headless service
+#  selector:
+#    Protocol: TCP
+#    app: mysql
+#    tier: database
+#  ports:
+#    - port: 3306
+#      name: mysql
+#---

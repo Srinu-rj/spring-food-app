@@ -1,0 +1,262 @@
+trigger:
+  branches:
+    include:
+      - master
+      - production
+    exclude: ["master", "feature*", "README.md","helm"]
+
+pr:
+ branches:
+    include:
+      - feature/*
+
+pool:
+  vmImage: Ubuntu
+  name: pool
+
+variables:
+  - group: pipelines  # Use a variable group for secrets and configuration
+  - name: helmChartVersion
+    value: '1.0.0'
+  - name: releaseName
+    value: 'myapp-release'
+  - name: namespace
+    value: 'myapp-namespace'
+
+stages:
+  - stage: dev
+    condition: and(succeeded(), eq(variables['isDev'], true))
+    jobs:
+      - job: maven_build_tool
+        strategy:
+          parallel: 4
+        displayName: 'Create a jar File'
+        steps:
+          - task: PowerShell@2
+            displayName: Help Option of Az Devops CLI
+            inputs:
+              targetType: 'inline'
+              script: |
+                mvn clean install
+                mvn package
+          - bash: |
+              sudo npm install -g handlebars-cmd
+              
+              cat <<EOF > owaspzap/nunit-template.hbs
+              {{#each site}}
+              
+              <test-run
+                  id="2"
+                  name="Owasp test"
+                  start-time="{{../[@generated]}}"  >
+                  <test-suite
+                      id="{{@index}}"
+                      type="Assembly"
+                      name="{{[@name]}}"
+                      result="Failed"
+                      failed="{{alerts.length}}">
+                      <attachments>
+                          <attachment>
+                              <filePath>owaspzap/report.html</filePath>
+                          </attachment>
+                      </attachments>
+                  {{#each alerts}}<test-case
+                      id="{{@index}}"
+                      name="{{alert}}"
+                      result="Failed"
+                      fullname="{{alert}}"
+                      time="1">
+                          <failure>
+                              <message>
+                                  <![CDATA[{{{desc}}}]]>
+                              </message>
+                              <stack-trace>
+                                  <![CDATA[
+              Solution:
+              {{{solution}}}
+              
+              Reference:
+              {{{reference}}}
+              
+              instances:{{#each instances}}
+              * {{uri}}
+                  - {{method}}
+                  {{#if evidence}}- {{{evidence}}}{{/if}}
+                                  {{/each}}]]>
+                              </stack-trace>
+                          </failure>
+                  </test-case>
+                  {{/each}}
+                  </test-suite>
+              </test-run>
+              {{/each}}
+              EOF
+            displayName: 'owasp nunit template'
+            condition: always()
+          - bash: ' handlebars owaspzap/report.json < owaspzap/nunit-template.hbs > owaspzap/test-results.xml'
+            displayName: 'generate nunit type file'
+            condition: always()
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results **/TEST-*.xml'
+            inputs:
+              testResultsFormat: NUnit
+              testResultsFiles: 'owaspzap/test-results.xml'
+      - job: owasp_zap_depednce_check
+        dependsOn: maven_build_tool
+        condition: always()
+        strategy:
+          parallel: 4
+        displayName: 'Create a jar File'
+        steps:
+          - task: SnykSecurityScan@1
+            inputs:
+            serviceConnectionEndpoint: 'mySnykToken'
+            testType: 'app'
+            failOnIssues: true
+            monitorWhen: 'always'
+          - script: snyk test --json > snyk-report.json
+            displayName: "Run Snyk SCA"
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results **/TEST-*.xml'
+            inputs:
+              testResultsFormat: NUnit
+              testResultsFiles: 'synk/synk-results.xml'
+            condition: always()
+      - job: install_Artifact_and_Download
+        dependsOn: owasp_zap_depednce_check
+        condition: always()
+        strategy:
+          parallel: 4
+        displayName: 'Create a Artifact'
+        steps:
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish Artifact"
+            inputs:
+              targetPath: "$(System.DefaultWorkingDirectory)/target"
+              artifact: "application-mysql"
+          - task: DownloadPipelineArtifact@2
+            displayName: "Download Artifact"
+            inputs:
+              artifact: application-mysql
+              path: "$(Pipeline.Workspace)/app"
+      - job: install_sonarCloud_and_sa
+        dependsOn: install_Artifact_and_Download
+        condition: always()
+        strategy:
+          parallel: 4
+        displayName: 'Create a Artifact'
+        steps:
+          - task: SonarCloudPrepare@1
+            displayName: 'Prepare analysis configuration'
+            inputs:
+              SonarCloud: 'shared-sonarcloud-service-connection'  # Service connection name
+              organization: 'your-sonarcloud-organization'
+              projectKey: 'your-project-key'
+              projectName: 'your-project-name'
+              extraProperties: |
+                scm.provider=git
+                sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+      - job: docker_push_and_pull
+        dependsOn: install_sonarCloud_and_sa
+        condition: always()
+        strategy:
+          parallel: 4
+        displayName: 'Create a Artifact'
+        input:
+          azureSubscription: 'your-service-connection'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az acr login --name $(ACRName)
+      - task: Docker@2
+        displayName: 'Build and Push Image'
+        inputs:
+          command: 'buildAndPush'
+        repository: $(imageName)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(ACRServiceConnection)
+        tags: |
+          $(tag)            
+      - job: HelmDeploy
+        dependsOn: docker_push_and_pull
+        condition: always()
+        strategy:
+          parallel: 4
+        displayName: 'Create a Artifact'
+        steps:
+          - task: HelmInstaller@1
+            displayName: 'Install Helm'
+            inputs:
+              helmVersionToInstall: '3.14.0'
+          - task: HelmDeploy@0
+            displayName: 'Helm package and deploy'
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+              namespace: $(namespace)
+              command: 'install'
+              chartType: 'helm-kubernetes'
+              chartPath: './charts/backend'
+              releaseName: $(releaseName)
+              valueFile: './qa-values.yaml'
+              arguments: '--timeout 30m'
+
+  - stage: qa
+    displayName: Build and Push Docker Image
+    jobs:
+      - job: BuildJob
+        displayName: Build Container
+        steps:
+          - task: Docker@2
+            displayName: Build and Push Docker Image
+            inputs:
+              containerRegistry: '$(dockerRegistryServiceConnection)'
+              repository: '$(imageRepository)'
+              command: 'buildAndPush'
+              Dockerfile: 'app/Dockerfile'
+              tags: |
+                $(Build.BuildId)
+                latest
+
+          - task: HelmInstaller@1
+            displayName: Install Helm
+            inputs:
+              helmVersionToInstall: '3.11.0'
+
+          - task: HelmDeploy@0
+            displayName: Helm Upgrade/Install (Dev)
+            inputs:
+              azureSubscription: '$(aksServiceConnection)'
+              azureResourceGroup: 'demo'
+              kubernetesCluster: 'my-aks-cluster'
+              command: 'upgrade'
+              chartType: 'FilePath'
+              chartPath: '$(System.DefaultWorkingDirectory)/$(helmChartPath)'
+              releaseName: 'my-app-dev'
+              arguments: '--install -f $(System.DefaultWorkingDirectory)/$(helmChartPath)/qa-values.yaml'
+              overrideValues: 'image.tag=$(Build.BuildId)'
+
+          - task: CmdLine@2
+            displayName: "Helm: List repo content"
+            inputs:
+              script: |
+                helm list
+
+          - task: CmdLine@2
+            displayName: "Helm: install helm charts"
+            inputs:
+              script: |
+                helm template qa-deployment frontend/ -f backend/values-qa.yaml > deployment-qa.yaml          
+
+          - task: CmdLine@2
+            displayName: "Helm: install helm charts"
+            inputs:
+              script: |
+                helm install backend-qa-realese backend/ --values backend/values-qa.yaml
+  
+  
+  
+
+  - stage: non_prod
+  - stage: prod
+

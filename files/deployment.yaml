@@ -1,0 +1,49 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: spring-boot-crud-deployment
+#spec:
+#  selector:
+#    matchLabels:
+#      app: springboot-k8s-mysql
+#  replicas: 3
+#  template:
+#    metadata:
+#      labels:
+#        app: springboot-k8s-mysql
+#    spec:
+#      containers:
+#        - name: spring-boot-crud-k8s
+#          image: application-mysql:v1.0
+#          ports:
+#            - containerPort: 9988
+#          imagePullPolicy:  IfNotPresent
+#          #write limits and requests as per your requirement
+#          resources:
+#            limits:
+#              memory: "512Mi"
+#              cpu: "500m"
+#            requests:
+#              memory: "256Mi"
+#              cpu: "250m"
+#          readinessProbe:
+#            httpGet:
+#              path: /healthz
+#              port: 8080
+#            initialDelaySeconds: 5
+#            periodSeconds: 10
+#          livenessProbe:
+#            httpGet:
+#              path: /healthz
+#              port: 8080
+#            initialDelaySeconds: 3
+#            periodSeconds: 5
+#          env:   # Setting Enviornmental Variables
+#            - name: DB_HOST   # Setting Database host address from configMap
+#              value: mysql
+#            - name: DB_NAME  # Setting Database name from configMap
+#              value: trinadhrayala
+#            - name: DB_USERNAME  # Setting Database username from Secret
+#              value: root
+#            - name: DB_PASSWORD # Setting Database password from Secret
+#              value: root

@@ -5,12 +5,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3b18375-654a-4b0b-bae5-3979ec4c1afa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/main.tf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/outputs.tf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/providers.tf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/azure-terraform/acr/variables.tf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/azure-pipeline-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/CustomerDataConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/FoodCartDataConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/ItemDataConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/OrderDataConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/RestaurantDataConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/custome_security/auth/JwtToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/custome_security/auth/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/azure-pipeline.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/azure-pipeline.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsonSchemas.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsonSchemas.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/terraform.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/terraform.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkindfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkindfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/argocd/argocd.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/argocd/argocd.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/azure-pipelines.yml" beforeDir="false" afterPath="$PROJECT_DIR$/azure-pipelines.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.helmignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.helmignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Chart.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Chart.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/NOTES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/NOTES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/_helpers.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/_helpers.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/deployment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/deployment.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/hpa.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/hpa.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/httproute.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/httproute.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/ingress.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/ingress.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/service.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/service.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/serviceaccount.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/serviceaccount.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/templates/tests/test-connection.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/templates/tests/test-connection.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/values.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/values.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/.helmignore" beforeDir="false" afterPath="$PROJECT_DIR$/database/.helmignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/Chart.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/database/Chart.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/NOTES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/NOTES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/_helpers.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/_helpers.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/db-deployment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/db-deployment.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/namespace.yml" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/namespace.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/pvc-aws-ebs.yml" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/pvc-aws-ebs.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/templates/secrets.yml" beforeDir="false" afterPath="$PROJECT_DIR$/database/templates/secrets.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/values.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/database/values.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/block-all-traffic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/block-all-traffic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/cronjobs.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/cronjobs.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/database-deployment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/database-deployment.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/database-service.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/database-service.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/deployment.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/deployment.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/hpa.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/hpa.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/keda-hpa.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/keda-hpa.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/namespaces.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/namespaces.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/pvc.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/pvc.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/service.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/service.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/serviceaccount.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/files/serviceaccount.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/app-deployment/app-deployment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/app-deployment/app-deployment.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/app-deployment/namespace.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/app-deployment/namespace.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/app-ingress/ingress.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/app-ingress/ingress.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/app-ingress/namespace.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/app-ingress/namespace.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/argocd/argocd-canary-rollout.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/argocd/argocd-canary-rollout.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/ceert-manager/cluster-issuer.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/ceert-manager/cluster-issuer.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/configmap/namespace_configmap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/configmap/namespace_configmap.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/database-deployment/db-deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/database-deployment/db-deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/database-deployment/namespace.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/database-deployment/namespace.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/database-deployment/secrets.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/database-deployment/secrets.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/database-deployment/storage-class.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/database-deployment/storage-class.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kubernates/hpa/keda.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kubernates/hpa/keda.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/SpringFoodAppApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/SpringFoodAppApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/AddressDataSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/config/configdatabase/AddressDataSourceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/custome_security/Demo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/custome_security/Demo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/entiry/Restaurant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/entiry/Restaurant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/service/AddressServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/service/AddressServices.java" afterDir="false" />
     </list>
     <list id="cb1c13d1-3e5f-4223-96a2-1efbdd54b582" name="Uncommitted changes before Update at 10/23/2024 7:57 PM" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -103,10 +165,24 @@
   &quot;prStates&quot;: [
     {
       &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQSYbyM62IETH&quot;,
+        &quot;number&quot;: 4
+      },
+      &quot;lastSeen&quot;: 1764828876616
+    },
+    {
+      &quot;id&quot;: {
         &quot;id&quot;: &quot;PR_kwDOQSYbyM60-Ld5&quot;,
         &quot;number&quot;: 3
       },
-      &quot;lastSeen&quot;: 1764087456464
+      &quot;lastSeen&quot;: 1764828924710
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQSYbyM63Aia5&quot;,
+        &quot;number&quot;: 5
+      },
+      &quot;lastSeen&quot;: 1764916584823
     }
   ]
 }</component>
@@ -116,11 +192,11 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Srinu-rj/spring-food-app.git&quot;,
-    &quot;accountId&quot;: &quot;fb1681a0-8ad5-429e-9a56-59931dc463f5&quot;
+    &quot;accountId&quot;: &quot;9cafbd9b-abfd-4341-8112-ac873e092a50&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/SpringFoodAppApplication.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/foodapp/springfoodapp/SpringFoodAppApplication.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
@@ -182,13 +258,14 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\dnsri\\AppData\\Roaming\\JetBrains\\IdeaIC2025.2\\plugins\\Shell Script\\shellcheck.exe&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
     &quot;appmap.toolWindow.appMaps.collapsed&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app/azure-terraform/sql&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/spring-food-app&quot;,
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.55172414&quot;,
@@ -213,18 +290,18 @@
       <recent name="com.foodapp.springfoodapp.email.service" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\spring-food-app\azure-terraform\sql" />
-      <recent name="D:\spring-food-app\azure-terraform\load-balancer" />
-      <recent name="D:\spring-food-app\azure-terraform" />
-      <recent name="D:\spring-food-app" />
-      <recent name="D:\spring-food-app\src\main\java\com\foodapp\springfoodapp" />
+      <recent name="D:\spring-food-app\kubernates\api-gateway" />
+      <recent name="D:\spring-food-app\kubernates\argocd" />
+      <recent name="D:\spring-food-app\database\templates" />
+      <recent name="D:\spring-food-app\kubernates" />
+      <recent name="D:\spring-food-app\ui\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\spring-food-app\kubernates\deployment1" />
-      <recent name="D:\spring-food-app\src\main\java\com\foodapp\springfoodapp" />
-      <recent name="D:\spring-food-app\src" />
-      <recent name="D:\spring-food-app\kubernates\deployment" />
-      <recent name="D:\spring-food-app\kubernates\secrets" />
+      <recent name="D:\spring-food-app\kubernates\pod-distruption" />
+      <recent name="D:\spring-food-app\ui\templates" />
+      <recent name="D:\spring-food-app" />
+      <recent name="D:\spring-food-app\ui" />
+      <recent name="D:\spring-food-app\argocd" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.foodapp.springfoodapp.security.request" />
@@ -241,23 +318,35 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.SpringFoodAppApplication">
-    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml">
-        <settings />
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
-      <deployment type="docker-image">
-        <settings />
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <method v="2" />
+    <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
+      <option name="appName" />
+      <option name="appServicePlanName" />
+      <option name="appServicePlanResourceGroup" />
+      <option name="appSettingsKey" value="e196b216-d243-4bc4-8fb5-b656069be750" />
+      <option name="artifact" />
+      <option name="debugOptions" />
+      <option name="deployment" />
+      <option name="deploymentStagingDirectoryPath" />
+      <option name="funcPath" />
+      <option name="functionHostArguments" />
+      <option name="hostJsonPath" />
+      <option name="insightsName" />
+      <option name="instrumentationKey" />
+      <option name="javaVersion" />
+      <option name="localSettingsJsonPath" />
+      <option name="moduleName" />
+      <option name="os" />
+      <option name="pricingTier" />
+      <option name="providerMap">
+        <map />
+      </option>
+      <option name="region" />
+      <option name="resourceGroup" />
+      <option name="stagingFolder" />
+      <option name="subscription" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="SpringFoodAppApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <envs>
@@ -319,10 +408,33 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
+      <deployment type="docker-image">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="envFilePath" value="" />
+          <option name="envFilePaths">
+            <list>
+              <option value="" />
+            </list>
+          </option>
           <option name="sourceFilePath" value="docker-compose.yaml" />
         </settings>
       </deployment>
@@ -332,6 +444,11 @@
       <deployment type="docker-compose.yml">
         <settings>
           <option name="envFilePath" value="" />
+          <option name="envFilePaths">
+            <list>
+              <option value="" />
+            </list>
+          </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
         </settings>
       </deployment>
@@ -347,14 +464,30 @@
     </configuration>
     <list>
       <item itemvalue="Application.SpringFoodAppApplication" />
+      <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+      <item itemvalue="Docker.Docker Image" />
+      <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
+      <item itemvalue="Docker.promethus: Compose Deployment" />
       <item itemvalue="JUnit.All in spring-food-app" />
       <item itemvalue="JUnit.All in spring-food-app (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.promethus: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.Docker Image" />
         <item itemvalue="JUnit.All in spring-food-app (1)" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -364,46 +497,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710910410759</updated>
-    </task>
-    <task id="LOCAL-00243" summary="jenkins file updated">
-      <option name="closed" value="true" />
-      <created>1738810587810</created>
-      <option name="number" value="00243" />
-      <option name="presentableId" value="LOCAL-00243" />
-      <option name="project" value="LOCAL" />
-      <updated>1738810587810</updated>
-    </task>
-    <task id="LOCAL-00244" summary="snapshot nexus added">
-      <option name="closed" value="true" />
-      <created>1738810920587</created>
-      <option name="number" value="00244" />
-      <option name="presentableId" value="LOCAL-00244" />
-      <option name="project" value="LOCAL" />
-      <updated>1738810920587</updated>
-    </task>
-    <task id="LOCAL-00245" summary="Kubernates added">
-      <option name="closed" value="true" />
-      <created>1739528635422</created>
-      <option name="number" value="00245" />
-      <option name="presentableId" value="LOCAL-00245" />
-      <option name="project" value="LOCAL" />
-      <updated>1739528635422</updated>
-    </task>
-    <task id="LOCAL-00246" summary="Jenkins Pipeline">
-      <option name="closed" value="true" />
-      <created>1739528727654</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
-      <option name="project" value="LOCAL" />
-      <updated>1739528727654</updated>
-    </task>
-    <task id="LOCAL-00247" summary="Jenkins Pipeline">
-      <option name="closed" value="true" />
-      <created>1739528946376</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
-      <option name="project" value="LOCAL" />
-      <updated>1739528946376</updated>
     </task>
     <task id="LOCAL-00248" summary="Jenkins Pipeline">
       <option name="closed" value="true" />
@@ -757,7 +850,47 @@
       <option name="project" value="LOCAL" />
       <updated>1764236161540</updated>
     </task>
-    <option name="localTasksCounter" value="292" />
+    <task id="LOCAL-00292" summary="java version changed from 21 to 17">
+      <option name="closed" value="true" />
+      <created>1764484469218</created>
+      <option name="number" value="00292" />
+      <option name="presentableId" value="LOCAL-00292" />
+      <option name="project" value="LOCAL" />
+      <updated>1764484469219</updated>
+    </task>
+    <task id="LOCAL-00293" summary="Java version changed to 17">
+      <option name="closed" value="true" />
+      <created>1764484503682</created>
+      <option name="number" value="00293" />
+      <option name="presentableId" value="LOCAL-00293" />
+      <option name="project" value="LOCAL" />
+      <updated>1764484503682</updated>
+    </task>
+    <task id="LOCAL-00294" summary="Helm Added">
+      <option name="closed" value="true" />
+      <created>1764828759364</created>
+      <option name="number" value="00294" />
+      <option name="presentableId" value="LOCAL-00294" />
+      <option name="project" value="LOCAL" />
+      <updated>1764828759365</updated>
+    </task>
+    <task id="LOCAL-00295" summary="Helm Kubernetes Added">
+      <option name="closed" value="true" />
+      <created>1764877631615</created>
+      <option name="number" value="00295" />
+      <option name="presentableId" value="LOCAL-00295" />
+      <option name="project" value="LOCAL" />
+      <updated>1764877631617</updated>
+    </task>
+    <task id="LOCAL-00296" summary="kubernetes and helm v.10">
+      <option name="closed" value="true" />
+      <created>1766475734739</created>
+      <option name="number" value="00296" />
+      <option name="presentableId" value="LOCAL-00296" />
+      <option name="project" value="LOCAL" />
+      <updated>1766475734739</updated>
+    </task>
+    <option name="localTasksCounter" value="297" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -840,11 +973,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Jenkins pipeline" />
-    <MESSAGE value="some files added" />
-    <MESSAGE value="Web page Added" />
-    <MESSAGE value="k8s" />
-    <MESSAGE value="Application deployed on k8s" />
     <MESSAGE value="Github Action" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="Github_actions" />
@@ -865,6 +993,11 @@
     <MESSAGE value="Jenkins" />
     <MESSAGE value="Azure Terraform" />
     <MESSAGE value="Azure-Devops" />
+    <MESSAGE value="java version changed from 21 to 17" />
+    <MESSAGE value="Java version changed to 17" />
+    <MESSAGE value="Helm Added" />
+    <MESSAGE value="Helm Kubernetes Added" />
+    <MESSAGE value="kubernetes and helm v.10" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">

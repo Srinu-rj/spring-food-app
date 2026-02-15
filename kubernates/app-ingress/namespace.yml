@@ -1,0 +1,6 @@
+#create a namespace for ingress
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: ingress
+---

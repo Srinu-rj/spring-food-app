@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-config
+  namespace: payments
+  finalizers:
+    - kubernetes
+data:
+  env: prod
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-config
+  namespace: database
+  finalizers:
+    - kubernetes
+data:
+  env: dev
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qa-config
+  namespace: backend
+  finalizers:
+    - kubernetes
+data:
+  env: qa
+---

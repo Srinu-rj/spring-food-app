@@ -33,7 +33,6 @@ public class Restaurant {
     @NotNull
     @Pattern(regexp = "^\\d{10}$")
     private String contactNumber;
-
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;

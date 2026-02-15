@@ -1,50 +1,57 @@
+# Deployment specification begins here
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: mysql
   labels:
-    app: postgres
+    app: mysql
+    tier: database
 spec:
-  replicas: 1
-  selector:
+  selector: # mySQL Pod Should contain same labels
     matchLabels:
-      app: postgres
+      app: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
-      labels:
-        app: postgres
+      labels: # Must match 'Service' and 'Deployment' selectors
+        app: mysql
+        tier: database
     spec:
       containers:
-        - name: postgres
-          image: postgres:15
-          ports:
-            - containerPort: 5432
+        - name: mysql
+          image: mysql:latest
+          imagePullPolicy: "IfNotPresent"
           env:
-            - name: POSTGRES_DB
-              value: mydb
-            - name: POSTGRES_USER
-              value: myuser
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: password
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: fleetdb
+          ports:
+            - containerPort: 3307
+              name: mysql
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql/data/pgdata
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: my-disk-pvc
 ---
+# Define a 'Service' To Expose MySQL to Other Services
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-service
+  name: mysql
+  labels:
+    app: mysql
+    tier: database
 spec:
-  type: ClusterIP
-  selector:
-    app: postgres
   ports:
-    - port: 5432
-      targetPort: 5432
+    - port: 3307
+      targetPort: 3307
+  selector:
+    app: mysql
+    tier: database
+  clusterIP: None # DNS is used, so clusterIP is not needed
+---

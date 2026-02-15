@@ -12,18 +12,25 @@ on:
           - dev
           - qa
           - prod
+env:
+    SONAR_HOST_URL: "http://10.0.2.197:9000"
+    NEXUS_URL: "http://10.0.2.87:8081/repository/maven-releases/"
+    ARTIFACT_ID: "simple-java-maven-app"
+    IMAGE_TAG: ${{ github.run_number }}
+    JAVA_VERSION: '21'  # TODO Set the Java Version to 21
+    DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    IMAGE_NAME: spring-boot-app
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-
-    env:
-      SONAR_HOST_URL: "http://10.0.2.197:9000"
-      NEXUS_URL: "http://10.0.2.87:8081/repository/maven-releases/"
-      ARTIFACT_ID: "simple-java-maven-app"
-      IMAGE_TAG: ${{ github.run_number }}
+    permissions:
+      contents: read
+      packages: write
 
     steps:
+      - name: just a test step
+        run: echo "This workflow runs at Every One Hour
       - name: Checkout
         uses: actions/checkout@v4
 

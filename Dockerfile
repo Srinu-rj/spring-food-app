@@ -1,16 +1,13 @@
-FROM eclipse-temurin:17-jdk-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-22-jammy AS build
 COPY . .
-LABEL maintainer="sreenivasa raju | dnsrinu143@gmail.com"
-LABEL description="A Docker image for a Spring Boot application."
+FROM openjdk:17 AS builder
+COPY --from=build /target/spring-application-k8s.jar spring-application-k8s.jar
 EXPOSE 8998
-COPY target/application-mysql.jar application-mysql.jar
-ENTRYPOINT ["java","-jar", "application-mysql.jar"]
-
-
-
-
-
-
+ENTRYPOINT ["java","-jar","application-mysql.jar"]
+LABEL maintainer="SREENIVASA RAJU"
+LABEL version="1.0.0"
+LABEL description="Spring Boot Application with Postgress Database"
+USER nobody
 
 
 

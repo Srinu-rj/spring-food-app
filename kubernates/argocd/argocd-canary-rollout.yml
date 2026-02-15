@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: spring-boot-rollout
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 40
+        - pause: {duration: 10}
+        - setWeight: 60
+        - pause: {duration: 10}
+        - setWeight: 80
+        - pause: {duration: 10}
+  revisionHistoryLimit: 3
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+        app: spring-boot-rollout
+  template:
+    metadata:
+      labels:
+        app: spring-boot-rollout
+    spec:
+      containers:
+        - name: spring-boot-container
+          image: srinu641/spring-image:1.0
+          ports:
+            - containerPort: 8998
+---

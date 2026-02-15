@@ -2,8 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: spring-boot-ingress
-  namespace: app-namespace
+  namespace:
   annotations:
+    kubernetes.io/ingress.bandwidth: "10M"
+    kubernetes.io/egress-bandwidth: "30M"
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
@@ -23,68 +25,3 @@ spec:
                 port:
                   number: 8998
 ---
-#apiVersion: traefik.containo.us/v1alpha1
-#kind: IngressRoute
-#metadata:
-#  name: springboot-ingress
-#  namespace: app-deployment-namespace
-#spec:
-#  entryPoints:
-#    - web
-#  routes:
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/address`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/bill`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/customer`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/restaurant`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/order`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/item`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#
-#    - kind: Rule
-#      match: Host(`spring-boot.com`) && PathPrefix(`/api/category`)
-#      services:
-#        - kind: Service
-#          name: app-service
-#          port: 8998
-#          scheme: http
-#---

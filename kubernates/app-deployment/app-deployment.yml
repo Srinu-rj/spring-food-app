@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-service-application
+  namespace: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend-service-k8s
+  replicas: 8
+  template:
+    metadata:
+      labels:
+        app: backend-service-k8s
+    spec:
+      securityContext:  #TODO runAsUser, runAsGroup, fsGroup, allowPrivilegeEscalation, and readOnlyRootFilesystem
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+        supplementalGroups: [1002]
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+      containers:
+        - name: backend-service-k8s
+          image: srinu641/spring-application-k8s:v1.02
+          ports:
+            - containerPort: 1199
+          restartPolicy: Always
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: host
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgres_user
+                  name: postgres-credentials
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-k8s
+  namespace: backend
+  labels:
+    name: backend-service-k8s
+spec:
+  type:  LoadBalancer
+  ports:
+    - protocol: http
+      port: 1199
+      targetPort: 1199
+  selector:
+    app: backend-service-k8s
+---
